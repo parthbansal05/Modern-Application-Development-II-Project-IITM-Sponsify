@@ -116,21 +116,24 @@ export default {
 			username: '',
 			email: '',
 			password: '',
-			confirmPassword: '',
 			phno: '',
-			category: 'Select Category',
-			niche: 'Select Niche',
+			category: 'Cooking',
+			niche: 'Grill',
 			error: ''
 		};
 	},
 	methods: {
 		async register() {
 			try {
-				const response = await axios.post('http://localhost:5000/registerInfluencer', {
+				// check if the password and confirm password match
+				if (this.password !== this.confirmPassword) {
+					this.error = 'Passwords do not match';
+					return;
+				}
+				await axios.post('http://localhost:5000/influencer/register', {
 					username: this.username,
 					email: this.email,
 					pwd: this.password,
-					confirmPwd: this.confirmPassword,
 					phno: this.phno,
 					category: this.category,
 					niche: this.niche,

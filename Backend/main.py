@@ -48,9 +48,8 @@ def server(app, socketio):
         return list(set(l))
 
     # user authentication
-    @app.route("/login", methods=("GET", "POST"), strict_slashes=False)
+    @app.route("/login", methods=["POST"], strict_slashes=False)
     def login():
-        
         if request.method == 'POST':
             data = request.json
             email = data.get('email')
@@ -84,25 +83,21 @@ def server(app, socketio):
             else:
                 return jsonify({"msg": "Wrong username or password"}), 401
 
-    @app.route('/sponsor', methods=['GET'])
-    @e.sponsor_required
-    def sponsor():
-        current_user = get_jwt_identity()
-        return jsonify(username=current_user, msg = "You are sponsor"), 200    
 
-    @app.route("/influencer/register", methods=("GET", "POST"), strict_slashes=False)
+    @app.route("/influencer/register", methods=["POST"], strict_slashes=False)
     def influencer_register():
-        form = register_form_inf()
-        if form.validate_on_submit():
+        if request.method == 'POST':
+            data = request.json
+            username = data.get('username')
+            email = data.get('email')
+            pwd = data.get('pwd')
+            ph_no = data.get('phno')
+            category = data.get('category')
+            niche = data.get('niche')
+            next_url = data.get('next')
+            user_type = "I"
+            print(data)
             try:
-                email = form.email.data
-                pwd = form.pwd.data
-                username = form.username.data
-                ph_no = form.ph_no.data
-                category = form.category.data
-                niche = form.niche.data
-                user_type = "I"
-
                 newuser = User(
                     username=username,
                     email=email,
@@ -117,6 +112,42 @@ def server(app, socketio):
                 
                 db.session.add(newuser)
                 db.session.commit()
+                return jsonify({"msg": "Account Succesfully created"}), 200
+            except IntegrityError as exc:
+                db.session.rollback()
+                return jsonify({"msg": "User already exists!"}), 409
+            except Exception as exc:
+                db.session.rollback()
+                return jsonify({"msg": "Something went wrong!"}), 500
+    
+    @app.route("/sponsor/register", methods=["POST"], strict_slashes=False)
+    def sponsor_register():
+        if request.method == 'POST':
+            try:
+                data = request.json
+                username = data.get('username')
+                email = data.get('email')
+                pwd = data.get('pwd')
+                ph_no = data.get('phno')
+                industry = data.get('industry')
+                next_url = data.get('next')
+                user_type = "S"
+                print(data)
+                
+                newuser = User(
+                    username=username,
+                    email=email,
+                    ph_no=ph_no,
+                    pwd=bcrypt.generate_password_hash(pwd),
+                    user_type=user_type,
+                    category="",
+                    niche="",
+                    followers=0,
+                    industry=industry,
+                    budget=0)
+                
+                db.session.add(newuser)
+                db.session.commit()
                 flash(f"Account Succesfully created", "success")
             except IntegrityError as exc:
                 db.session.rollback()
@@ -125,53 +156,11 @@ def server(app, socketio):
                 db.session.rollback()
                 flash(f"Something went wrong!.", "danger")
 
-        return render_template("register_inf.html",
+        return render_template("register_spo.html",
                                form=form,
-                               text="Influencer Register",
-                               title="Influencer Register",
-                               btn_action="Register Influencer")
-    
-    # @app.route("/sponsor/register", methods=("GET", "POST"), strict_slashes=False)
-    # def sponsor_register():
-    #     form = register_form_spo()
-    #     userID = current_user.get_id()
-    #     if form.validate_on_submit():
-    #         try:
-    #             email = form.email.data
-    #             pwd = form.pwd.data
-    #             username = form.username.data
-    #             ph_no = form.ph_no.data
-                
-    #             user_type = "S"
-    #             industry = form.industry.data
-
-    #             newuser = User(
-    #                 username=username,
-    #                 email=email,
-    #                 ph_no=ph_no,
-    #                 pwd=bcrypt.generate_password_hash(pwd),
-    #                 user_type=user_type,
-    #                 category="",
-    #                 niche="",
-    #                 followers=0,
-    #                 industry=industry,
-    #                 budget=0)
-                
-    #             db.session.add(newuser)
-    #             db.session.commit()
-    #             flash(f"Account Succesfully created", "success")
-    #         except IntegrityError as exc:
-    #             db.session.rollback()
-    #             flash(f"User already exists!.", "warning")
-    #         except Exception as exc:
-    #             db.session.rollback()
-    #             flash(f"Something went wrong!.", "danger")
-
-    #     return render_template("register_spo.html",
-    #                            form=form,
-    #                            text="Sponsor Register",
-    #                            title="Sponsor Register",
-    #                            btn_action="Register Sponsor")
+                               text="Sponsor Register",
+                               title="Sponsor Register",
+                               btn_action="Register Sponsor")
 
     # @app.route("/user/register", methods=("GET", "POST"), strict_slashes=False)
     # def user_register():
