@@ -41,107 +41,107 @@ export default new Router({
   mode: "history", // Use HTML5 History mode
   routes: [
     {
-      path: "AdminDash",
+      path: "/AdminDash",
       name: "AdminDash",
       component: AdminDash,
     },
     {
-      path: "AdminInsights",
+      path: "/AdminInsights",
       name: "AdminInsights",
       component: AdminInsights,
     },
     {
-      path: "AdminViewAllCampaigns",
+      path: "/AdminViewAllCampaigns",
       name: "AdminViewAllCampaigns",
       component: AdminViewAllCampaigns,
     },
     {
-      path: "AdminViewCampaign",
+      path: "/AdminViewCampaign",
       name: "AdminViewCampaign",
       component: AdminViewCampaign,
     },
     {
-      path: "DeleteUser",
+      path: "/DeleteUser/:id", // Add a dynamic parameter :id
       name: "DeleteUser",
       component: DeleteUser,
     },
     {
-      path: "InfluencerDash",
+      path: "/InfluencerDash",
       name: "InfluencerDash",
       component: InfluencerDash,
     },
     {
-      path: "InfluencerInbox",
+      path: "/InfluencerInbox",
       name: "InfluencerInbox",
       component: InfluencerInbox,
     },
     {
-      path: "InfluencerInboxChat",
+      path: "/InfluencerInboxChat",
       name: "InfluencerInboxChat",
       component: InfluencerInboxChat,
     },
     {
-      path: "InfluencerSearchCampaigns",
+      path: "/InfluencerSearchCampaigns",
       name: "InfluencerSearchCampaigns",
       component: InfluencerSearchCampaigns,
     },
     {
-      path: "InfluencerUpdateDashboard",
+      path: "/InfluencerUpdateDashboard",
       name: "InfluencerUpdateDashboard",
       component: InfluencerUpdateDashboard,
     },
     {
-      path: "CreateCampaign",
+      path: "/CreateCampaign",
       name: "CreateCampaign",
       component: CreateCampaign,
     },
     {
-      path: "SponsorDash",
+      path: "/SponsorDash",
       name: "SponsorDash",
       component: SponsorDash,
     },
     {
-      path: "SponsorInbox",
+      path: "/SponsorInbox",
       name: "SponsorInbox",
       component: SponsorInbox,
     },
     {
-      path: "SponsorInboxChat",
+      path: "/SponsorInboxChat",
       name: "SponsorInboxChat",
       component: SponsorInboxChat,
     },
     {
-      path: "SponsorSearchInfluencer",
+      path: "/SponsorSearchInfluencer",
       name: "SponsorSearchInfluencer",
       component: SponsorSearchInfluencer,
     },
     {
-      path: "SponsorUpdateDashboard",
+      path: "/SponsorUpdateDashboard",
       name: "SponsorUpdateDashboard",
       component: SponsorUpdateDashboard,
     },
     {
-      path: "SponsorViewCampaign",
+      path: "/SponsorViewCampaign",
       name: "SponsorViewCampaign",
       component: SponsorViewCampaign,
     },
     {
-      path: "UpdateCampaign",
+      path: "/UpdateCampaign",
       name: "UpdateCampaign",
       component: UpdateCampaign,
     },
     {
-      path: "UserDash",
+      path: "/UserDash",
       name: "UserDash",
       component: UserDash,
     },
     {
-      path: "UserSearchInfluencer",
+      path: "/UserSearchInfluencer",
       name: "UserSearchInfluencer",
       component: UserSearchInfluencer,
     },
     {
-      path: "UserUpdateDashboard",
+      path: "/UserUpdateDashboard",
       name: "UserUpdateDashboard",
       component: UserUpdateDashboard,
     },

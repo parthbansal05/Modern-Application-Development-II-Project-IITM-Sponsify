@@ -46,6 +46,10 @@ def server(app, socketio):
     @app.template_filter('unique_list')
     def unique_list_filter(l):
         return list(set(l))
+    
+    def get_jwt_id():
+        verify_jwt_in_request(optional = True)
+        return get_jwt_identity()
 
     # user authentication
     @app.route("/login", methods=["POST"], strict_slashes=False)
@@ -62,14 +66,14 @@ def server(app, socketio):
                 redirect_url = ""
                 print(user.user_type)
                 print(type(next_url))
-                if user.user_type == "A":
-                    redirect_url = url_for('admin')
-                elif user.user_type == "S":
-                    redirect_url = url_for('sponsor')
-                elif user.user_type == "I":
-                    redirect_url = url_for('influencer')
-                elif user.user_type == "U":
-                    redirect_url = url_for('user')
+                # if user.user_type == "A":
+                #     redirect_url = url_for('admin')
+                # elif user.user_type == "S":
+                #     redirect_url = url_for('sponsor')
+                # elif user.user_type == "I":
+                #     redirect_url = url_for('influencer')
+                # elif user.user_type == "U":
+                #     redirect_url = url_for('user')
                 
                 access_token = create_access_token(identity=user.id, expires_delta = False)
                 
@@ -190,57 +194,40 @@ def server(app, socketio):
                 db.session.rollback()
                 return jsonify({"error": "Something went wrong!"}), 500
 
-
-    # @app.route("/logout")
-    # @login_required
-    # def logout():
-    #     logout_user()
-    #     return redirect(url_for('login'))
-
-    # @e.admin_required
-    # @app.route("/delete_user/<uid>", methods=("GET", "POST"), strict_slashes=False)
-    # def users_delete(uid):
-    #     uid = int(uid)
-    #     try:
-    #         user_details = User.query.filter_by(id=uid).first()
-    #         # check it user exists
-    #         if not user_details:
-    #             raise Exception("User does not exist")
-    #     except Exception as exc:
-    #         return render_template("admin/delete_user.html",
-    #                                msg="Failed",
-    #                                page="index",
-    #                                user=[-1, "NA"])
-    #     user_id = user_details.id
-    #     user_name = user_details.username
-    #     try:
-    #         if uid == 1:
-    #             raise Exception("Cannot delete admin")
-    #         if uid == current_user.get_id():
-    #             raise Exception("Cannot delete yourself")
-    #         if User.query.filter_by(id=uid).first().user_type == "A":
-    #             raise Exception("Cannot delete admin")
-    #         if User.query.filter_by(id=uid).first().user_type == "S":
-    #             if DB_Manager().RemoveSponsorCampaigns(uid):
-    #                 pass
-    #             if DB_Manager().RemoveSponsorAdRequest(uid):
-    #                 pass
-    #         if User.query.filter_by(id=uid).first().user_type == "I":
-    #             if DB_Manager().RemoveInfluencerAdRequest(uid):
-    #                 pass
-    #         User.query.filter_by(id=uid).delete()
-    #         flash("User deleted", "success")
-    #         db.session.commit()
-    #         return redirect(url_for('admin_dashboard'))
-    #     except Exception as exc:
-    #         return render_template("admin/delete_user.html",
-    #                                msg="Failed",
-    #                                page="index",
-    #                                user=[user_id, user_name])
-    #     return render_template("admin/delete_user.html",
-    #                            msg="Succeeded",
-    #                            page="index",
-    #                            user=[user_id, user_name])
+    @e.admin_required
+    @app.route("/delete_user/<uid>", methods=["GET"], strict_slashes=False)
+    def users_delete(uid):
+        uid = int(uid)
+        try:
+            user_details = User.query.filter_by(id=uid).first()
+            # check it user exists
+            if not user_details:
+                raise Exception("User does not exist")
+        except Exception as exc:
+            print(exc)
+            return jsonify({"error": "User does not exist"}), 404
+        
+        try:
+            if uid == 1:
+                raise Exception("Cannot delete admin")
+            if uid == get_jwt_id():
+                raise Exception("Cannot delete yourself")
+            if User.query.filter_by(id=uid).first().user_type == "A":
+                raise Exception("Cannot delete admin")
+            if User.query.filter_by(id=uid).first().user_type == "S":
+                if DB_Manager().RemoveSponsorCampaigns(uid):
+                    pass
+                if DB_Manager().RemoveSponsorAdRequest(uid):
+                    pass
+            if User.query.filter_by(id=uid).first().user_type == "I":
+                if DB_Manager().RemoveInfluencerAdRequest(uid):
+                    pass
+            User.query.filter_by(id=uid).delete()
+            db.session.commit()
+            return jsonify({"status": "Deleted"}), 200
+        except Exception as exc:
+            print(exc)
+            return jsonify({"error": str(exc)}), 500
 
     # # content page
     # @app.route("/", methods=["GET"], strict_slashes=False)
