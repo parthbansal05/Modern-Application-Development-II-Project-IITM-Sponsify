@@ -112,28 +112,28 @@ def server(app, socketio):
                 
                 db.session.add(newuser)
                 db.session.commit()
-                return jsonify({"msg": "Account Succesfully created"}), 200
+                return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
-                return jsonify({"msg": "User already exists!"}), 409
+                return jsonify({"error": "User already exists!"}), 409
             except Exception as exc:
                 db.session.rollback()
-                return jsonify({"msg": "Something went wrong!"}), 500
+                return jsonify({"error": "Something went wrong!"}), 500
     
     @app.route("/sponsor/register", methods=["POST"], strict_slashes=False)
     def sponsor_register():
         if request.method == 'POST':
+        
+            data = request.json
+            username = data.get('username')
+            email = data.get('email')
+            pwd = data.get('pwd')
+            ph_no = data.get('phno')
+            industry = data.get('industry')
+            next_url = data.get('next')
+            user_type = "S"
+            print(data)
             try:
-                data = request.json
-                username = data.get('username')
-                email = data.get('email')
-                pwd = data.get('pwd')
-                ph_no = data.get('phno')
-                industry = data.get('industry')
-                next_url = data.get('next')
-                user_type = "S"
-                print(data)
-                
                 newuser = User(
                     username=username,
                     email=email,
@@ -148,19 +148,14 @@ def server(app, socketio):
                 
                 db.session.add(newuser)
                 db.session.commit()
-                flash(f"Account Succesfully created", "success")
+                return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
-                flash(f"User already exists!.", "warning")
+                return jsonify({"error": "User already exists!"}), 409
             except Exception as exc:
                 db.session.rollback()
-                flash(f"Something went wrong!.", "danger")
+                return jsonify({"error": "Something went wrong!"}), 500
 
-        return render_template("register_spo.html",
-                               form=form,
-                               text="Sponsor Register",
-                               title="Sponsor Register",
-                               btn_action="Register Sponsor")
 
     # @app.route("/user/register", methods=("GET", "POST"), strict_slashes=False)
     # def user_register():

@@ -104,6 +104,7 @@
 			<button type="submit">Register</button>
 		</form>
 		<div v-if="error">{{ error }}</div>
+		<div v-if="msg">{{ msg }}</div>
 	</div>
 </template>
 
@@ -119,13 +120,16 @@ export default {
 			phno: '',
 			category: 'Cooking',
 			niche: 'Grill',
-			error: ''
+			error: '',
+			msg: ''
 		};
 	},
 	methods: {
 		async register() {
 			try {
 				// check if the password and confirm password match
+				this.error = '';
+				this.msg = '';
 				if (this.password !== this.confirmPassword) {
 					this.error = 'Passwords do not match';
 					return;
@@ -139,6 +143,7 @@ export default {
 					niche: this.niche,
 					next: this.$route.query.next
 				});
+				this.msg = 'Influencer registered successfully';
 			} catch (err) {
 				this.error = 'Error registering influencer';
 			}
