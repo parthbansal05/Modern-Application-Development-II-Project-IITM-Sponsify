@@ -1,0 +1,100 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{% block content%}
+	<div class="m-2 card p-4">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+			{% if messages %} 
+				{% for category, message in messages %}
+					<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %} 
+			{% endif %} 
+		{% endwith %}
+
+        <!-- Filter Section -->
+        <div class="col-md-5 mx-auto">
+            <div class="mb-3">
+                <label for="timeFilter" class="form-label">Start Time</label>
+                <select id="timeFilter" class="form-select">
+                    <option value="">All</option>
+                    {% for time in campaigns[4]|unique %}
+                    <option value="{{ time }}">{{ time|timestamp_to_date }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="budgetFilter" class="form-label">Budget</label>
+                <select id="budgetFilter" class="form-select">
+                    <option value="">All</option>
+                    {% for budget in campaigns[6]|unique %}
+                    <option value="{{ budget }}">{{ budget }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div id="campaignsContainer" class="row">
+            {% for i in range(campaigns[0]|length) %}
+                <div class="col-md-4 campaign-item" data-time="{{ campaigns[4][i] }}" data-budget="{{ campaigns[6][i] }}" style="margin-top: 10px; margin-bottom: 10px;">
+                    <div class = "card">
+                        <div class="card-header">
+                            <span class="d-inline-block text-truncate">{{campaigns[2][i]}}</span>
+                            <div style="float: right;">
+                                <a href="{{ url_for('influencer_initiate_chat', cid=campaigns[0][i], sid=campaigns[1][i], budget=campaigns[6][i] ) }}" class="btn btn-primary">Send Request</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- <p>Campaign ID: {{campaigns[0][i]}}</p>
+                            <p>Sponsor ID: {{campaigns[1][i]}}</p> -->
+                            <!-- <p>Campaign Name: {{campaigns[2][i]}}</p> -->
+                            <p>Description: {{campaigns[3][i]}}</p>
+                            <p>Start Date: {{campaigns[4][i]|timestamp_to_date }}</p>
+                            <p>End Date: {{campaigns[5][i]|timestamp_to_date }}</p>
+                            <p>Budget: {{campaigns[6][i]}}</p>
+                            <p>Visibility: {{campaigns[7][i]}}</p>
+                            <p>Goals: {{campaigns[8][i]}}</p>
+                            <p>Flagged: {{campaigns[9][i]}}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}        
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const timeFilter = document.getElementById("timeFilter");
+            const budgetFilter = document.getElementById("budgetFilter");
+            const campaignsContainer = document.getElementById("campaignsContainer");
+            const campaigns = Array.from(document.getElementsByClassName("campaign-item"));
+
+            function filterCampaigns() {
+                const selectedTime = timeFilter.value;
+                const selectedBudget = budgetFilter.value;
+
+                campaigns.forEach(campaign => {
+                    const campaignTime = campaign.getAttribute("data-time");
+                    const campaignBudget = campaign.getAttribute("data-budget");
+
+                    const timeMatch = !selectedTime || campaignTime === selectedTime;
+                    const budgetMatch = !selectedBudget || campaignBudget === selectedBudget;
+
+                    if (timeMatch && budgetMatch) {
+                        campaign.style.display = "";
+                    } else {
+                        campaign.style.display = "none";
+                    }
+                });
+            }
+
+            timeFilter.addEventListener("change", filterCampaigns);
+            budgetFilter.addEventListener("change", filterCampaigns);
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+{% block head %} 
+    {{ super() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        img.huechange { filter: hue-rotate(120deg); }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var opacity = 0.5;
+
+            var FlagStatus_ctx = document.getElementById('FlagStatus').getContext('2d');
+            var FlagStatus_data = JSON.parse('{{ info[0] | tojson | safe }}');
+            var FlagStatus_labels = FlagStatus_data.map(item => item.label);
+            var FlagStatus_values = FlagStatus_data.map(item => item.number);
+
+            var VisibleStatus_ctx = document.getElementById('VisibleStatus').getContext('2d');
+            var VisibleStatus_data = JSON.parse('{{ info[1] | tojson | safe }}');
+            var VisibleStatus_labels = VisibleStatus_data.map(item => item.label);
+            var VisibleStatus_values = VisibleStatus_data.map(item => item.number);
+
+            var UserStatus_ctx = document.getElementById('UserStatus').getContext('2d');
+            var UserStatus_data = JSON.parse('{{ info[2] | tojson | safe }}');
+            var UserStatus_labels = UserStatus_data.map(item => item.label);
+            var UserStatus_values = UserStatus_data.map(item => item.number);
+
+            var topInfluencers_ctx = document.getElementById('topInfluencers').getContext('2d');
+            var topInfluencers_data = JSON.parse('{{ info[3] | tojson | safe }}');
+            var topInfluencers_labels = topInfluencers_data.map(item => item.label);
+            var topInfluencers_values = topInfluencers_data.map(item => item.number);
+
+            var ApprovedStatus_ctx = document.getElementById('ApprovedStatus').getContext('2d');
+            var ApprovedStatus_data = JSON.parse('{{ info[4] | tojson | safe }}');
+            var ApprovedStatus_labels = ApprovedStatus_data.map(item => item.label);
+            var ApprovedStatus_values = ApprovedStatus_data.map(item => item.number);
+            
+
+            function getRandomColor(opacity) {
+                var r = Math.floor(Math.random() * 206) + 50; // Range: 50-255
+                var g = Math.floor(Math.random() * 206) + 50; // Range: 50-255
+                var b = Math.floor(Math.random() * 206) + 50; // Range: 50-255
+                return `rgba(${r},${g},${b},${opacity})`;
+            }
+
+            var FlagStatus = new Chart(FlagStatus_ctx, {
+                type: 'pie',
+                data: {
+                    labels: FlagStatus_labels,
+                    datasets: [{
+                        data: FlagStatus_values,
+                        
+                        backgroundColor: FlagStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        borderColor: FlagStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        
+                        borderWidth: 1
+                    }]},options: {responsive: true,plugins: {legend: {display: false}}}}
+            );
+
+            var VisibleStatus = new Chart(VisibleStatus_ctx, {
+                type: 'pie',
+                data: {
+                    labels: VisibleStatus_labels,
+                    datasets: [{
+                        data: VisibleStatus_values,
+                        
+                        backgroundColor: VisibleStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        borderColor: VisibleStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        
+                        borderWidth: 1
+                    }]},options: {responsive: true,plugins: {legend: {display: false}}}}
+            );
+
+            var UserStatus = new Chart(UserStatus_ctx, {
+                type: 'pie',
+                data: {
+                    labels: UserStatus_labels,
+                    datasets: [{
+                        data: UserStatus_values,
+                        
+                        backgroundColor: UserStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        borderColor: UserStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        
+                        borderWidth: 1
+                    }]},options: {responsive: true,plugins: {legend: {display: false}}}}
+            );
+            
+            var topInfluencers = new Chart(topInfluencers_ctx, {
+                type: 'bar',
+                data: {
+                    labels: topInfluencers_labels,
+                    datasets: [{
+                        data: topInfluencers_values,
+                        
+                        backgroundColor: topInfluencers_labels.map(function() {return getRandomColor(opacity);}),
+                        borderColor: topInfluencers_labels.map(function() {return getRandomColor(opacity);}),
+                        
+                        borderWidth: 1
+                    }]},
+                options: {responsive: true,plugins: {legend: {display: false}},scales: {y: {beginAtZero: true,title: {display: true,text: 'Followers'}}}}});
+
+            var ApprovedStatus = new Chart(ApprovedStatus_ctx, {
+                type: 'pie',
+                data: {
+                    labels: ApprovedStatus_labels,
+                    datasets: [{
+                        data: ApprovedStatus_values,
+                        
+                        backgroundColor: ApprovedStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        borderColor: ApprovedStatus_labels.map(function() {return getRandomColor(opacity);}),
+                        
+                        borderWidth: 1
+                    }]},options: {responsive: true,plugins: {legend: {display: false}}}}
+            );
+        });
+    </script>
+{% endblock %} 
+
+{% block content%}
+    <div class="m-2 card">
+        <div class="card-header">
+            <span class="d-inline-block text-truncate" style="max-width: 1000px">Insights</span>
+        </div>
+        <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col-md-3">
+                    <div class="card mb-4">
+                        <div class="card-header">Flagged Campaign Distribution</div>
+                        <div class="card-body">
+                            <canvas id="FlagStatus"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card mb-4">
+                        <div class="card-header">Campaign Visibility Distribution</div>
+                        <div class="card-body">
+                            <canvas id="VisibleStatus"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card mb-4">
+                        <div class="card-header">User Status Distribution</div>
+                        <div class="card-body">
+                            <canvas id="UserStatus"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card mb-4">
+                        <div class="card-header">Campaign Approval Distribution</div>
+                        <div class="card-body">
+                            <canvas id="ApprovedStatus"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card mb-4">
+                        <div class="card-header">Top Influencers</div>
+                        <!-- <div class="card-body" style="height: 400px;"> -->
+                        <div class="card-body">
+                            <canvas id="topInfluencers"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

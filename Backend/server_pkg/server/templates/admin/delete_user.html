@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/favicon.ico')}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Deletion</title>
+</head>
+<body>
+    User Deletion {{msg}} with user id: {{user[0]}} and user name: {{user[1]}}<br>
+
+    redirecting to user page in 5 seconds <br>
+    if not redirected click <a href="{{url_for(page)}}">here</a><br>
+    <script>
+        // Wait for 5 seconds (5000 milliseconds) and then redirect
+        setTimeout(function() {
+            window.location.href = "{{url_for(page)}}";
+        }, 5000);
+    </script>
+</body>
+</html>

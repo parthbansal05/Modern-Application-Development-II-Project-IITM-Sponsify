@@ -1,0 +1,46 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{% block content%}
+	<div class="m-2 card p-4">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+			{% if messages %} 
+				{% for category, message in messages %}
+					<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %} 
+			{% endif %} 
+		{% endwith %}
+              
+		<div class="row">
+			{% for i in range(influencers|length) %}
+				<div class="col-md-4">
+					<div class="card">
+						<div class="card-header">
+							<span class="d-inline-block text-truncate">{{influencers[i].username}}</span>
+							<div style="float: right;">
+								<a href="{{ url_for('user_follow', iid=influencers[i].id) }}" class="btn btn-primary">Follow</a>
+							</div>
+						</div>
+						<div class="card-body">
+							<!-- <p>influencer ID: {{influencers[i].id}}</p> -->
+							<!-- <p>influencer Username: {{influencers[i].username}}</p> -->
+							<p>Email: {{influencers[i].email}}</p>
+							<p>Phone Number: {{influencers[i].ph_no}}</p>
+							<p>Category: {{influencers[i].category}}</p>
+							<p>Niche: {{influencers[i].niche}}</p>
+							<p>Followers: {{influencers[i].followers}}</p>
+							<!-- <p>influencer Industry: {{influencers[i].industry}}</p>
+							<p>influencer Budget: {{influencers[i].budget}}</p> -->
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+    </div>
+{% endblock %}

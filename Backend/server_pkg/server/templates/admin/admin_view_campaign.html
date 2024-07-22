@@ -1,0 +1,42 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{% block content%}
+	<div class="m-2 card">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+			{% if messages %} 
+			{% for category, message in messages %}
+				<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			{% endfor %} 
+			{% endif %} 
+		{% endwith %}
+		<div class="card-header p-3">
+			<span class="d-inline-block text-truncate" style="max-width: 1000px">{{campaign[2][0]}}</span>
+			<div style="float: right;">
+				{% if campaign[9][0] == "NO" %}
+					<a href="{{ url_for('admin_flag_campaign', cid=campaign[0][0]) }}" class="btn btn-danger">Flag</a>
+				{% elif campaign[9][0] == "YES" %}
+					<a href="{{ url_for('admin_unflag_campaign', cid=campaign[0][0]) }}" class="btn btn-primary">Un Flag</a>
+				{% endif %}
+			</div>
+		</div>
+		<div class="card-body">
+			<p class="card-text">
+				<p>Sponsor Name: {{sponsors|selectattr("id", "equalto", campaign[1][0])|map(attribute="username")|first }}</p>
+				<p>Campaign Description: {{campaign[3][0]}}</p>
+				<p>Campaign Start Date: {{campaign[4][0]|timestamp_to_date }}</p>
+				<p>Campaign End Date: {{campaign[5][0]|timestamp_to_date }}</p>
+				<p>Campaign Budget: {{campaign[6][0]}}</p>
+				<p>Campaign Visibility: {{campaign[7][0]}}</p>
+				<p>Goals: {{campaign[8][0]}}</p>
+				<p>Flagged: {{campaign[9][0]}}</p>
+			</p>
+		</div>
+	</div>
+{% endblock %}

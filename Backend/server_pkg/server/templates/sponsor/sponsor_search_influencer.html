@@ -1,0 +1,139 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{% block content%}
+	<div class="m-2 card p-4">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+			{% if messages %} 
+				{% for category, message in messages %}
+					<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %} 
+			{% endif %} 
+		{% endwith %}
+
+        <!-- Campaign Selection -->
+		<div class="col-md-5 mx-auto">
+			<label for="campaignSelect" class="form-label">Select Campaign</label>
+			<select name="campaign" title="Select Campaign" id="campaignSelect" class="form-select mb-3">
+			{% for i in range(campaigns[0] | length) %}
+				<option value="{{ campaigns[0][i]}}|{{ campaigns[2][i]}}">{{ campaigns[1][i] }}</option>
+			{% endfor %}
+			</select>
+			
+			<!-- Filter Section -->
+			<div class="mb-3">
+				<label for="categoryFilter" class="form-label">Category</label>
+				<select id="categoryFilter" class="form-select">
+					<option value="">All</option>
+					{% for category in influencers|map(attribute='category')|unique %}
+					<option value="{{ category }}">{{ category }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="mb-3">
+				<label for="nicheFilter" class="form-label">Niche</label>
+				<select id="nicheFilter" class="form-select">
+					<option value="">All</option>
+					{% for niche in influencers|map(attribute='niche')|unique %}
+					<option value="{{ niche }}">{{ niche }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="mb-3">
+				<label for="sortFollowers" class="form-label">Sort by Followers</label>
+				<select id="sortFollowers" class="form-select">
+					<option value="desc">Descending</option>
+					<option value="asc">Ascending</option>
+				</select>
+			</div>
+		</div>
+              
+        <!-- Influencers Section -->
+        <div id="influencersContainer" class="row">
+			{% for influencer in influencers %}
+				<div class="col-md-4 influencer-item" data-category="{{ influencer.category }}" data-niche="{{ influencer.niche }}" data-followers="{{ influencer.followers }}">
+					<div class = "card">
+						<div class="card-header">
+                            <span class="d-inline-block text-truncate">{{influencer.username}}</span>
+                            <div style="float: right;">
+                                <a href="#" class="btn btn-primary view-button" data-iid="{{ influencer.id }}">Send Request</a>
+                            </div>
+                        </div>
+						<div class="card-body">
+							<!-- <p>ID: {{influencer.id}}</p> -->
+							<p>Username: {{influencer.username}}</p>
+							<p>Email: {{influencer.email}}</p>
+							<p>Phone Number: {{influencer.ph_no}}</p>
+							<p>Category: {{influencer.category}}</p>
+							<p>Niche: {{influencer.niche}}</p>
+							<p>Followers: {{influencer.followers}}</p>
+							<!-- <p>Industry: {{influencer.industry}}</p>
+							<p>Budget: {{influencer.budget}}</p> -->
+						</div>
+					</div>  
+				</div>  
+			{% endfor %}
+        </div>
+  	</div>
+
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const campaignSelect = document.getElementById('campaignSelect');
+		const categoryFilter = document.getElementById('categoryFilter');
+		const nicheFilter = document.getElementById('nicheFilter');
+		const sortFollowers = document.getElementById('sortFollowers');
+		const influencersContainer = document.getElementById('influencersContainer');
+		const influencerItems = Array.from(document.getElementsByClassName('influencer-item'));
+		const viewButtons = document.querySelectorAll('.view-button');
+
+		function updateButtons() {
+		const selectedCampaign = campaignSelect.value.split('|');
+		const selectedCampaignId = selectedCampaign[0];
+		const selectedCampaignBudget = selectedCampaign[1];
+
+		viewButtons.forEach(button => {
+			const iid = button.getAttribute('data-iid');
+			button.href = "{{ url_for('sponsor_initiate_chat', cid='', iid='', budget='') }}" + selectedCampaignId + "/" + iid + "/" + selectedCampaignBudget;
+		});
+		}
+
+		function filterAndSortInfluencers() {
+		const selectedCategory = categoryFilter.value;
+		const selectedNiche = nicheFilter.value;
+		const sortOrder = sortFollowers.value;
+
+		let filteredInfluencers = influencerItems.filter(item => {
+			const categoryMatch = !selectedCategory || item.getAttribute('data-category') === selectedCategory;
+			const nicheMatch = !selectedNiche || item.getAttribute('data-niche') === selectedNiche;
+			return categoryMatch && nicheMatch;
+		});
+
+		filteredInfluencers.sort((a, b) => {
+			const followersA = parseInt(a.getAttribute('data-followers'), 10);
+			const followersB = parseInt(b.getAttribute('data-followers'), 10);
+			return sortOrder === 'asc' ? followersA - followersB : followersB - followersA;
+		});
+
+		influencersContainer.innerHTML = '';
+		filteredInfluencers.forEach(item => influencersContainer.appendChild(item));
+		}
+
+		campaignSelect.addEventListener('change', updateButtons);
+		categoryFilter.addEventListener('change', filterAndSortInfluencers);
+		nicheFilter.addEventListener('change', filterAndSortInfluencers);
+		sortFollowers.addEventListener('change', filterAndSortInfluencers);
+
+		// Initial update in case the page is reloaded with a selection
+		updateButtons();
+		filterAndSortInfluencers();
+	});
+	</script>
+{% endblock %}

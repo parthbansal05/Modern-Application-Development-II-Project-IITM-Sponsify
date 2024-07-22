@@ -1,0 +1,161 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- <meta name="viewport" content = "width = device-width, initial-scale = 10.0"> -->
+
+    <style>
+      .dot_g {
+        height: 10px;
+        width: 10px;
+        background-color: #00DD00;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .dot_y {
+        height: 10px;
+        width: 10px;
+        background-color: yellow;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .dot_r {
+        height: 10px;
+        width: 10px;
+        background-color: red;
+        border-radius: 50%;
+        display: inline-block;
+      }
+    </style>
+
+{% endblock %} 
+
+{% block content%}
+
+<div class="col-lg-8 col-md-8 m-auto card" style="padding-bottom: 50px;">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+	{% if messages %} 
+		{% for category, message in messages %}
+		<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+			{{ message }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% endfor %} 
+	{% endif %} 
+	{% endwith %}
+	<div class="card-header">
+		<span class="d-inline-block text-truncate" style="max-width: 1000px">{{influencer.username}}</span>
+	</div>
+	<div class="card-body">
+		{% for i in range(inbox[0]|length) %}
+		
+		<!-- Card Format -->
+		{% if inbox[4][i] == "INFL" %}
+		<div class="col-lg-10 col-md-6 ms-0 me-auto card p-3" style = "background-color: #C4A484;">
+		{% elif inbox[4][i] == "SOPN" %}
+		<div class="col-lg-10 col-md-6 ms-auto me-0 card p-3" style = "background-color: #FF5CCE;">
+		{% endif %}
+			<h5> {{inbox[7][i]}} </h5>
+			<span>Budget Negotiation: {{inbox[8][i]}}</span>
+			{% if inbox[9][i] != ""  %}
+				<span> Terms Negotiation:&nbsp&nbsp {{inbox[9][i]}}  </span>  
+			{% endif %}
+			<span> Campaign Title:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{camp_dict[inbox[1][i]]}} </span>
+			<div style="float: right;">  
+			<!-- Status -->
+			<span style=" {% if inbox[4][i] == 'SOPN' %} position: absolute; top: 85%; right: 200px; transform: translateY(-50%)
+							{% elif inbox[4][i] == 'INFL' %} position: absolute; top: 85%; right: 170px; transform: translateY(-50%);
+							{% endif %}"
+					class="{% if inbox[5][i] == 'Rejected' %} dot_r 
+						{% elif inbox[5][i] == 'PENDING' %} dot_y
+						{% elif inbox[5][i] == 'Approved' %} dot_g
+						{% endif %}"
+					title = {{inbox[5][i]|title}}>
+			</span>
+
+
+			<!-- TimeStamp -->
+			<span style="{% if inbox[4][i] == 'SOPN' %} position: absolute; top: 85%; right: 50px; transform: translateY(-50%)
+						{% elif inbox[4][i] == 'INFL' %} position: absolute; top: 85%; right: 20px; transform: translateY(-50%);
+						{% endif %}">
+				{{ inbox[6][i]|timestamp_to_datetime }}
+			</span> 
+
+			<!-- Tick and Double Tick -->
+			{% if inbox[4][i] == "SOPN" and inbox[11][i] ==  "False" %}
+				<span class="material-symbols-outlined" style="position: absolute; top: 85%; right: 20px; transform: translateY(-50%);"> 
+					check 
+				</span>
+			{% elif inbox[4][i] == "SOPN" and inbox[11][i] == "True" %}
+				<span class="material-symbols-outlined" style="position: absolute; top: 85%; right: 20px; transform: translateY(-50%);">
+					done_all
+				</span>
+			{% endif %}
+
+			</div> 
+
+		</div>
+
+		<br>
+		{% endfor %}        
+
+	</div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const campaignSelect = document.getElementById('campaignSelect');
+    const acceptButton = document.getElementById('acceptButton');
+    const rejectButton = document.getElementById('rejectButton');
+
+    function updateButtons() {
+      const selectedCampaign = campaignSelect.value;
+      acceptButton.href = "{{ url_for('sponsor_accept_ad_request', iid=inbox[3][0], sid=inbox[2][0], status='Approved', cid='') }}" + selectedCampaign;
+      rejectButton.href = "{{ url_for('sponsor_accept_ad_request', iid=inbox[3][0], sid=inbox[2][0], status='Rejected', cid='') }}" + selectedCampaign;
+    }
+
+    // Update buttons on dropdown change
+    campaignSelect.addEventListener('change', updateButtons);
+
+    // Initial update in case the page is reloaded with a selection
+    updateButtons();
+  });
+</script>
+{% endblock %}
+
+{% block Outcontent%}
+
+<footer class="footer bg-light fixed-bottom" style="border-radius: 15px 15px 0 0; box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); z-index: 1;">
+	<div class="container py-3 d-flex justify-content-between align-items-center">
+	  <form action="{{ url_for('sponsor_inbox_chat', iid=inbox[3][0]) }}" method="post" class="w-100">
+		<div class="row align-items-center">
+		  <div class="col-md-4 mb-2 mb-md-0">
+			<input type="text" name="message" class="form-control" placeholder="Write a message">
+		  </div>
+		  <div class="col-md-8 d-flex flex-column flex-md-row align-items-center gap-3">
+			<select name="campaign" class="form-select mb-2 mb-md-0" title="Select Campaign" id="campaignSelect">
+			  {% for campaign in inbox[1] | unique_list %}
+				<option value="{{ campaign }}">{{ camp_dict[campaign] }}</option>
+			  {% endfor %}
+			</select>
+			<input type="number" name="modified_budget" class="form-control mb-2 mb-md-0" placeholder="Modified Budget">
+			<input type="text" name="modified_terms" class="form-control mb-2 mb-md-0" placeholder="Modified terms">
+			<div class="d-flex gap-2 mb-2 mb-md-0">
+			  <a href="#" id="acceptButton" class="btn btn-success">Accept</a>
+			  <a href="#" id="rejectButton" class="btn btn-danger">Reject</a>
+			  <input type="submit" class="btn btn-primary" value="Send">
+			</div>
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+		  </div>
+		</div>
+	  </form>
+	</div>
+  </footer>
+  
+
+{% endblock %}

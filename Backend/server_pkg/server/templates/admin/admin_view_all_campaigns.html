@@ -1,0 +1,54 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+
+{% block content%}
+	
+  <div class="m-2 card">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+			<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+			{% if messages %} 
+				{% for category, message in messages %}
+					<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %} 
+			{% endif %} 
+		{% endwith %}
+    <div class="card-header">
+        <span class="d-inline-block text-truncate" style="max-width: 1000px">All Campaigns</span>
+    </div>
+    <div class="card-body">
+      {% for i in range(campaigns[0]|length) %}
+        <div class="card m-2" style="width: 350px; display: inline-block;">
+          <div class="card-header p-3">
+            <span class="d-inline-block text-truncate" style="max-width: 1000px">{{campaigns[2][i]}}</span>
+            <div style="float: right;">
+              <a href="{{ url_for('admin_view_campaign', cid=campaigns[0][i]) }}" class="btn btn-primary">View</a>
+              {% if campaigns[9][i] == "NO" %}
+                <a href="{{ url_for('admin_flag_campaign', cid=campaigns[0][i]) }}" class="btn btn-danger">Flag</a>
+              {% elif campaigns[9][i] == "YES" %}
+                <a href="{{ url_for('admin_unflag_campaign', cid=campaigns[0][i]) }}" class="btn btn-primary">Un Flag</a>
+              {% endif %}
+            </div>
+          </div>
+          <div class="card-body" style="margin: 0 auto;">
+            <p class="card-text">
+							<p>Sponsor Name: {{sponsors|selectattr("id", "equalto", campaigns[1][i])|map(attribute="username")|first }}</p>
+							<p>Campaign Description: {{campaigns[3][i]}}</p>
+							<p>Campaign Start Date: {{campaigns[4][i]|timestamp_to_date }}</p>
+							<p>Campaign End Date: {{campaigns[5][i]|timestamp_to_date }}</p>
+							<p>Campaign Budget: {{campaigns[6][i]}}</p>
+							<p>Campaign Visibility: {{campaigns[7][i]}}</p>
+							<p>Goals: {{campaigns[8][i]}}</p>
+							<!-- <p>Flagged: {{campaigns[9][i]}}</p> -->
+						</p>
+          </div>
+        </div>  
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

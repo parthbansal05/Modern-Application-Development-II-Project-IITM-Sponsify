@@ -1,0 +1,17 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "frontend\\sponsify/public": true,
+        "frontend\\sponsify\\src/assets": true,
+        "frontend\\sponsify/node_modules": true,
+        "frontend\\sponsify\\src/main.js": true,
+        "frontend\\sponsify\\src/App.vue": true,
+        "frontend\\sponsify/.gitignore": true
+    },
+    "explorerExclude.backup": {}
+}

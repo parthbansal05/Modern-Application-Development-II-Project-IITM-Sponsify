@@ -1,0 +1,250 @@
+/* Navbar styles */
+.navbar {
+  background-color: #f9f9f9;
+  /* Off-white background color */
+
+  height: 60px;
+  /* Set a fixed height */
+  border-bottom: 1px solid #f9f9f9;
+  /* Add a light border at the bottom */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Add a subtle box shadow */
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+  background-color: #007bff;
+  /* Blue background on hover */
+
+  font-weight: 600;
+  border-radius: 25px;
+  /* Rounded button shape */
+  padding: 8px 16px;
+  /* Adjust padding as needed */
+  margin: 0 5px;
+  /* Add spacing between buttons */
+}
+
+.navbar-nav .nav-link:hover {
+  color: #fff;
+  /* White text on hover */
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  /* Initially hidden */
+  width: 250px;
+  height: 100vh;
+  background: #FFFFF7;
+  color: #333;
+  /* Text color */
+  padding-top: 60px;
+  /* Match the navbar height */
+  transition: left 0.3s ease;
+  border-top-right-radius: 20px;
+  /* Add rounded corners to the top-right */
+  border-bottom-right-radius: 20px;
+  /* Add rounded corners to the bottom-right */
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px;
+  color: #007bff;
+  /* Colored text */
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  background-color: #f2f2f2;
+  /* Light gray on hover */
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.container {
+  /* margin-right: 50px; */
+  /* Adjust the margin-right value to your desired spacing */
+  /* margin-left: 50px; */
+  /* Adjust the margin-left value to your desired spacing */
+  width: 100%;
+  margin: 0 auto; /* Center horizontally */
+}
+
+.sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 280px; /* Set the height of the footer */
+  
+}
+
+
+@keyframes animate {
+  0%{
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+      border-radius: 0;
+  }
+  100%{
+      transform: translateY(-1000px) rotate(720deg);
+      opacity: 0;
+      border-radius: 50%;
+  }
+}
+
+.background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  background: #4e54c8;
+  overflow: hidden;
+}
+.background li {
+  position: absolute;
+  display: block;
+  list-style: none;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  animation: animate 19s linear infinite;
+}
+
+
+
+
+.background li:nth-child(0) {
+  left: 14%;
+  width: 18px;
+  height: 18px;
+  bottom: -18px;
+  animation-delay: 0s;
+}
+.background li:nth-child(1) {
+  left: 13%;
+  width: 180px;
+  height: 180px;
+  bottom: -180px;
+  animation-delay: 0s;
+}
+.background li:nth-child(2) {
+  left: 46%;
+  width: 162px;
+  height: 162px;
+  bottom: -162px;
+  animation-delay: 10s;
+}
+.background li:nth-child(3) {
+  left: 52%;
+  width: 79px;
+  height: 79px;
+  bottom: -79px;
+  animation-delay: 6s;
+}
+.background li:nth-child(4) {
+  left: 59%;
+  width: 197px;
+  height: 197px;
+  bottom: -197px;
+  animation-delay: 12s;
+}
+.background li:nth-child(5) {
+  left: 54%;
+  width: 37px;
+  height: 37px;
+  bottom: -37px;
+  animation-delay: 19s;
+}
+.background li:nth-child(6) {
+  left: 30%;
+  width: 50px;
+  height: 50px;
+  bottom: -50px;
+  animation-delay: 14s;
+}
+.background li:nth-child(7) {
+  left: 87%;
+  width: 156px;
+  height: 156px;
+  bottom: -156px;
+  animation-delay: 3s;
+}
+.background li:nth-child(8) {
+  left: 62%;
+  width: 140px;
+  height: 140px;
+  bottom: -140px;
+  animation-delay: 7s;
+}
+.background li:nth-child(9) {
+  left: 8%;
+  width: 35px;
+  height: 35px;
+  bottom: -35px;
+  animation-delay: 19s;
+}
+.background li:nth-child(10) {
+  left: 1%;
+  width: 109px;
+  height: 109px;
+  bottom: -109px;
+  animation-delay: 22s;
+}
+.background li:nth-child(11) {
+  left: 35%;
+  width: 117px;
+  height: 117px;
+  bottom: -117px;
+  animation-delay: 9s;
+}
+.background li:nth-child(12) {
+  left: 62%;
+  width: 5px;
+  height: 5px;
+  bottom: -5px;
+  animation-delay: 54s;
+}
+.background li:nth-child(13) {
+  left: 41%;
+  width: 181px;
+  height: 181px;
+  bottom: -181px;
+  animation-delay: 22s;
+}
+.background li:nth-child(14) {
+  left: 82%;
+  width: 1px;
+  height: 1px;
+  bottom: -1px;
+  animation-delay: 10s;
+}
+.background li:nth-child(15) {
+  left: 33%;
+  width: 156px;
+  height: 156px;
+  bottom: -156px;
+  animation-delay: 71s;
+}

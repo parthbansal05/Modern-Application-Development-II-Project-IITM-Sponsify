@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+		<meta charset="utf-8" />
+			<link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/favicon.ico')}}">
+			{% block head %}
+
+				<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+				<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+				<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+				<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/base.page.css')}}"/>
+				<script src="{{url_for('static', filename='scripts/base.page.js')}}"></script>
+
+				<title>{% block title %} {% endblock %}</title>
+			{% endblock %}
+	</head>
+
+  	<body>
+		<!-- Navbar -->
+		<nav class="navbar navbar-expand-md navbar-dark" style="z-index: 2">
+			<div class="container">
+				<a class="navbar-brand" href="{{url_for('index')}}">
+					<img src="{{url_for('static', filename='assets/logo.png')}}" alt="Logo" width="100" height="50" class="d-inline-block align-text-top me-2"/>
+				</a>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav ms-auto">
+						{% if current_user.is_authenticated %}
+							<a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+						{% else %}
+							<a class="nav-link" href="{{url_for('login')}}">Login</a>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div id="sidebar" class="sidebar" style="z-index: 2">
+			<!-- Sidebar content goes here -->
+			<br />
+			<div class="text-center sidebar-header">
+				<h4>
+					<p class="font-weight-light">
+						<span class="d-inline-block text-truncate" style="max-width: 150px">
+						{{ current_user.username|title }}
+						</span>
+						<h6>
+							{% if current_user.user_type  == "A" %}
+								Admin
+							{% endif %}
+							
+							{% if current_user.user_type  == "S" %}
+								Sponsor
+							{% endif %}
+							
+							{% if current_user.user_type  == "I" %}
+								Influencer
+							{% endif %}
+
+							{% if current_user.user_type  == "U" %}
+								User
+							{% endif %}
+						</h6>
+					</p>
+				</h4>
+				<hr />
+			</div>
+
+			<ul>
+				{% if current_user.user_type  == "A" %}
+					<a href="{{url_for('admin_dashboard')}}"><i class="fas fa-campground"></i> Dashboard<br></a>
+					<a href="{{url_for('admin_view_all_campaigns')}}"><i class="fas fa-campground"></i> View Campaigns<br></a>
+					<a href="{{url_for('admin_insights')}}"><i class="fas fa-campground"></i> View Insights<br></a>
+					<!-- users page -->
+				{% endif %}
+				
+				{% if current_user.user_type  == "S" %}
+					<a href="{{url_for('sponsor_dashboard')}}"><i class="fas fa-campground"></i> Dashboard<br></a>
+					<a href="{{url_for('sponsor_update_dashboard')}}"><i class="fas fa-campground"></i> Update Dashboard<br></a>
+					<a href="{{url_for('sponsor_create_campaign')}}"><i class="fas fa-campground"></i> Create Campaign<br></a>
+					<a href="{{url_for('sponsor_inbox')}}"><i class="fas fa-campground"></i> Inbox<br></a>
+					<a href="{{url_for('sponsor_search_influencer')}}"><i class="fas fa-campground"></i> Search Influencer<br></a>
+				
+				{% endif %}
+				
+				{% if current_user.user_type  == "I" %}
+					<a href="{{url_for('influencer_dashboard')}}"><i class="fas fa-campground"></i> Dashboard<br></a>
+					<a href="{{url_for('influencer_update_dashboard')}}"><i class="fas fa-campground"></i> Update Dashboard<br></a>
+					<a href="{{url_for('influencer_search_campaigns')}}"><i class="fas fa-campground"></i> Search Campaigns<br></a>
+					<a href="{{url_for('influencer_inbox')}}"><i class="fas fa-campground"></i> Inbox<br></a>
+				{% endif %}
+
+				{% if current_user.user_type  == "U" %}
+					<a href="{{url_for('user_dashboard')}}"><i class="fas fa-campground"></i> Dashboard <br></a>
+					<a href="{{url_for('user_update_dashboard')}}"><i class="fas fa-campground"></i> Update Dashboard <br></a>
+					<a href="{{url_for('user_search_influencer')}}"><i class="fas fa-campground"></i> Search Influencer <br></a>
+					
+				{% endif %}
+				
+			</ul>
+      		<!-- add a footer -->
+			<div class="sidebar-footer">
+				<ul>
+					<a href="{{url_for('login')}}"><i class="fas fa-campground"></i> Login<br></a>
+					<a href="{{url_for('influencer_register')}}"><i class="fas fa-campground"></i> Influencer Register<br></a>
+					<a href="{{url_for('sponsor_register')}}"><i class="fas fa-campground"></i> Sponsor Register<br></a>
+					<a href="{{url_for('user_register')}}"><i class="fas fa-campground"></i> User Register<br></a>
+					<a href="{{url_for('logout')}}"><i class="fas fa-campground"></i> Logout</a>
+				</ul>
+				<hr />
+				<p class="text-center font-weight-light">v1.0.0</p>
+			</div>
+    	</div>
+
+		<button id="sidebarToggle" class="sidebar-toggle" onclick="toggleSidebar()" style="z-index: 2">
+		<span class="fas fa-bars"></span>
+		</button>
+
+		<!-- Main content -->
+		<ul class="background">
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		</ul>
+		<div class="container mt-4" style="z-index: 1">
+			{% block content %} 
+			
+			{% endblock %}
+		</div>
+
+		{% block Outcontent %} 
+			
+		{% endblock %}
+
+  	</body>
+</html>

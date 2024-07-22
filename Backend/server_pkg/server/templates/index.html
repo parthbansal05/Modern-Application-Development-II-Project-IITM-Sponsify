@@ -1,0 +1,24 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{% block content%}
+<div class="container">
+  	<div class="row mt-4">
+    	<div class="col-lg-5 col-md-6 m-auto card p-4">
+			<center>
+				{% if current_user.is_authenticated %}
+				<h1>
+					Welcome {{ current_user.username|title }}
+				</h1>
+					Your access is revoked by the admin <br />
+					Please contact the admin for more details 
+				{% else %} 
+				<!-- content -->
+				{% endif %}
+			</center>
+    	</div>
+  	</div>
+</div>
+{% endblock %}

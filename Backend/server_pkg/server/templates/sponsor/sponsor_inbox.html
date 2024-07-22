@@ -1,0 +1,65 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{%block head%}
+	{{super()}}
+	<style>
+		.dot {
+		height: 15px;
+		width: 15px;
+		background-color: green;
+		border-radius: 50%;
+		display: inline-block;
+		}
+	</style>
+{%endblock%}
+
+{% block content%}
+	<div class="m-2 card">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+			{% if messages %} 
+				{% for category, message in messages %}
+					<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %} 
+			{% endif %} 
+		{% endwith %}
+		<div class="card-header">
+            <span class="d-inline-block text-truncate" style="max-width: 1000px">Inbox</span>
+		</div>
+		<div class="card-body">
+			{% for i in range(inbox[0]|length) %}
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">{{ influencers|selectattr("id", "equalto", inbox[3][i])|map(attribute="username")|first }}</span>
+					<div style="float: right;">
+						<a href="{{ url_for('delete_chat', iid = inbox[3][i], sid = inbox[2][i], red = 'S') }}" class="btn btn-primary">Delete</a>
+					</div>
+				</div>
+				<a href="{{ url_for('sponsor_inbox_chat', iid=inbox[3][i]) }}" style="color: black; text-decoration: none;">
+					<div class="card-body">
+						<h5> {{inbox[7][i]}} </h5>
+						<span>Budget Negotiation: {{inbox[8][i]}}</span><br>	
+						{% if inbox[9][i] != ""  %}
+							<span> Terms Negotiation:&nbsp&nbsp {{inbox[9][i]}}  </span><br>
+						{% endif %}
+						<span> Campaign Title:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{camp_dict[inbox[1][i]]}} </span>
+
+						{% if inbox[10][i] == "False" %}
+							<div style="float: right;">
+								<span class="dot" title = "Unread message"></span>
+							</div>
+						{% endif %}
+					</div>
+				</a>
+			</div>
+			{% endfor %}        
+		</div>
+    </div>
+  	
+{% endblock %}

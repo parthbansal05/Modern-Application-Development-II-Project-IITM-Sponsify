@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/favicon.ico')}}"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="{{url_for('static', filename='scripts/auth.page.js')}}"></script>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/base.page.css')}}"/>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/auth.page.css')}}"/>
+		<title>{{ title }}</title>
+	</head>
+
+	<body>
+		<ul class="background">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<div class="container mt-4">
+			<div class="container">
+				<div class="row mt-4">
+					<div class="col-lg-5 col-md-6 m-auto card p-4">
+						<form action="{{ request.path }}" method="POST" class="card-body">
+							{{ form.csrf_token }}
+							<!-- info lables -->
+							{% with messages = get_flashed_messages(with_categories=true) %}
+								<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+								{% if messages %} 
+									{% for category, message in messages %}
+									<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+										{{ message }}
+										<button	type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+									</div>
+									{% endfor %} 
+								{% endif %} 
+							{% endwith %}
+
+							<!-- heading -->
+							<div class="text-center">
+								<h2 class="text-primary">{{ text }}</h2>
+							</div>
+
+							<!-- text fields -->
+							<!-- Title -->
+							<div class="form-group mb-3">
+								{{ form.title(class_="form-control", placeholder="Title")}}
+							</div>
+							{% for error in form.title.errors %}
+								<div class="alert alert-warning alert-dismissible fade show" role="alert" >
+									{{ error }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+
+							<!-- Description -->
+							<div class="form-group mb-3">
+								{{ form.description(class_="form-control", placeholder="Description")}}
+							</div>
+							{% for error in form.description.errors %}
+								<div class="alert alert-warning alert-dismissible fade show" role="alert" >
+									{{ error }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+
+							<!-- Start Date -->
+							<div class="form-group mb-3">
+								{{ form.sdate.label }} {{ form.sdate }}
+							</div>
+							{% for error in form.sdate.errors %}
+								<div class="alert alert-warning alert-dismissible fade show" role="alert">
+									{{ error }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+
+							<!-- End Date -->
+							<div class="form-group mb-3">
+								{{ form.edate.label }} {{ form.edate }}
+							</div>
+							{% for error in form.edate.errors %}
+								<div class="alert alert-warning alert-dismissible fade show" role="alert">
+									{{ error }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+
+							<!-- Budget -->
+							<div class="form-group mb-3">
+								{{ form.budget.label }} {{ form.budget }}
+							</div>
+							{% for error in form.budget.errors %}
+								<div class="alert alert-warning alert-dismissible fade show" role="alert">
+									{{ error }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+
+							<!-- Visibility -->
+							<div class="form-group mb-3">
+								{{ form.visibility.label }} {{ form.visibility }}
+							</div>
+							{% for error in form.visibility.errors %}
+								<div class="alert alert-warning alert-dismissible fade show" role="alert">
+									{{ error }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor%}
+
+							<!-- Goal -->
+							<div class="form-group mb-3">
+								{{ form.goal.label }} {{ form.goal }}
+							</div>
+							{% for error in form.goal.errors %}
+								<div class="alert alert-warning alert-dismissible fade show" role="alert">
+									{{ error }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+
+
+							<div class="text-center">
+								<div class="d-grid gap-2">
+									<button type="submit" class="btn btn-block btn-primary mb-3">
+										{{ btn_action }}
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

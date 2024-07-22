@@ -1,0 +1,115 @@
+{% extends "base.html" %} 
+{% block title%} 
+    {{ title }} 
+{% endblock %} 
+
+{% block content%}
+	<div class="m-2 card">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+			{% if messages %} 
+			{% for category, message in messages %}
+				<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			{% endfor %} 
+			{% endif %} 
+		{% endwith %}
+
+		<div class="card-header p-3">
+			<span class="d-inline-block text-truncate" style="max-width: 1000px">{{campaign[2][0]}}</span>
+				<div style="float: right;">
+					<a href="{{ url_for('sponsor_view_campaigns', cid=campaign[0][0]) }}" class="btn btn-primary">View</a>
+					{% if campaign[7][0] == 'Public' %}
+					<a href="{{ url_for('sponsor_set_visibility', cid=campaign[0][0], visibility='Private') }}" class="btn btn-warning">Make Private</a>
+					{% else %}
+					<a href="{{ url_for('sponsor_set_visibility', cid=campaign[0][0], visibility='Public') }}" class="btn btn-success">Make Public</a>
+					{% endif %}
+					<a href="{{ url_for('sponsor_update_campaign', cid = campaign[0][0]) }}" class="btn btn-primary">Update</a>
+					<a href="{{ url_for('sponsor_delete_campaign', cid = campaign[0][0]) }}" class="btn btn-primary">Delete</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<p class="card-text">
+					<!-- <p>Campaign ID: {{campaign[0][0]}}</p>
+					<p>Sponsor ID: {{campaign[1][0]}}</p> -->
+					<p>Description: {{campaign[3][0]}}</p>
+					<p>Start Date: {{campaign[4][0]|timestamp_to_date }}</p>
+					<p>End Date: {{campaign[5][0]|timestamp_to_date }}</p>
+					<p>Budget: {{campaign[6][0]}}</p>
+					<p>Visibility: {{campaign[7][0]}}</p>
+					<p>Goals: {{campaign[8][0]}}</p>
+					<p>Flagged: {{campaign[9][0]}}</p>
+					<br>
+					<p>Campaign Progress</p>
+					<div class="slider-container">
+						<div class="slider" id="slider-0">
+							<div class="slider-progress" id="slider-progress-0"></div>
+						</div>
+						<div class="timestamp-container">
+						<span id="start-time-0"></span>
+						<span id="end-time-0"></span>
+						</div>
+					</div>
+				</p>
+			</div>
+		</div>
+	</div>
+	<style>
+		.slider-container {
+			width: 100%;
+		}
+		.slider {
+			width: 100%;
+			height: 10px;
+			background-color: #ddd;
+			position: relative;
+			border-radius: 5px;
+		}
+		.slider-progress {
+			height: 100%;
+			background-color: #4caf50;
+			width: 0;
+			border-radius: 5px;
+		}
+		.timestamp-container {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 10px;
+		}
+		.timestamp-container span {
+			font-size: 14px;
+		}
+		</style>
+	
+		<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const campaigns = {{ campaign|tojson }};
+			
+			const startTime = new Date(campaigns[4][0] * 1000); // Assuming timestamp in seconds
+			const endTime = new Date(campaigns[5][0] * 1000); // Assuming timestamp in seconds
+			const slider = document.getElementById('slider-progress-0');
+			const startTimeElem = document.getElementById('start-time-0');
+			const endTimeElem = document.getElementById('end-time-0');
+	
+			// Set the start and end time in the HTML
+			startTimeElem.textContent = startTime.toLocaleString();
+			endTimeElem.textContent = endTime.toLocaleString();
+	
+			function updateSlider() {
+				const now = new Date();
+				const totalDuration = endTime - startTime;
+				const elapsedDuration = now - startTime;
+				const percentage = Math.min((elapsedDuration / totalDuration) * 100, 100);
+	
+				slider.style.width = percentage + '%';
+			}
+	
+			// Update the slider initially and then every second
+			updateSlider();
+			setInterval(updateSlider, 1000);
+			}
+		);
+		</script>
+{% endblock %}
