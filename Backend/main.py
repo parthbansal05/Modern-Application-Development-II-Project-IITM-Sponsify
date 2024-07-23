@@ -347,49 +347,48 @@ def server(app, socketio):
         return jsonify(campaigns=campaigns,
                        info = sponsors)        
     
-    # @app.route("/sponsor/update_dashboard", methods=["GET", "POST"], strict_slashes=False)
-    # @e.sponsor_required
-    # def sponsor_update_dashboard():
-    #     userID = current_user.get_id()
-    #     user = User.query.filter_by(id=userID).first()
-    #     form = register_form_spo()
-    #     if form.validate_on_submit():
-    #         try:
-    #             pwd = form.pwd.data
-    #             username = form.username.data
-    #             ph_no = form.ph_no.data
-    #             industry = form.industry.data
+    @app.route("/sponsor/update_dashboard", methods=("GET", "POST"), strict_slashes=False)
+    @e.sponsor_required
+    def sponsor_update_dashboard():
+        userID = get_jwt_id()
+        user = User.query.filter_by(id=userID).first()
+        if request.method == 'POST':
+            print("inpost")
+            data = request.json
+            username = data.get('username')
+            pwd = data.get('pwd')
+            ph_no = data.get('phno')
+            industry = data.get('industry')
+            next_url = data.get('next')
+            try:
 
-    #             user.pwd = bcrypt.generate_password_hash(pwd)
-    #             user.username = username
-    #             user.ph_no = ph_no
-    #             user.industry = industry
+                user.pwd = bcrypt.generate_password_hash(pwd)
+                user.username = username
+                user.ph_no = ph_no
+                user.industry = industry
 
-    #             db.session.commit()
-    #             flash("Details updated", "success")
-    #         except Exception as exc:
-    #             db.session.rollback()
-    #             flash("Failed to update details", "danger")
-    #         return redirect(url_for('sponsor_update_dashboard'))
-    #     form.email.data = user.email
-    #     form.username.data = user.username
-    #     form.ph_no.data = user.ph_no
-    #     form.industry.data = user.industry
-    #     return render_template("sponsor/sponsor_update_dashboard.html",
-    #                              form=form,
-    #                              text="Sponsor Update Dashboard",
-    #                              title="Sponsor Update Dashboard",
-    #                              btn_action="Update Dashboard")
+                db.session.commit()
+                return jsonify({"msg": "Details updated"}), 200
+            except Exception as exc:
+                print(exc)
+                db.session.rollback()
+                return jsonify({"error": "Failed to update details"}), 500
+        
+        elif request.method == 'GET':
+            return jsonify(email=user.email,
+                           username=user.username,
+                           ph_no=user.ph_no,
+                           industry=user.industry)
   
-    # @app.route("/sponsor/set_visibility/<cid>/<visibility>", methods=["GET"], strict_slashes=False)
-    # @e.sponsor_required
-    # def sponsor_set_visibility(cid, visibility):
-    #     cid = int(cid)
-    #     if DB_Manager().SetCampaignVisibility(cid, visibility):
-    #         flash("Visibility set", "success")
-    #     else:
-    #         flash("Failed to set visibility", "danger")
-    #     return redirect(url_for('sponsor_dashboard'))
+    @app.route("/sponsor/set_visibility/<cid>/<visibility>", methods=["GET"], strict_slashes=False)
+    @e.sponsor_required
+    def sponsor_set_visibility(cid, visibility):
+        cid = int(cid)
+        if DB_Manager().SetCampaignVisibility(cid, visibility):
+            return jsonify({"msg": "Visibility set"}), 200
+        else:
+            return jsonify({"error": "Failed to set visibility"}), 500
+
     
     # @app.route("/sponsor/view_campaigns/<cid>", methods=["GET"], strict_slashes=False)
     # @e.sponsor_required
