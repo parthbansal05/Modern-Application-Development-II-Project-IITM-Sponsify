@@ -2,18 +2,17 @@
     <div class="login-container" >
         <div v-if="error" class="error-message">
             {{ error }}
-            <!-- <div> -->
+     
             <button @click="closeError" class = "close-btn">
                 &nbsp; &times; &nbsp;
             </button>
-            <!-- </div> -->
+   
         </div>
      
         <form @submit.prevent="login" class="login-form">
             <input v-model="email" placeholder="Email" type="email" required />
             <input v-model="password" type="password" placeholder="Password" required />
             <button type="submit">Login</button>
-            <!-- <img :src="bg_img" alt="BackGround" /> -->
         </form>
         
     </div>
@@ -82,8 +81,6 @@ export default {
   padding: 0rem; 
 }
 .close-btn:hover {
-    /* border: darkred; */
-    /* background: white; */
     color: darkred;
 }
 
@@ -113,7 +110,7 @@ export default {
     position: relative;
     z-index: 2;
     
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.8) 60%),url('@/assets/leafy_bg.jpeg');
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.8) 60%),url('@/assets/leafy_bg.jpeg');
     background-size: cover;
     
 
