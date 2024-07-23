@@ -56,12 +56,12 @@ export default new Router({
       component: AdminViewAllCampaigns,
     },
     {
-      path: "/AdminViewCampaign",
+      path: "/AdminViewCampaign/:id",
       name: "AdminViewCampaign",
       component: AdminViewCampaign,
     },
     {
-      path: "/DeleteUser/:id", // Add a dynamic parameter :id
+      path: "/DeleteUser/:id",
       name: "DeleteUser",
       component: DeleteUser,
     },

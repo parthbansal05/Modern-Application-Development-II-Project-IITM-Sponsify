@@ -244,126 +244,108 @@ def server(app, socketio):
     #         redirect_url = url_for('user_dashboard')
     #     return redirect(redirect_url)
     
-    # # admin pages
-    # @app.route("/admin/dashboard", methods=["GET"], strict_slashes=False)
-    # @e.admin_required
-    # def admin_dashboard():
-    #     userID = current_user.get_id()
-    #     recent_campains = DB_Manager().QueryRecentCampaigns()
-    #     influencers = User.query.filter(User.user_type == "I").all()
-    #     sponsors = User.query.filter(User.user_type == "S").all()
-    #     users = User.query.filter(User.user_type == "U").all()
+    # admin pages
+    @app.route("/admin/dashboard", methods=["GET"], strict_slashes=False)
+    @e.admin_required
+    def admin_dashboard():
+        userID = get_jwt_id()
+        campaigns = DB_Manager().QueryRecentCampaigns()
+        
+        influencer = ([[inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget] for inf in User.query.filter(User.user_type == "I").all()])
+        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])        
+        users = ([[usr.id, usr.username, usr.email, usr.ph_no, usr.user_type, usr.category, usr.niche, usr.followers, usr.industry, usr.budget] for usr in User.query.filter(User.user_type == "U").all()])
+        
+        camps = DB_Manager().QueryCampaignTitleID()
+        camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))} if camps not in [None, []] else {}
 
-    #     camps = DB_Manager().QueryCampaignTitleID()
-    #     camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))}
+        return jsonify(campaigns=campaigns,
+                        users=users,
+                        influencer=influencer,
+                        sponsors=sponsors,
+                        camp_dict=camp_dict,
+                        admin_email=str(User.query.filter_by(id=userID).first().email),
+                        admin_phno=str(User.query.filter_by(id=userID).first().ph_no))
 
-    #     return render_template("admin/admin_dash.html",
-    #                              text="Admin Dashboard",
-    #                              title="Admin Dashboard",
-    #                              recent_campains=recent_campains,
-    #                              users=users,
-    #                              influencers=influencers,
-    #                              sponsors=sponsors,
-    #                              camp_dict = camp_dict,
-    #                              info = User.query.filter_by(id=userID).first(),
-    #                              btn_action="Admin Dashboard")
+    @app.route("/admin/insights", methods=["GET"], strict_slashes=False)
+    @e.admin_required
+    def admin_insights():
+        flagged_stats =DB_Manager().QueryFlaggedCampaignsStats()
+        visibility_stats =DB_Manager().QueryCampaignsVisibilityStats()
 
-    # @app.route("/admin/insights", methods=["GET"], strict_slashes=False)
-    # @e.admin_required
-    # def admin_insights():
-    #     userID = current_user.get_id()
-    #     flagged_stats =DB_Manager().QueryFlaggedCampaignsStats()
-    #     visibility_stats =DB_Manager().QueryCampaignsVisibilityStats()
+        # user_type_mapping = {'S': 'Sponsor', 'I': 'Influencer', 'A': 'Admin', 'U': 'User'}
+        user_counts = {'S': 0, 'I': 0, 'A': 0, 'U': 0}
+        for user_type, count in User.query.with_entities(User.user_type, db.func.count(User.user_type)).group_by(User.user_type).order_by(User.user_type.desc()).all():
+            user_counts[user_type] = count
 
-    #     user_type_mapping = {'S': 'Sponsor', 'I': 'Influencer', 'A': 'Admin', 'U': 'User'}
-    #     user_counts = {'S': 0, 'I': 0, 'A': 0, 'U': 0}
-    #     for user_type, count in User.query.with_entities(User.user_type, db.func.count(User.user_type)).group_by(User.user_type).order_by(User.user_type.desc()).all():
-    #         user_counts[user_type] = count
-
-    #     top5_influencers = User.query.filter_by(user_type="I").order_by(User.followers.desc()).limit(5).all()
-    #     Approved_stats = DB_Manager().QueryCampaignsAcceptanceStatus()
+        top5_influencers = User.query.filter_by(user_type="I").order_by(User.followers.desc()).limit(5).all()
+        Approved_stats = DB_Manager().QueryCampaignsAcceptanceStatus()
 
 
-    #     flagged_campaigns_stats = [{'number': flagged_stats[0], 'label': "number_of_flagged_campaigns"},
-    #                                 {'number': flagged_stats[1], 'label': "number_of_non_flagged_campaigns"}]
-    #     visibility_campaigns_stats = [{'number': visibility_stats[0], 'label': "Public"},
-    #                                 {'number': visibility_stats[1], 'label': "Private"}]
-    #     Approved_campaigns_stats = [{'number': Approved_stats[0][0], 'label': "Approved"},
-    #                                 {'number': Approved_stats[1][0], 'label': "Rejected"},
-    #                                 {'number': Approved_stats[2][0], 'label': "PENDING"}]
+        flagged_campaigns_stats = [{'number': flagged_stats[0], 'label': "number_of_flagged_campaigns"},
+                                    {'number': flagged_stats[1], 'label': "number_of_non_flagged_campaigns"}]
+        visibility_campaigns_stats = [{'number': visibility_stats[0], 'label': "Public"},
+                                    {'number': visibility_stats[1], 'label': "Private"}]
+        Approved_campaigns_stats = [{'number': Approved_stats[0][0], 'label': "Approved"},
+                                    {'number': Approved_stats[1][0], 'label': "Rejected"},
+                                    {'number': Approved_stats[2][0], 'label': "PENDING"}]
         
         
 
-    #     user_distribution = [
-    #         {'number': user_counts['U'], 'label': "User"},
-    #         {'number': user_counts['S'], 'label': "Sponsor"},
-    #         {'number': user_counts['I'], 'label': "Influencer"},
-    #         {'number': user_counts['A'], 'label': "Admin"}
-    #     ]
-    #     influencer_stats = [{'number': top5_influencers[i].followers, 'label': top5_influencers[i].username} for i in range(min(len(top5_influencers), 5))]
-        
-    #     info = [flagged_campaigns_stats, visibility_campaigns_stats, user_distribution, influencer_stats, Approved_campaigns_stats]
-    #     return render_template("admin/admin_insights.html",
-    #                  text="Admin Insights",
-    #                  title="Admin Insights",
-    #                  info = info,
-    #                  btn_action="Admin Insights")
+        user_distribution = [
+            {'number': user_counts['U'], 'label': "User"},
+            {'number': user_counts['S'], 'label': "Sponsor"},
+            {'number': user_counts['I'], 'label': "Influencer"},
+            {'number': user_counts['A'], 'label': "Admin"}
+        ]
+        influencer_stats = [{'number': top5_influencers[i].followers, 'label': top5_influencers[i].username} for i in range(min(len(top5_influencers), 5))]
+        info = [flagged_campaigns_stats, visibility_campaigns_stats, user_distribution, influencer_stats, Approved_campaigns_stats]
+        return jsonify(info=info)
 
-    # @app.route("/admin/view_campaign/<cid>", methods=["GET"], strict_slashes=False)
-    # @e.admin_required
-    # def admin_view_campaign(cid):
-    #     cid = int(cid)
-    #     campaign = DB_Manager().QueryCampaignByCID(cid)
-    #     return render_template("admin/admin_view_campaign.html",
-    #                            text="Admin View Campaigns",
-    #                            title="Admin View Campaigns",
-    #                            campaign=campaign,
-    #                            sponsors = User.query.filter(User.user_type == "S").all(),
-    #                            btn_action="Admin View Campaigns")
+    @app.route("/admin/view_campaign/<cid>", methods=["GET"], strict_slashes=False)
+    @e.admin_required
+    def admin_view_campaign(cid):
+        cid = int(cid)
+        campaign = DB_Manager().QueryCampaignByCID(cid)
+        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])        
+        return jsonify(campaign=campaign,
+                       sponsors=sponsors)
     
-    # @app.route("/admin/view_all_campaigns", methods=["GET"], strict_slashes=False)
-    # @e.admin_required
-    # def admin_view_all_campaigns():
-    #     return render_template("admin/admin_view_all_campaigns.html",
-    #                            text="Admin View All Campaigns",
-    #                            title="Admin View All Campaigns",
-    #                            campaigns=DB_Manager().QueryAllCampaigns(),
-    #                            sponsors = User.query.filter(User.user_type == "S").all(),
-    #                            btn_action="Admin View All Campaigns")
+    @app.route("/admin/view_all_campaigns", methods=["GET"], strict_slashes=False)
+    @e.admin_required
+    def admin_view_all_campaigns():
+        campaigns=DB_Manager().QueryAllCampaigns()
+        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])        
+        return jsonify(campaigns=campaigns,
+                          sponsors=sponsors)
     
-    # @app.route("/admin/flag_campaign/<cid>", methods=["GET"], strict_slashes=False)
-    # @e.admin_required
-    # def admin_flag_campaign(cid):
-    #     cid = int(cid)
-    #     if DB_Manager().flagCampaign(cid):
-    #         flash("Campaign flagged", "success")
-    #     else:
-    #         flash("Failed to flag campaign", "danger")
-    #     return redirect(url_for('admin_dashboard'))
+    @app.route("/admin/flag_campaign/<cid>", methods=["GET"], strict_slashes=False)
+    @e.admin_required
+    def admin_flag_campaign(cid):
+        cid = int(cid)
+        if DB_Manager().flagCampaign(cid):
+            return jsonify({"msg": "Campaign flagged"}), 200
+        else:
+            return jsonify({"error": "Failed to flag campaign"}), 500
     
-    # @app.route("/admin/unflag_campaign/<cid>", methods=["GET"], strict_slashes=False)
-    # @e.admin_required
-    # def admin_unflag_campaign(cid):
-    #     cid = int(cid)
-    #     if DB_Manager().unflagCampaign(cid):
-    #         flash("Campaign unflagged", "success")
-    #     else:
-    #         flash("Failed to unflag campaign", "danger")
-    #     return redirect(url_for('admin_dashboard'))
+    @app.route("/admin/unflag_campaign/<cid>", methods=["GET"], strict_slashes=False)
+    @e.admin_required
+    def admin_unflag_campaign(cid):
+        cid = int(cid)
+        if DB_Manager().unflagCampaign(cid):
+            return jsonify({"msg": "Campaign unflagged"}), 200
+        else:
+            return jsonify({"error": "Failed to unflag campaign"}), 500
 
     # # sponsor pages
-    # @app.route("/sponsor/dashboard", methods=["GET"], strict_slashes=False)
-    # @e.sponsor_required
-    # def sponsor_dashboard():
-    #     userID = current_user.get_id()
-
-    #     campaigns = DB_Manager().QueryCampaignBySID(userID)
-    #     return render_template("sponsor/sponsor_dash.html",
-    #                            text="Sponsor Dashboard",
-    #                            title="Sponsor Dashboard",
-    #                            campaigns=campaigns,
-    #                            info = User.query.filter_by(id=userID).first(),
-    #                            btn_action="Sponsor Dashboard")
+    @app.route("/sponsor/dashboard", methods=["GET"], strict_slashes=False)
+    @e.sponsor_required
+    def sponsor_dashboard():
+        userID = get_jwt_id()
+        campaigns = DB_Manager().QueryCampaignBySID(userID)
+        spo = User.query.filter_by(id=userID).first()
+        sponsors = ([spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget])
+        return jsonify(campaigns=campaigns,
+                       info = sponsors)        
     
     # @app.route("/sponsor/update_dashboard", methods=["GET", "POST"], strict_slashes=False)
     # @e.sponsor_required

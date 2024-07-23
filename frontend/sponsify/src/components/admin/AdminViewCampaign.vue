@@ -1,6 +1,7 @@
 <template>
     <div>
-      <h1>Current User: {{ username }}</h1>
+      <h4>{{ campaign }}</h4>
+      <h4>{{ sponsors }}</h4>
     </div>
   </template>
   
@@ -10,17 +11,20 @@
   export default {
     data() {
       return {
-        username: ''
+        campaign: "",
+        sponsors: "",
+        id: this.$route.params.id
       };
     },
     async created() {
       try {
-        const response = await axios.get('http://localhost:5000/sponsor', {
+        const response = await axios.get('http://localhost:5000/admin/view_campaign/' + this.id, {
           headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
         });
-        this.username = response.data.username;
+        this.campaign = response.data.campaign;
+        this.sponsors = response.data.sponsors;
       } catch (err) {
-        this.$router.push('/login');
+        console.error(err);
       }
     }
   

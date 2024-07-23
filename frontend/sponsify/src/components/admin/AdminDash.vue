@@ -1,6 +1,14 @@
 <template>
     <div>
-      <h1>Current User: {{ username }}</h1>
+      <h6>
+        {{ campaigns }} <br>
+        {{ users }}<br>
+        {{ influencer }}<br>
+        {{ sponsors }}<br>
+        {{ camp_dict }}<br>
+        {{ admin_email }}<br>
+        {{ admin_phno }}<br>
+      </h6>
     </div>
   </template>
   
@@ -10,17 +18,29 @@
   export default {
     data() {
       return {
-        username: ''
+        campaigns: '',
+        users: '',
+        influencer: '',
+        sponsors: '',
+        camp_dict: '',
+        admin_email: '',
+        admin_phno: ''
       };
     },
     async created() {
       try {
-        const response = await axios.get('http://localhost:5000/sponsor', {
+        const response = await axios.get('http://localhost:5000/admin/dashboard', {
           headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
         });
-        this.username = response.data.username;
+        this.campaigns = response.data.campaigns;
+        this.users = response.data.users;
+        this.influencer = response.data.influencer;
+        this.sponsors = response.data.sponsors;
+        this.camp_dict = response.data.camp_dict;
+        this.admin_email = response.data.admin_email;
+        this.admin_phno = response.data.admin_phno;
       } catch (err) {
-        this.$router.push('/login');
+        console.log(err);
       }
     }
   
