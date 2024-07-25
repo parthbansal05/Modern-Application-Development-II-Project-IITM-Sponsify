@@ -178,7 +178,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 
 .error-message{
 	display: flex;
@@ -195,7 +195,7 @@ export default {
 .err-close-btn{
 	position: relative;
 	top: 0px;
-	right: 10px;
+	right: 0px;
 	background: none;
 	border: none;
 	border-radius: 2px; 
@@ -223,7 +223,7 @@ export default {
 .msg-close-btn{
 	position: relative;
 	top: 0px;
-	right: 10px;
+	right: 0px;
 	background: none;
 	border: none;
 	border-radius: 2px; 
