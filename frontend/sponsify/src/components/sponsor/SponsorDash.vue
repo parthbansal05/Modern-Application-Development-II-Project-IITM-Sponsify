@@ -8,8 +8,8 @@
 				Email: {{ info[2] }}<br>
 				Phone Number: {{ info[3] }}<br>
 				User Type: {{ info[4] }}<br>
-				Category: {{ info[8] }}<br>
-				Niche: {{ info[5] }}<br>
+				Category: {{ info[5] }}<br>
+				Niche: {{ info[6] }}<br>
 				Followers: {{ info[7] }}<br>
 				Industry: {{ info[8] }}<br>
 				Budget: {{ info[9] }}<br>
@@ -21,32 +21,43 @@
 			</div>
 			<div class="card-body">
 				<div v-if="campaigns.length" class="campaign-container">
-
-					<div v-for="(campaign, index) in campaigns" :key="index" class="card">
-
+					<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 						<div class="card-header">
-							<h3>Campaign {{ index + 1 }}</h3>
+							<h3>{{ campaigns[2][index] }}</h3>
 							<div style="display: flex; justify-content: space-between;">
-							<a href="#" class="btn btn-primary">View</a>
-							<a href="#" class="btn btn-warning">Make Private</a>
-							<a href="#" class="btn btn-success">Make Public</a>
-							<a href="#" class="btn btn-primary">Update</a>
-							<a href="#" class="btn btn-primary">Delete</a>
+								<a :href="`/SponsorViewCampaign/${campaigns[0][index]}`"
+									class="btn btn-primary">View</a>
+								<a v-if="campaigns[7][index] === 'Public'" href="#" class="btn btn-warning"
+									@click="setVisibility(campaigns[0][index], 'Private')">Make Private</a>
+								<a v-if="campaigns[7][index] === 'Private'" href="#" class="btn btn-success"
+									@click="setVisibility(campaigns[0][index], 'Public')">Make Public</a>
+								<a :href="`/UpdateCampaign/${campaigns[0][index]}`" class="btn btn-primary">Update</a>
+								<a href="#" class="btn btn-primary"
+									@click="delete_campaign(campaigns[0][index])">Delete</a>
+							</div>
 						</div>
-						</div>
-
 						<div class="card-body">
-
-							<p>Campaign Number: {{ campaign[0] }}</p>
-							<p>Sponsor ID: {{ campaign[1] }}</p>
-							<p>Title: {{ campaign[2] }}</p>
-							<p>Description: {{ campaign[3] }}</p>
-							<p>Start Time: {{ formatTimestamp(campaign[4]) }}</p>
-							<p>End Time: {{ formatTimestamp(campaign[5]) }}</p>
-							<p>Budget: {{ campaign[6] }}</p>
-							<p>Accessibility: {{ campaign[7] }}</p>
-							<p>Goal: {{ campaign[8] }}</p>
-							<p>Flagged: {{ campaign[9] }}</p>
+							<p>Campaign ID: {{ campaigns[0][index] }}</p>
+							<p>Sponsor ID: {{ campaigns[1][index] }}</p>
+							<p>Title: {{ campaigns[2][index] }}</p>
+							<p>Description: {{ campaigns[3][index] }}</p>
+							<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>
+							<p>End Time: {{ formatTimestamp(campaigns[5][index]) }}</p>
+							<p>Budget: {{ campaigns[6][index] }}</p>
+							<p>Visibility: {{ campaigns[7][index] }}</p>
+							<p>Goal: {{ campaigns[8][index] }}</p>
+							<p>Flagged: {{ campaigns[9][index] }}</p>
+							<br>
+							<p>Campaign Progress</p>
+							<div class="slider-container">
+								<div class="slider" :id="'slider-' + index">
+									<div class="slider-progress" :id="'slider-progress-' + index"></div>
+								</div>
+								<div class="timestamp-container">
+									<span :id="'start-time-' + index">{{ formatTimestamp(campaigns[4][index]) }}</span>
+									<span :id="'end-time-' + index">{{ formatTimestamp(campaigns[5][index]) }}</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -76,14 +87,51 @@ export default {
 			});
 			this.campaigns = response.data.campaigns;
 			this.info = response.data.info;
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+			for (let i = 0; i < this.campaigns[0].length; i++) {
+				const startTime = this.campaigns[4][i] * 1000;
+				const endTime = this.campaigns[5][i] * 1000;
+				const currentTime = Date.now();
+				const totalDuration = endTime - startTime;
+				const elapsedDuration = currentTime - startTime;
+				const percentage = Math.min((elapsedDuration / totalDuration) * 100, 100);
+
+				const slider = document.getElementById('slider-progress-' + i);
+				slider.style.width = percentage + '%';
+			}
 		} catch (err) {
 			console.log(err);
 		}
 	},
+
 	methods: {
 		formatTimestamp(timestamp) {
 			const date = new Date(timestamp * 1000);
 			return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+		},
+		async setVisibility(campaignID, visibility) {
+			await axios.get('http://localhost:5000/sponsor/set_visibility/' + campaignID + '/' + visibility, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			})
+				.then((response) => {
+					console.log(response);
+					window.location.reload();
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async delete_campaign(campaignID) {
+			await axios.get('http://localhost:5000/sponsor/delete_campaign/' + campaignID, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			})
+				.then((response) => {
+					console.log(response);
+					window.location.reload();
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		}
 
 
@@ -137,5 +185,34 @@ export default {
 	margin: 0px 0;
 	background-color: #f9f9f9;
 	box-sizing: border-box;
+}
+
+.slider-container {
+	width: 100%;
+}
+
+.slider {
+	width: 100%;
+	height: 10px;
+	background-color: #ddd;
+	position: relative;
+	border-radius: 5px;
+}
+
+.slider-progress {
+	height: 100%;
+	background-color: #4caf50;
+	width: 0;
+	border-radius: 5px;
+}
+
+.timestamp-container {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 10px;
+}
+
+.timestamp-container span {
+	font-size: 14px;
 }
 </style>

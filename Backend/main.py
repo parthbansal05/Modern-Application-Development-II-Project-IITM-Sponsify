@@ -85,7 +85,6 @@ def server(app, socketio):
             else:
                 return jsonify({"error": "Wrong username or password"}), 401
 
-
     @app.route("/influencer/register", methods=["POST"], strict_slashes=False)
     def influencer_register():
         if request.method == 'POST':
@@ -157,7 +156,6 @@ def server(app, socketio):
             except Exception as exc:
                 db.session.rollback()
                 return jsonify({"error": "Something went wrong!"}), 200
-
 
     @app.route("/user/register", methods=("GET", "POST"), strict_slashes=False)
     def user_register():
