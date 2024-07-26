@@ -1,16 +1,14 @@
 <template>
     <div>
-        <button @click="logout">Logout</button>
+        <h1>Logging out...</h1>
     </div>
 </template>
 
 <script>
 export default {
-    methods: {
-        logout() {
-            sessionStorage.removeItem('token');  // Change to sessionStorage
-            this.$router.push('/login');
-        }
+    async created() {
+        sessionStorage.removeItem('token');  // Change to sessionStorage
+        this.$router.push('/login');
     }
 };
 </script>

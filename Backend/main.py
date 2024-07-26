@@ -66,26 +66,24 @@ def server(app, socketio):
                 redirect_url = ""
                 print(user.user_type)
                 print(type(next_url))
-                # if user.user_type == "A":
-                #     redirect_url = url_for('admin')
-                # elif user.user_type == "S":
-                #     redirect_url = url_for('sponsor')
-                # elif user.user_type == "I":
-                #     redirect_url = url_for('influencer')
-                # elif user.user_type == "U":
-                #     redirect_url = url_for('user')
+                if user.user_type == "A":
+                    redirect_url = "/AdminDash"
+                elif user.user_type == "S":
+                    redirect_url = "/SponsorDash"
+                elif user.user_type == "I":
+                    redirect_url = "/InfluencerDash"
+                elif user.user_type == "U":
+                    redirect_url = "/UserDash"
                 
                 access_token = create_access_token(identity=user.id, expires_delta = False)
                 
                 if next_url == "None" or next_url == None:
                     return jsonify(access_token=access_token, redirect_url = redirect_url)
-                
                 if not e.is_safe_url(next_url):
-                    return jsonify({"msg": "Bad URL"}), 400
-                
+                    return jsonify({"error": "Bad URL"}), 400
                 return jsonify(access_token=access_token, redirect_url = next_url)
             else:
-                return jsonify({"msg": "Wrong username or password"}), 401
+                return jsonify({"error": "Wrong username or password"}), 401
 
 
     @app.route("/influencer/register", methods=["POST"], strict_slashes=False)
@@ -119,10 +117,11 @@ def server(app, socketio):
                 return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
-                return jsonify({"error": "User already exists!"}), 409
+                print(exc)
+                return jsonify({"error": "User already exists!"}), 200
             except Exception as exc:
                 db.session.rollback()
-                return jsonify({"error": "Something went wrong!"}), 500
+                return jsonify({"error": "Something went wrong!"}), 200
     
     @app.route("/sponsor/register", methods=["POST"], strict_slashes=False)
     def sponsor_register():
@@ -154,10 +153,10 @@ def server(app, socketio):
                 return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
-                return jsonify({"error": "User already exists!"}), 409
+                return jsonify({"error": "User already exists!"}), 200
             except Exception as exc:
                 db.session.rollback()
-                return jsonify({"error": "Something went wrong!"}), 500
+                return jsonify({"error": "Something went wrong!"}), 200
 
 
     @app.route("/user/register", methods=("GET", "POST"), strict_slashes=False)
@@ -189,10 +188,10 @@ def server(app, socketio):
                 return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
-                return jsonify({"error": "User already exists!"}), 409
+                return jsonify({"error": "User already exists!"}), 200
             except Exception as exc:
                 db.session.rollback()
-                return jsonify({"error": "Something went wrong!"}), 500
+                return jsonify({"error": "Something went wrong!"}), 200
 
     @e.admin_required
     @app.route("/delete_user/<uid>", methods=["GET"], strict_slashes=False)
