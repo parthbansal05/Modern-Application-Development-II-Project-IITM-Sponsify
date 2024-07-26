@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>Current User: {{ username }}</h1>
+      <h1>Current User: {{ campaigns }}</h1>
     </div>
   </template>
   
@@ -10,17 +10,17 @@
   export default {
     data() {
       return {
-        username: ''
+        campaigns: ''
       };
     },
     async created() {
       try {
-        const response = await axios.get('http://localhost:5000/sponsor', {
+        const response = await axios.get('http://localhost:5000/influencer/search_campaigns', {
           headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
         });
-        this.username = response.data.username;
+        this.campaigns = response.data.campaigns;
       } catch (err) {
-        this.$router.push('/login');
+        console.log(err);
       }
     }
   
