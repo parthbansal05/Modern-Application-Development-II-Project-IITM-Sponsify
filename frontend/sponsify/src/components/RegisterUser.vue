@@ -54,14 +54,21 @@ export default {
 					this.error = 'Passwords do not match';
 					return;
 				}
-				await axios.post('http://localhost:5000/user/register', {
+				const response = await axios.post('http://localhost:5000/user/register', {
 					username: this.username,
 					email: this.email,
 					pwd: this.password,
 					phno: this.phno,
 					next: this.$route.query.next
 				});
-				this.msg = 'User registered successfully';
+				if ('error' in response.data) {
+                    this.error = response.data.error;
+                    return;
+                }
+				if ('msg' in response.data) {
+                    this.msg = response.data.msg;
+                    return;
+                }
 			} catch (err) {
 				this.error = 'Error registering User';
 			}

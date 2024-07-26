@@ -76,7 +76,7 @@ export default {
 					this.error = 'Passwords do not match';
 					return;
 				}
-				await axios.post('http://localhost:5000/sponsor/register', {
+				const response = await axios.post('http://localhost:5000/sponsor/register', {
 					username: this.username,
 					email: this.email,
 					pwd: this.password,
@@ -84,9 +84,16 @@ export default {
 					industry: this.industry,
 					next: this.$route.query.next
 				});
-				this.msg = 'Sponsor registered successfully';
+				if ('error' in response.data) {
+                    this.error = response.data.error;
+                    return;
+                }
+				if ('msg' in response.data) {
+                    this.msg = response.data.msg;
+                    return;
+                }
 			} catch (err) {
-				this.error = 'Error registering Sponsor';
+				console.error(err);
 			}
 		},
 

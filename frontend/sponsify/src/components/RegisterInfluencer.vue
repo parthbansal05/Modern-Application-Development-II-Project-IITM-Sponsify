@@ -152,7 +152,7 @@ export default {
 					this.error = 'Passwords do not match';
 					return;
 				}
-				await axios.post('http://localhost:5000/influencer/register', {
+				const response = await axios.post('http://localhost:5000/influencer/register', {
 					username: this.username,
 					email: this.email,
 					pwd: this.password,
@@ -161,9 +161,16 @@ export default {
 					niche: this.niche,
 					next: this.$route.query.next
 				});
-				this.msg = 'Influencer registered successfully';
+				if ('error' in response.data) {
+                    this.error = response.data.error;
+                    return;
+                }
+				if ('msg' in response.data) {
+                    this.msg = response.data.msg;
+                    return;
+                }
 			} catch (err) {
-				this.error = 'Error registering influencer';
+				console.error(err);
 			}
 		},
 

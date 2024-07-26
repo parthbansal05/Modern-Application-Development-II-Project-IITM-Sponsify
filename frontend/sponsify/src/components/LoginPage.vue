@@ -1,20 +1,20 @@
 <template>
-    <div class="login-container" >
+    <div class="login-container">
         <div v-if="error" class="error-message">
             {{ error }}
-     
-            <button @click="closeError" class = "close-btn">
+
+            <button @click="closeError" class="close-btn">
                 &nbsp; &times; &nbsp;
             </button>
-   
+
         </div>
-     
+
         <form @submit.prevent="login" class="login-form">
             <input v-model="email" placeholder="Email" type="email" required />
             <input v-model="password" type="password" placeholder="Password" required />
             <button type="submit">Login</button>
         </form>
-        
+
     </div>
 </template>
 
@@ -38,24 +38,28 @@ export default {
                     pwd: this.password,
                     next: this.$route.query.next
                 });
+                if ('error' in response.data) {
+                    this.error = response.data.error;
+                    return;
+                }
                 console.log(response.data);
                 sessionStorage.setItem('token', response.data.access_token);
                 const nextUrl = response.data.redirect_url || '/';
                 this.$router.push(nextUrl);
             } catch (err) {
-                this.error = 'Invalid Username or Password !';
+                console.error(err);
             }
         },
 
         closeError() {
-                this.error = '';
+            this.error = '';
         }
     }
 };
 </script>
 
 <style scoped>
-.error-message{
+.error-message {
     display: flex;
     width: 30rem;
     align-items: center;
@@ -69,17 +73,18 @@ export default {
 }
 
 .close-btn {
-  position: relative;
-  top: 0px;
-  right: 10px;
-  background: none;
-  border: none;
-  border-radius: 2px; 
-  font-size: 2rem;
-  cursor: pointer;
-  color: rgb(188, 0, 0);
-  padding: 0rem; 
+    position: relative;
+    top: 0px;
+    right: 10px;
+    background: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: rgb(188, 0, 0);
+    padding: 0rem;
 }
+
 .close-btn:hover {
     color: darkred;
 }
@@ -91,10 +96,14 @@ export default {
     justify-content: center;
     height: 100vh;
     background-color: #FFFFFF;
-    background-image: url('@/assets/background.jpeg'); /* Replace with your image path */
-    background-size: cover; /* Adjust this to cover, contain, or other values based on your need */
-    background-position: center; /* Adjust the position as needed */
-    background-repeat: no-repeat; /* Ensure the image doesn't repeat */
+    background-image: url('@/assets/background.jpeg');
+    /* Replace with your image path */
+    background-size: cover;
+    /* Adjust this to cover, contain, or other values based on your need */
+    background-position: center;
+    /* Adjust the position as needed */
+    background-repeat: no-repeat;
+    /* Ensure the image doesn't repeat */
 }
 
 .login-form {
@@ -106,13 +115,13 @@ export default {
     padding-top: 15rem;
     border-radius: 8px;
 
-    
+
     position: relative;
     z-index: 2;
-    
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.8) 60%),url('@/assets/leafy_bg.jpeg');
+
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.8) 60%), url('@/assets/leafy_bg.jpeg');
     background-size: cover;
-    
+
 
 }
 
@@ -138,6 +147,4 @@ export default {
 .login-form button:hover {
     background-color: #B97A57;
 }
-
-
 </style>
