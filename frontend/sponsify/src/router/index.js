@@ -76,7 +76,7 @@ export default new Router({
       component: InfluencerInbox,
     },
     {
-      path: "/InfluencerInboxChat",
+      path: "/InfluencerInboxChat/:id",
       name: "InfluencerInboxChat",
       component: InfluencerInboxChat,
     },
@@ -106,7 +106,7 @@ export default new Router({
       component: SponsorInbox,
     },
     {
-      path: "/SponsorInboxChat",
+      path: "/SponsorInboxChat/:id",
       name: "SponsorInboxChat",
       component: SponsorInboxChat,
     },
@@ -121,12 +121,12 @@ export default new Router({
       component: SponsorUpdateDashboard,
     },
     {
-      path: "/SponsorViewCampaign",
+      path: "/SponsorViewCampaign/:id",
       name: "SponsorViewCampaign",
       component: SponsorViewCampaign,
     },
     {
-      path: "/UpdateCampaign",
+      path: "/UpdateCampaign/:id",
       name: "UpdateCampaign",
       component: UpdateCampaign,
     },

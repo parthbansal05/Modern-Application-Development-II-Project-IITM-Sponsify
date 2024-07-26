@@ -62,7 +62,10 @@ def admin_required(f):
     def wrap(*args, **kwargs):
         # get function name
         func_name = f.__name__
-        verify_jwt_in_request(optional = True)
+        try:
+            verify_jwt_in_request(optional = True)
+        except Exception as exc:
+            return redirect(url_for('login')+"?next="+url_for(func_name, **kwargs))
         current_user_id = get_jwt_identity()
         print(current_user_id)
         if current_user_id is not None:
@@ -85,7 +88,10 @@ def sponsor_required(f):
     def wrap(*args, **kwargs):
         # get function name
         func_name = f.__name__
-        verify_jwt_in_request(optional = True)
+        try:
+            verify_jwt_in_request(optional = True)
+        except Exception as exc:
+            return redirect(url_for('login')+"?next="+url_for(func_name, **kwargs))
         current_user_id = get_jwt_identity()
         print(current_user_id)
         if current_user_id is not None:
@@ -107,7 +113,10 @@ def influencer_required(f):
     def wrap(*args, **kwargs):
         # get function name
         func_name = f.__name__
-        verify_jwt_in_request(optional = True)
+        try:
+            verify_jwt_in_request(optional = True)
+        except Exception as exc:
+            return redirect(url_for('login')+"?next="+url_for(func_name, **kwargs))
         current_user_id = get_jwt_identity()
         if current_user_id is not None:
             user_type = User.query.filter_by(id=current_user_id).first().user_type
@@ -128,7 +137,10 @@ def user_required(f):
     def wrap(*args, **kwargs):
         # get function name
         func_name = f.__name__
-        verify_jwt_in_request(optional = True)
+        try:
+            verify_jwt_in_request(optional = True)
+        except Exception as exc:
+            return redirect(url_for('login')+"?next="+url_for(func_name, **kwargs))
         current_user_id = get_jwt_identity()
         if current_user_id is not None:
             user_type = User.query.filter_by(id=current_user_id).first().user_type

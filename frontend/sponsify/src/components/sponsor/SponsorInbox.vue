@@ -1,6 +1,8 @@
 <template>
     <div>
-      <h1>Current User: {{ username }}</h1>
+      <h4>{{ inbox }}</h4>
+      <h4>{{ camp_dict }}</h4>
+      <h4>{{ influencer }}</h4>
     </div>
   </template>
   
@@ -10,17 +12,21 @@
   export default {
     data() {
       return {
-        username: ''
+        inbox: '',
+        camp_dict: '',
+        influencer: ''
       };
     },
     async created() {
       try {
-        const response = await axios.get('http://localhost:5000/sponsor', {
+        const response = await axios.get('http://localhost:5000/sponsor/inbox', {
           headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
         });
-        this.username = response.data.username;
+        this.inbox = response.data.inbox;
+        this.camp_dict = response.data.camp_dict;
+        this.influencer = response.data.influencer;
       } catch (err) {
-        this.$router.push('/login');
+        console.log(err);
       }
     }
   
