@@ -55,7 +55,6 @@ export default {
 </script>
 
 <style scoped>
-
 .error-message {
     display: flex;
     width: 30rem;

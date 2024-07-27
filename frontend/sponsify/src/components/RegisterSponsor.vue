@@ -47,7 +47,7 @@
 
 			<button type="submit">Register</button>
 		</form>
-		
+
 	</div>
 </template>
 
@@ -85,13 +85,13 @@ export default {
 					next: this.$route.query.next
 				});
 				if ('error' in response.data) {
-                    this.error = response.data.error;
-                    return;
-                }
+					this.error = response.data.error;
+					return;
+				}
 				if ('msg' in response.data) {
-                    this.msg = response.data.msg;
-                    return;
-                }
+					this.msg = response.data.msg;
+					return;
+				}
 			} catch (err) {
 				console.error(err);
 			}
@@ -103,15 +103,14 @@ export default {
 
 		closeMsg() {
 			this.msg = null
-			}
+		}
 	}
 };
 </script>
 
 
 <style scoped>
-
-.error-message{
+.error-message {
 	display: flex;
 	width: 50rem;
 	align-items: center;
@@ -123,46 +122,51 @@ export default {
 	border-radius: 8px;
 	margin-bottom: 8px;
 }
-.err-close-btn{
+
+.err-close-btn {
 	position: relative;
 	top: 0px;
 	right: 0px;
 	background: none;
 	border: none;
-	border-radius: 2px; 
+	border-radius: 2px;
 	font-size: 2rem;
 	cursor: pointer;
 	color: rgb(188, 0, 0);
-	padding: 0rem; 
+	padding: 0rem;
 }
+
 .err-close-btn:hover {
 	color: darkred;
 }
 
-.success-message{
+.success-message {
 	display: flex;
 	width: 50rem;
 	align-items: center;
 	justify-content: space-between;
 	font-size: 1.2rem;
-	background: rgba(144, 238, 144, 0.8); /* light green */
+	background: rgba(144, 238, 144, 0.8);
+	/* light green */
 	color: green;
 	padding: 1rem;
 	border-radius: 8px;
 	margin-bottom: 8px;
 }
-.msg-close-btn{
+
+.msg-close-btn {
 	position: relative;
 	top: 0px;
 	right: 0px;
 	background: none;
 	border: none;
-	border-radius: 2px; 
+	border-radius: 2px;
 	font-size: 2rem;
 	cursor: pointer;
 	color: green;
-	padding: 0rem; 
+	padding: 0rem;
 }
+
 .msg-close-btn:hover {
 	color: darkgreen;
 }
@@ -174,60 +178,62 @@ export default {
 	justify-content: center;
 	height: 100vh;
 	background-color: #FFFFFF;
-	background-image: url('@/assets/background.jpeg'); /* Replace with your image path */
-	background-size: cover; /* Adjust this to cover, contain, or other values based on your need */
-	background-position: center; /* Adjust the position as needed */
-	background-repeat: no-repeat; /* Ensure the image doesn't repeat */
-}	
+	background-image: url('@/assets/background.jpeg');
+	/* Replace with your image path */
+	background-size: cover;
+	/* Adjust this to cover, contain, or other values based on your need */
+	background-position: center;
+	/* Adjust the position as needed */
+	background-repeat: no-repeat;
+	/* Ensure the image doesn't repeat */
+}
 
 .register-form {
-    display: flex;
-    width: 50rem;
-    flex-direction: column;
-    background: white;
-    padding: 1.5rem;
-    padding-right: 25rem;
-    border-radius: 8px;
+	display: flex;
+	width: 50rem;
+	flex-direction: column;
+	background: white;
+	padding: 1.5rem;
+	padding-right: 25rem;
+	border-radius: 8px;
 
-    
-    position: relative;
-    z-index: 2;
-    
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.3) 55%,rgba(255, 255, 255, 0) 60%),url('@/assets/leafy_bg.jpeg');
-    background-size: cover;
+
+	position: relative;
+	z-index: 2;
+
+	background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 60%), url('@/assets/leafy_bg.jpeg');
+	background-size: cover;
 }
 
 .register-form input {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    background-color: #FFFFFF;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	background-color: #FFFFFF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
 }
 
 .register-form button {
-    padding: 0.5rem;
-    font-size: 1rem;
-    color: white;
-    background-color: #38566E;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+	padding: 0.5rem;
+	font-size: 1rem;
+	color: white;
+	background-color: #38566E;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
 }
 
 .register-form select {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    background-color: #FFFFFF;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	background-color: #FFFFFF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
 }
 
 .register-form button:hover {
-    background-color: #B97A57;
+	background-color: #B97A57;
 }
-
-
 </style>
