@@ -16,23 +16,30 @@
 		<div id="mySidebar" class="sidebar">
 			<h3 class="sidebar-heading">Person</h3>
 			<h6 class="sidebar-subheading">Post</h6>
-		
+
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="navigate('dashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="navigate('view-campaigns')" class="sidebar-button btn btn-secondary btn-block mb-2">View Campaigns</button>
-				<button @click="navigate('view-insights')" class="sidebar-button btn btn-secondary btn-block mb-2">View Insights</button>
+				<button @click="navigate('dashboard')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="navigate('view-campaigns')" class="sidebar-button btn btn-secondary btn-block mb-2">View
+					Campaigns</button>
+				<button @click="navigate('view-insights')" class="sidebar-button btn btn-secondary btn-block mb-2">View
+					Insights</button>
 			</div>
-			
+
 			<div class="sidebar-buttons-bottom">
-				<button @click="navigate('login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="navigate('influencer-register')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="navigate('sponsor-register')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="navigate('user-register')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="navigate('login')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="navigate('influencer-register')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="navigate('sponsor-register')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="navigate('user-register')" class="sidebar-button btn btn-secondary btn-block mb-2">User
+					Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
-			
+
 		</div>
 
 		<div class="main-content" id="main">
@@ -267,11 +274,11 @@ export default {
 	background-color: #444;
 }
 
-.logo-img{
+.logo-img {
 	position: absolute;
 	height: 60px;
-    width: auto;  
-    left: 80px; 
+	width: auto;
+	left: 80px;
 }
 
 .sidebar {
@@ -286,27 +293,28 @@ export default {
 	transition: 0.5s;
 	padding-top: 20px;
 	justify-content: center;
-	text-align: center;	
-	background: rgba(255,255,255,0.5), url('@/assets/sidebar_bg.jpg');
+	text-align: center;
+	background: rgba(255, 255, 255, 0.5), url('@/assets/sidebar_bg.jpg');
 	background-size: cover;
 	background-position: center;
 	backdrop-filter: blur(10px);
 	scrollbar-width: none;
 }
+
 .sidebar::before {
-  content: "";
-  position: absolute;
-  top: -20px;    
-  left: -20px;  
-  width: calc(100% + 40px);  
-  height: calc(100% + 0px);
-  background: url('@/assets/sidebar_bg.jpg') no-repeat center center;
-  background-size: cover;
-  filter: blur(10px);
-  z-index: -1;
+	content: "";
+	position: absolute;
+	top: -20px;
+	left: -20px;
+	width: calc(100% + 40px);
+	height: calc(100% + 0px);
+	background: url('@/assets/sidebar_bg.jpg') no-repeat center center;
+	background-size: cover;
+	filter: blur(10px);
+	z-index: -1;
 }
 
-.sidebar-button{
+.sidebar-button {
 	position: relative;
 	width: 100%;
 	background-color: transparent;
@@ -316,12 +324,14 @@ export default {
 	cursor: pointer;
 	font-size: 16px;
 }
-.sidebar-button:hover{
+
+.sidebar-button:hover {
 	background-color: #38566E;
 }
 
 
-.sidebar-buttons-top, .sidebar-buttons-bottom {
+.sidebar-buttons-top,
+.sidebar-buttons-bottom {
 	padding: 0 20px;
 }
 
@@ -331,14 +341,11 @@ export default {
 	width: 100%;
 }
 
-.sidebar-bg{
+.sidebar-bg {
 	background-image: url('@/assets/sidebar_bg.jpg');
 	filter: blur(8px);
 }
 
-
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
 	.sidebar {
 		padding-top: 15px;

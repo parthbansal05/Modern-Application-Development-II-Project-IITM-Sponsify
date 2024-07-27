@@ -522,8 +522,6 @@ def server(app, socketio):
         campaigns = DB_Manager().QueryCampaignIDAndNameAndBudgetBySID(userID)
         unique_niches = list(set([inf[6] for inf in influencers]))
         unique_categories = list(set([inf[5] for inf in influencers]))
-        print(unique_niches)
-        print(unique_categories)
         return jsonify(influencers=influencers,
                         campaigns=campaigns,
                         unique_niches=unique_niches,
@@ -592,7 +590,11 @@ def server(app, socketio):
     @e.influencer_required
     def influencer_search_campaigns():
         campaigns = DB_Manager().QueryPublicCampaign()
-        return jsonify(campaigns=campaigns)
+        unique_start_times = list(set(campaigns[4]))
+        unique_budgets = list(set(campaigns[6]))
+        return jsonify(campaigns=campaigns,
+                        unique_start_times=unique_start_times,
+                        unique_budgets=unique_budgets)
     
     @app.route("/influencer/initiate_chat/<cid>/<sid>/<budget>", methods=["GET"], strict_slashes=False)
     @e.influencer_required
@@ -701,7 +703,11 @@ def server(app, socketio):
         if len(followers_to_ignore) == 0:
             followers_to_ignore = [-1]
         influencers = ([[inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget] for inf in User.query.filter(User.user_type == "I", User.id.notin_(followers_to_ignore)).all()])
-        return jsonify(influencers=influencers)
+        unique_niches = list(set([inf[6] for inf in influencers]))
+        unique_categories = list(set([inf[5] for inf in influencers]))
+        return jsonify(influencers=influencers,
+                        unique_niches=unique_niches,
+                        unique_categories=unique_categories)
 
     @app.route("/user/follow/<iid>", methods=["GET"], strict_slashes=False)
     @e.user_required

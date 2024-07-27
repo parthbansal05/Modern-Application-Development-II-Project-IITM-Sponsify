@@ -3,9 +3,9 @@
     <div class="m-2 card p-4">
       <h6>
         User Info:<br>
-        Current User: {{ info }}
-        Followers: {{ followers }}
-        Influencers: {{ influencers }}
+        Current User: {{ info }}<br>
+        Followers: {{ followers }}<br>
+        Influencers: {{ influencers }}<br>
       </h6>
     </div>
   </div>
