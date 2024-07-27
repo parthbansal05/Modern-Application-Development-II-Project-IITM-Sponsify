@@ -39,23 +39,118 @@
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
-
 		</div>
 
 		<div class="main-content" id="main">
+
+			<!-- Main Content -->
 			<div class="m-2 card p-4">
 				<h6>
-					{{ campaigns }} <br>
-					{{ users }}<br>
-					{{ influencer }}<br>
-					{{ sponsors }}<br>
-					{{ camp_dict }}<br>
-					{{ admin_email }}<br>
-					{{ admin_phno }}<br>
+					{{ campaigns }} <br><br>
+					{{ users }}<br><br>
+					{{ influencer }}<br><br>
+					{{ sponsors }}<br><br>
+					{{ camp_dict }}<br><br>
+					{{ admin_email }}<br><br>
+					{{ admin_phno }}<br><br>
 				</h6>
 			</div>
+
+			<div class="m-2 card p-4">
+				<h4>
+					<u>
+						Admin Info
+					</u>
+				</h4>
+				<h6>
+					Email: {{ admin_email }}<br />
+					Phone Number: {{ admin_phno }}<br />
+				</h6>
+			</div>
+
+			<!-- 1 -->
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">Recent Campaigns</span>
+				</div>
+
+				<div class="card-body">
+					<div v-if="campaigns.length" class="campaign-container">
+						<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								<h3>{{ campaigns[2][index] }}</h3>
+								<div style="display: flex">
+									
+									<a :href="`/SponsorViewCampaign/${campaigns[0][index]}`" class="btn btn-primary">
+										View
+									</a>
+									&nbsp;
+									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
+										Flag
+									</a>
+								</div>
+							</div>
+							<div class="card-body">
+								<p>Campaign ID: {{ campaigns[0][index] }}</p>
+								<p>Sponsor ID: {{ campaigns[1][index] }}</p>
+								<p>Title: {{ campaigns[2][index] }}</p>
+								<p>Description: {{ campaigns[3][index] }}</p>
+								<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>
+								<p>End Time: {{ formatTimestamp(campaigns[5][index]) }}</p>
+								<p>Budget: {{ campaigns[6][index] }}</p>
+								<p>Visibility: {{ campaigns[7][index] }}</p>
+								<p>Goal: {{ campaigns[8][index] }}</p>
+								<p>Flagged: {{ campaigns[9][index] }}</p>
+								
+							</div>
+						</div>
+					</div>
+					<div v-else>
+						<p>No campaigns available.</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- 2 -->
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">Active Influencers</span>
+				</div>
+
+				<div class="card-body">
+					<div v-if="campaigns.length" class="campaign-container">
+						<div v-for="(data, index) in influencer" :key="index" class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								<h3>{{ data[1] }}</h3>
+								<div style="display: flex">
+									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
+										Delete
+									</a>
+								</div>
+							</div>
+							<div class="card-body">								
+								<p>Email ID: {{ data[2] }}</p>
+								<p>Phone Number: {{ data[3] }}</p>
+								<p>Category: {{ data[5] }}</p>
+								<p>Niche: {{ data[6] }}</p>
+								<p>Followers: {{ data[7] }}</p>
+							</div>
+						</div>
+					</div>
+					<div v-else>
+						<p>No campaigns available.</p>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
 		</div>
 	</div>
+
+
 </template>
 
 <script>
@@ -90,6 +185,10 @@ export default {
 		}
 	},
 	methods: {
+		formatTimestamp(timestamp) {
+			const date = new Date(timestamp * 1000);
+			return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+		},
 		// Nav and Side Bar
 		logout() {
 			this.$router.push("/logout")
@@ -243,4 +342,17 @@ export default {
 	transition: margin-left 0.5s;
 	padding: 16px;
 }
+
+.campaign-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	/* 3 columns of equal width */
+	grid-template-rows: auto;
+	gap: 16px;
+	width: 100%;
+	padding: 16px;
+	border-radius: 8px;
+}
+
+
 </style>

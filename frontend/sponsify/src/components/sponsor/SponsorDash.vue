@@ -361,15 +361,6 @@ export default {
 	padding: 16px;
 }
 
-.info-card {
-	border: 1px solid #ccc;
-	overflow-wrap: break-word;
-	padding: 16px;
-	margin: 16px 0;
-	border-radius: 8px;
-	background-color: #f9f9f9;
-}
-
 .campaign-container {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
@@ -379,29 +370,6 @@ export default {
 	width: 100%;
 	padding: 16px;
 	border-radius: 8px;
-}
-
-.campaign-card {
-	width: 30rem;
-	overflow-wrap: break-word;
-	border: 1px solid #ccc;
-	padding: 16px;
-	margin: 10px 0;
-	background-color: #f9f9f9;
-	box-sizing: border-box;
-}
-
-.campaign-card-header {
-	position: relative;
-	top: 0%;
-	left: 0%;
-	/* width: max-content; */
-	overflow-wrap: break-word;
-	border: 1px solid #ccc;
-	padding: 16px;
-	margin: 0px 0;
-	background-color: #f9f9f9;
-	box-sizing: border-box;
 }
 
 .slider-container {
