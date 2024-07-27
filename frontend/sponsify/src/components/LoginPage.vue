@@ -1,20 +1,30 @@
 <template>
-    <div class="login-container">
-        <div v-if="error" class="error-message">
-            {{ error }}
+    <div>
+        <!-- Header Bar -->
+        <header class="header-bar">
+          <h1>Dashboard</h1>
+        </header>
 
-            <button @click="closeError" class="close-btn">
-                &nbsp; &times; &nbsp;
-            </button>
+        <div class="main-content">
+        <!-- Other Content -->
+            <div class="login-container">
+                <div v-if="error" class="error-message">
+                    {{ error }}
 
+                    <button @click="closeError" class="close-btn">
+                        &nbsp; &times; &nbsp;
+                    </button>
+
+                </div>
+
+                <form @submit.prevent="login" class="login-form">
+                    <input v-model="email" placeholder="Email" type="email" required />
+                    <input v-model="password" type="password" placeholder="Password" required />
+                    <button type="submit">Login</button>
+                </form>
+
+            </div>
         </div>
-
-        <form @submit.prevent="login" class="login-form">
-            <input v-model="email" placeholder="Email" type="email" required />
-            <input v-model="password" type="password" placeholder="Password" required />
-            <button type="submit">Login</button>
-        </form>
-
     </div>
 </template>
 
@@ -59,6 +69,25 @@ export default {
 </script>
 
 <style scoped>
+/* Header */
+.header-bar{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #444;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  z-index: 1000;
+}
+.main-content{
+    margin-top: 52px;
+}
+
+
+
+
+/* Main Content */
 .error-message {
     display: flex;
     width: 30rem;
