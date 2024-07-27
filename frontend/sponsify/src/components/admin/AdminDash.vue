@@ -68,7 +68,7 @@
 				</div>
 
 				<div class="card-body">
-					<div v-if="campaigns.length" class="campaign-container">
+					<div v-if="campaigns.length" class="admin-container">
 						<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ campaigns[2][index] }}</h3>
@@ -111,7 +111,7 @@
 				</div>
 
 				<div class="card-body">
-					<div v-if="campaigns.length" class="campaign-container">
+					<div v-if="influencer.length" class="admin-container">
 						<div v-for="(data, index) in influencer" :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
@@ -131,19 +131,72 @@
 						</div>
 					</div>
 					<div v-else>
-						<p>No campaigns available.</p>
+						<p>No Influencers available.</p>
 					</div>
 				</div>
 			</div>
 
+			<!-- 3 -->
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">Active Sponsors</span>
+				</div>
 
+				<div class="card-body">
+					<div v-if="sponsors.length" class="admin-container">
+						<div v-for="(data, index) in sponsors " :key="index" class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								<h3>{{ data[1] }}</h3>
+								<div style="display: flex">
+									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
+										Delete
+									</a>
+								</div>
+							</div>
+							<div class="card-body">								
+								<p>Email ID: {{ data[2] }}</p>
+								<p>Phone Number: {{ data[3] }}</p>
+								<p>Industry: {{ data[8] }}</p>
+								
+							</div>
+						</div>
+					</div>
+					<div v-else>
+						<p>No Sponsors available.</p>
+					</div>
+				</div>
+			</div>
 
+			<!-- 4 -->
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">Active Users</span>
+				</div>
 
-
+				<div class="card-body">
+					<div v-if="users.length" class="admin-container">
+						<div v-for="(data, index) in users " :key="index" class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								<h3>{{ data[1] }}</h3>
+								<div style="display: flex">
+									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
+										Delete
+									</a>
+								</div>
+							</div>
+							<div class="card-body">								
+								<p>Email ID: {{ data[2] }}</p>
+								<p>Phone Number: {{ data[3] }}</p>								
+							</div>
+						</div>
+					</div>
+					<div v-else>
+						<p>No Users available.</p>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-
-
 </template>
 
 <script>
@@ -336,7 +389,7 @@ export default {
 	padding: 16px;
 }
 
-.campaign-container {
+.admin-container {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	/* 3 columns of equal width */
