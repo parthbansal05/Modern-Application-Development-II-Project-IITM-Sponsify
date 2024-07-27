@@ -520,8 +520,14 @@ def server(app, socketio):
         userID = get_jwt_id()
         influencers = ([[inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget] for inf in User.query.filter_by(user_type="I").all()])
         campaigns = DB_Manager().QueryCampaignIDAndNameAndBudgetBySID(userID)
+        unique_niches = list(set([inf[6] for inf in influencers]))
+        unique_categories = list(set([inf[5] for inf in influencers]))
+        print(unique_niches)
+        print(unique_categories)
         return jsonify(influencers=influencers,
-                        campaigns=campaigns)
+                        campaigns=campaigns,
+                        unique_niches=unique_niches,
+                        unique_categories=unique_categories)
     
     @app.route("/sponsor/initiate_chat/<cid>/<iid>/<budget>", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
