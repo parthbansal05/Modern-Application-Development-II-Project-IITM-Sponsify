@@ -19,23 +19,16 @@
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="navigate('dashboard')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="navigate('view-campaigns')" class="sidebar-button btn btn-secondary btn-block mb-2">View
-					Campaigns</button>
-				<button @click="navigate('view-insights')" class="sidebar-button btn btn-secondary btn-block mb-2">View
-					Insights</button>
+				<button @click="$router.push('/UserDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/UserUpdateDashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
+				<button @click="$router.push('/UserSearchInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="navigate('login')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="navigate('influencer-register')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="navigate('sponsor-register')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="navigate('user-register')" class="sidebar-button btn btn-secondary btn-block mb-2">User
-					Register</button>
+				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
