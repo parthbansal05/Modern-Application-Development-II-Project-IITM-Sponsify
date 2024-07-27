@@ -1,15 +1,43 @@
 <template>
 	<div>
-		<!-- Header Bar -->
+		<!-- Nav and Side Bar -->
 		<header class="header-bar">
 			<div class="header-content">
-				<h1>Dashboard</h1>
-				<button @click="logout" class="logout-button">Logout</button>
+				<button class="openbtn" @click="toggle()">
+					☰
+				</button>
+				<img src="@/assets/sponsify_logo.png" alt="Logo" class="logo-img">
+				<button @click="logout" class="logout-button">
+					Logout
+				</button>
 			</div>
 		</header>
 
-		<div class="main-content">
-			<!-- Other Content -->
+		<div id="mySidebar" class="sidebar">
+			<h3 class="sidebar-heading">Person</h3>
+			<h6 class="sidebar-subheading">Post</h6>
+		
+			<div class="sidebar-buttons-top">
+				<hr class="bg-white">
+				<button @click="navigate('dashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="navigate('view-campaigns')" class="sidebar-button btn btn-secondary btn-block mb-2">View Campaigns</button>
+				<button @click="navigate('view-insights')" class="sidebar-button btn btn-secondary btn-block mb-2">View Insights</button>
+			</div>
+			
+			<div class="sidebar-buttons-bottom">
+				<button @click="navigate('login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="navigate('influencer-register')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="navigate('sponsor-register')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="navigate('user-register')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<hr class="bg-white">
+				v 2.0.0
+			</div>
+			
+		</div>
+
+		<div class="main-content" id="main">
+
+			<!-- Main Content -->
 			<div class="m-2 card p-4">
 				<h6>
 					User Info:<br />
@@ -74,14 +102,14 @@
 							</div>
 						</div>
 					</div>
+					<div v-else>
+						<p>No campaigns available.</p>
+					</div>
 				</div>
 			</div>
-			<!-- <div v-else>
-			<p>No campaigns available.</p>
-		</div>  -->
+
 		</div>
 	</div>
-	<!-- </div> -->
 </template>
 
 <script>
@@ -170,26 +198,39 @@ export default {
 					console.log(error);
 				});
 		},
+
+		// Nav and Side Bar
+		toggle() {
+			const sidebar = document.getElementById("mySidebar");
+			const main = document.getElementById("main");
+			if (sidebar.style.width === "250px") {
+				sidebar.style.width = "0";
+				main.style.marginLeft = "0";
+			} else {
+				sidebar.style.width = "250px";
+				main.style.marginLeft = "250px";
+			}
+		},
 	},
 };
 </script>
 
 <style scoped>
-/* Header */
+/* Nav and Side Bar */
 .header-bar {
 	display: flex;
 	position: fixed;
 	top: 0;
 	width: 100%;
-	background-color: white;
+	height: 60px;
+	background-color: #B97A57;
 	padding: 10px 20px;
 	align-items: center;
-	z-index: 1000;
+	z-index: 4;
 }
 
 .header-content {
 	display: flex;
-	/* justify-content: space-between; */
 	align-items: center;
 	width: 100%;
 }
@@ -197,26 +238,120 @@ export default {
 .logout-button {
 	position: absolute;
 	right: 20px;
-	/* top: 50%; */
-	/* transform: translateY(-50%); */
-	/* margin-right: 0px; */
-	background-color: #f44336;
+	background-color: #38566E;
 	color: white;
-	border-color: #d32f2f;
+	border: 0px;
+
 	border-radius: 30px;
-	padding: 10px 20px;
+	padding: 5px 20px;
 	cursor: pointer;
-	font-size: 22px;
+	font-size: 16px;
 }
 
 .logout-button:hover {
-	background-color: #d32f2f;
+	background-color: #32284E;
 }
+
+
+.openbtn {
+	font-size: 20px;
+	cursor: pointer;
+	border-radius: 100%;
+	background-color: #111;
+	color: white;
+	padding: 10px 15px;
+	border: none;
+}
+
+.openbtn:hover {
+	background-color: #444;
+}
+
+.logo-img{
+	position: absolute;
+	height: 60px;
+    width: auto;  
+    left: 80px; 
+}
+
+.sidebar {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 60px;
+	left: 0;
+	color: white;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 20px;
+	justify-content: center;
+	text-align: center;	
+	background: rgba(255,255,255,0.5), url('@/assets/sidebar_bg.jpg');
+	background-size: cover;
+	background-position: center;
+	backdrop-filter: blur(10px);
+	scrollbar-width: none;
+}
+.sidebar::before {
+  content: "";
+  position: absolute;
+  top: -20px;    
+  left: -20px;  
+  width: calc(100% + 40px);  
+  height: calc(100% + 0px);
+  background: url('@/assets/sidebar_bg.jpg') no-repeat center center;
+  background-size: cover;
+  filter: blur(10px);
+  z-index: -1;
+}
+
+.sidebar-button{
+	position: relative;
+	width: 100%;
+	background-color: transparent;
+	border-color: #38566E;
+	color: white;
+	padding: 5px 20px;
+	cursor: pointer;
+	font-size: 16px;
+}
+.sidebar-button:hover{
+	background-color: #38566E;
+}
+
+
+.sidebar-buttons-top, .sidebar-buttons-bottom {
+	padding: 0 20px;
+}
+
+.sidebar-buttons-bottom {
+	position: absolute;
+	bottom: 100px;
+	width: 100%;
+}
+
+.sidebar-bg{
+	background-image: url('@/assets/sidebar_bg.jpg');
+	filter: blur(8px);
+}
+
+
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+	.sidebar {
+		padding-top: 15px;
+	}
+}
+
 
 /* Main Content */
 
 .main-content {
-	margin-top: 80px;
+	margin-top: 50px;
+	transition: margin-left 0.5s;
+	padding: 16px;
 }
 
 .info-card {
@@ -235,12 +370,8 @@ export default {
 	grid-template-rows: auto;
 	gap: 16px;
 	width: 100%;
-	/* border: 1px solid #ccc; */
 	padding: 16px;
-	/* margin: 16px 0; */
 	border-radius: 8px;
-	/* background-color: #f9f9f9; */
-	/* gap: 16px; */
 }
 
 .campaign-card {
