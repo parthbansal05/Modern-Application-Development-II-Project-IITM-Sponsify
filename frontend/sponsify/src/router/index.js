@@ -33,6 +33,7 @@ import LogoutPage from "@/components/LogoutPage.vue";
 import RegisterInfluencer from "@/components/RegisterInfluencer.vue";
 import RegisterSponsor from "@/components/RegisterSponsor.vue";
 import RegisterUser from "@/components/RegisterUser.vue";
+import Page404 from "@/components/Page404.vue";
 
 
 Vue.use(Router);
@@ -40,6 +41,10 @@ Vue.use(Router);
 export default new Router({
   mode: "history", // Use HTML5 History mode
   routes: [
+    {
+      path: '/',
+      redirect: '/login'
+    },
     {
       path: "/AdminDash",
       name: "AdminDash",
@@ -169,6 +174,11 @@ export default new Router({
       path: "/registerUser",
       name: "RegisterUser",
       component: RegisterUser,
+    },
+    {
+      path: '*', // This will match any route that is not defined above
+      name: 'NotFound',
+      component: Page404,
     }
   ],
 });
