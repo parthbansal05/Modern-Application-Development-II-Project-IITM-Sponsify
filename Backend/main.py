@@ -398,15 +398,16 @@ def server(app, socketio):
     def sponsor_create_campaign():
         if request.method == 'POST':
             data = request.json
-            title = data.get('title')
-            description = data.get('description')
-            sdate = data.get('sdate')
-            edate = data.get('edate')
+            title = data.get('campTitle')
+            description = data.get('campDesc')
+            sdate = data.get('startDate')
+            edate = data.get('endDate')
             budget = data.get('budget')
             visibility = data.get('visibility')
             goal = data.get('goal')
             flagged = "NO"
             SID = get_jwt_id()
+            print(SID)
             
             print(data)
             try:

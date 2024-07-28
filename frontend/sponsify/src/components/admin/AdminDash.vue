@@ -19,36 +19,29 @@
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="$router.push('/AdminDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="$router.push('/AdminViewAllCampaigns')" class="sidebar-button btn btn-secondary btn-block mb-2">View All Campaigns</button>
-				<button @click="$router.push('/AdminInsights')" class="sidebar-button btn btn-secondary btn-block mb-2">View Insights</button>
+				<button @click="$router.push('/AdminDash')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/AdminViewAllCampaigns')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">View All Campaigns</button>
+				<button @click="$router.push('/AdminInsights')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">View Insights</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="$router.push('/login')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
 		</div>
 
 		<div class="main-content" id="main">
-
-			<!-- Main Content -->
-			<div class="m-2 card p-4">
-				<h6>
-					{{ campaigns }} <br><br>
-					{{ users }}<br><br>
-					{{ influencer }}<br><br>
-					{{ sponsors }}<br><br>
-					{{ camp_dict }}<br><br>
-					{{ admin_email }}<br><br>
-					{{ admin_phno }}<br><br>
-				</h6>
-			</div>
-
 			<div class="m-2 card p-4">
 				<h4>
 					<u>
@@ -73,14 +66,10 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ campaigns[2][index] }}</h3>
 								<div style="display: flex">
-									
-									<a :href="`/SponsorViewCampaign/${campaigns[0][index]}`" class="btn btn-primary">
-										View
-									</a>
+									<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View </a>
 									&nbsp;
-									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
-										Flag
-									</a>
+									<a v-if="campaigns[9][index] !== 'YES'" href="#" class="btn btn-danger" @click="flag_campaign(campaigns[0][index])"> Flag </a>
+									<a v-if="campaigns[9][index] !== 'NO'" href="#" class="btn btn-danger" @click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -94,7 +83,7 @@
 								<p>Visibility: {{ campaigns[7][index] }}</p>
 								<p>Goal: {{ campaigns[8][index] }}</p>
 								<p>Flagged: {{ campaigns[9][index] }}</p>
-								
+
 							</div>
 						</div>
 					</div>
@@ -109,19 +98,16 @@
 				<div class="card-header">
 					<span class="d-inline-block text-truncate" style="max-width: 1000px">Active Influencers</span>
 				</div>
-
 				<div class="card-body">
 					<div v-if="influencer.length" class="admin-container">
 						<div v-for="(data, index) in influencer" :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
-										Delete
-									</a>
+									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
-							<div class="card-body">								
+							<div class="card-body">
 								<p>Email ID: {{ data[2] }}</p>
 								<p>Phone Number: {{ data[3] }}</p>
 								<p>Category: {{ data[5] }}</p>
@@ -148,16 +134,14 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
-										Delete
-									</a>
+									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
-							<div class="card-body">								
+							<div class="card-body">
 								<p>Email ID: {{ data[2] }}</p>
 								<p>Phone Number: {{ data[3] }}</p>
 								<p>Industry: {{ data[8] }}</p>
-								
+
 							</div>
 						</div>
 					</div>
@@ -179,14 +163,12 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_campaign(campaigns[0][index])">
-										Delete
-									</a>
+									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
-							<div class="card-body">								
+							<div class="card-body">
 								<p>Email ID: {{ data[2] }}</p>
-								<p>Phone Number: {{ data[3] }}</p>								
+								<p>Phone Number: {{ data[3] }}</p>
 							</div>
 						</div>
 					</div>
@@ -250,6 +232,24 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
+		async flag_campaign(cid) {
+			await axios.get('http://localhost:5000/admin/flag_campaign/' + cid, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
+		},
+		async unflag_campaign(cid) {
+			await axios.get('http://localhost:5000/admin/unflag_campaign/' + cid, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
+		},
+		async delete_user(uid){
+			await axios.get('http://localhost:5000/delete_user/' + uid, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
+		}
 	},
 };
 </script>
@@ -399,6 +399,4 @@ export default {
 	padding: 16px;
 	border-radius: 8px;
 }
-
-
 </style>
