@@ -592,6 +592,7 @@ def server(app, socketio):
     @e.influencer_required
     def influencer_search_campaigns():
         campaigns = DB_Manager().QueryPublicCampaign()
+        print(campaigns)
         unique_start_times = list(set(campaigns[4])) if campaigns != [] else []
         unique_budgets = list(set(campaigns[6])) if campaigns != [] else []
         return jsonify(campaigns=campaigns,
@@ -614,7 +615,7 @@ def server(app, socketio):
         userID = get_jwt_id()
         inbox = DB_Manager().QueryInfluencerInBoxChatOverView(userID)
         camps = DB_Manager().QueryCampaignTitleID()
-        camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))}
+        camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))} if camps not in [None, []] else {}
         sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])
         return jsonify(inbox=inbox,
                           camp_dict=camp_dict,

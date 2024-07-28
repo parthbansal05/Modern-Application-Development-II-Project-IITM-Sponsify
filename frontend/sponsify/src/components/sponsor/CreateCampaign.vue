@@ -45,8 +45,8 @@
 				<input type="date" v-model="endDate" placeholder="End Date" required>
 				<input type="number" v-model="budget" placeholder="Budget" required>
 				<select v-model="visibility" required>
-					<option value="public">Public</option>
-					<option value="private">Private</option>
+					<option value="Public">Public</option>
+					<option value="Private">Private</option>
 				</select>
 				<input type="text" v-model="goal" placeholder="Goal" required>
 				<button type="submit">Login</button>
@@ -67,7 +67,7 @@ export default {
 			startDate: '',
 			endDate: '',
 			budget: '',
-			visibility: 'public',
+			visibility: 'Public',
 			goal: '',
 			error: '',
 			username: '',
