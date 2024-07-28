@@ -261,7 +261,8 @@ def server(app, socketio):
                         sponsors=sponsors,
                         camp_dict=camp_dict,
                         admin_email=str(User.query.filter_by(id=userID).first().email),
-                        admin_phno=str(User.query.filter_by(id=userID).first().ph_no))
+                        admin_phno=str(User.query.filter_by(id=userID).first().ph_no),
+                        admin_username=str(User.query.filter_by(id=userID).first().username))
 
     @app.route("/admin/insights", methods=["GET"], strict_slashes=False)
     @e.admin_required
@@ -434,7 +435,7 @@ def server(app, socketio):
             visibility = data.get('visibility')
             goal = data.get('goal')
             print(data)
-            try:                
+            try:
                 if DB_Manager().UpdateCampaigns(cid, title, description, sdate, edate, budget, visibility, goal):
                     return jsonify({"msg": "Campaign updated"}), 200
                 else:
@@ -591,8 +592,8 @@ def server(app, socketio):
     @e.influencer_required
     def influencer_search_campaigns():
         campaigns = DB_Manager().QueryPublicCampaign()
-        unique_start_times = list(set(campaigns[4]))
-        unique_budgets = list(set(campaigns[6]))
+        unique_start_times = list(set(campaigns[4])) if campaigns != [] else []
+        unique_budgets = list(set(campaigns[6])) if campaigns != [] else []
         return jsonify(campaigns=campaigns,
                         unique_start_times=unique_start_times,
                         unique_budgets=unique_budgets)
@@ -739,6 +740,13 @@ def server(app, socketio):
             return jsonify({"msg": "Chat deleted"}), 200
         else:
             return jsonify({"error": "Failed to delete chat"}), 500
+        
+    @app.route("/get_username", methods=["GET"], strict_slashes=False)
+    def get_username():
+        userID = get_jwt_id()
+        utype_mapper = {'S': 'Sponsor', 'I': 'Influencer', 'A': 'Admin', 'U': 'User'}
+        return jsonify(username=User.query.filter_by(id=userID).first().username,
+                          user_type=utype_mapper[User.query.filter_by(id=userID).first().user_type]), 200
     
 
 app, socketio, dropzone = create_app()

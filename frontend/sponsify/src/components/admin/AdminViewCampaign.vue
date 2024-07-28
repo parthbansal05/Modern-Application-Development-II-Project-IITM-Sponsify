@@ -14,8 +14,8 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">Person</h3>
-			<h6 class="sidebar-subheading">Post</h6>
+			<h3 class="sidebar-heading">{{username}}</h3>
+			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
@@ -50,6 +50,8 @@ export default {
 		return {
 			campaign: "",
 			sponsors: "",
+			username: "",
+			user_type: "",
 			id: this.$route.params.id
 		};
 	},
@@ -60,6 +62,11 @@ export default {
 			});
 			this.campaign = response.data.campaign;
 			this.sponsors = response.data.sponsors;
+			const user_response = await axios.get('http://localhost:5000/get_username', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			this.username = user_response.data.username;
+			this.user_type = user_response.data.user_type;
 		} catch (err) {
 			console.error(err);
 		}
