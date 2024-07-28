@@ -55,10 +55,10 @@
 
 			<form @submit.prevent="updateSponsorDashboard" class="update-form">
 				<input v-model="username" :placeholder="username" type="text" required />
-				<input v-model="email" :placeholder="email" type="email" readonly required/>
+				<input v-model="email" :placeholder="email" type="email" readonly required />
 				<input v-model="password" type="password" placeholder="Password" required />
-				<input v-model="confirmPassword" type="password" placeholder="ConfirmPassword" required />
-				<input v-model="phno" :placeholder="phno" type="text" required />
+				<input v-model="confirmPassword" type="password" placeholder="Confirm Password" required />
+				<input v-model="phno" :placeholder="phno" type="number" required />
 				<select v-model="industry" :placeholder="industry" type="text" required>
 					<option value="Food & Beverage">Food & Beverage</option>
 					<option value="Health & Wellness">Health & Wellness</option>
@@ -96,7 +96,9 @@ export default {
 			username: '',
 			email: '',
 			phno: '',
-			industry: ''
+			industry: '',
+			error: '',
+			msg: '',
 		};
 	},
 	async created() {
@@ -113,8 +115,6 @@ export default {
 		}
 	},
 	methods: {
-		
-
 		async updateSponsorDashboard() {
 			try {
 				// check if the password and confirm password match
@@ -122,6 +122,8 @@ export default {
 				this.msg = '';
 				if (this.password !== this.confirmPassword) {
 					this.error = 'Passwords do not match';
+					this.password = "";
+					this.confirmPassword = "";
 					return;
 				}
 				const response = await axios.post('http://localhost:5000/sponsor/update_dashboard', {
@@ -133,6 +135,9 @@ export default {
 				}, {
 					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
 				});
+
+				this.password = "";
+				this.confirmPassword = "";
 
 				if ('error' in response.data) {
 					this.error = response.data.error;
@@ -308,6 +313,7 @@ export default {
 
 .main-container {
 	display: flex;
+	flex-direction: column;
 	position: fixed;
 	width: 100%;
 	height: 100vh;
