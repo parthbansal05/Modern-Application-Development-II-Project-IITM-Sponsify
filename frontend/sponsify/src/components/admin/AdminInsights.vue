@@ -14,8 +14,8 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">Person</h3>
-			<h6 class="sidebar-subheading">Post</h6>
+			<h3 class="sidebar-heading">{{username}}</h3>
+			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
@@ -36,26 +36,43 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h4>{{ info }}</h4>
+			<canvas id="FlaggedCampaignChart"></canvas>
+			<canvas id="PublicCampaignChart"></canvas>
+			<canvas id="UserDistribututionCampaignChart"></canvas>
+			<canvas id="StatusCampaignChart"></canvas>
+			<canvas id="InfluencerFollowersChart"></canvas>
 		</div>
 	</div>
 </template>
 
 <script>
 import axios from 'axios';
+import { Chart, registerables, BarController, CategoryScale, PieController, ArcElement, Tooltip, Legend } from 'chart.js';
+
+Chart.register(BarController, CategoryScale, PieController, ArcElement, Tooltip, Legend, ...registerables);
 
 export default {
 	data() {
 		return {
-			info: ''
+			info: '',
+			username: '',
+			user_type: ''
 		};
 	},
 	async created() {
 		try {
 			const response = await axios.get('http://localhost:5000/admin/insights', {
-				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
 			});
 			this.info = response.data.info;
+
+			const user_response = await axios.get('http://localhost:5000/get_username', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			});
+			this.username = user_response.data.username;
+			this.user_type = user_response.data.user_type;
+
+			this.renderChart();
 		} catch (err) {
 			console.error(err);
 		}
@@ -76,9 +93,163 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
+		renderChart() {
+			if (this.info[0]) {
+				const labels = this.info[0].map(item => item.label.replace(/_/g, ' '));
+				const data = this.info[0].map(item => item.number);
+
+				const ctx = document.getElementById('FlaggedCampaignChart').getContext('2d');
+				new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: data,
+							backgroundColor: data.map(() => 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',0.5)')
+						}]
+					},
+					options: {
+						responsive: true,
+						plugins: {
+							legend: {
+								position: 'top'
+							},
+							tooltip: {
+								mode: 'index'
+							}
+						}
+					}
+				});
+			}
+
+			if (this.info[1]) {
+				const labels = this.info[1].map(item => item.label.replace(/_/g, ' '));
+				const data = this.info[1].map(item => item.number);
+
+				const ctx = document.getElementById('PublicCampaignChart').getContext('2d');
+				new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: data,
+							backgroundColor: data.map(() => 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',0.5)')
+						}]
+					},
+					options: {
+						responsive: true,
+						plugins: {
+							legend: {
+								position: 'top'
+							},
+							tooltip: {
+								mode: 'index'
+							}
+						}
+					}
+				});
+			}
+
+			if (this.info[2]) {
+				const labels = this.info[2].map(item => item.label.replace(/_/g, ' '));
+				const data = this.info[2].map(item => item.number);
+
+				const ctx = document.getElementById('UserDistribututionCampaignChart').getContext('2d');
+				new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: data,
+							backgroundColor: data.map(() => 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',0.5)')
+						}]
+					},
+					options: {
+						responsive: true,
+						plugins: {
+							legend: {
+								position: 'top'
+							},
+							tooltip: {
+								mode: 'index'
+							}
+						}
+					}
+				});
+			}
+
+			if (this.info[4]) {
+				const labels = this.info[4].map(item => item.label.replace(/_/g, ' '));
+				const data = this.info[4].map(item => item.number);
+
+				const ctx = document.getElementById('StatusCampaignChart').getContext('2d');
+				new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: data,
+							backgroundColor: data.map(() => 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',0.5)')
+						}]
+					},
+					options: {
+						responsive: true,
+						plugins: {
+							legend: {
+								position: 'top'
+							},
+							tooltip: {
+								mode: 'index'
+							}
+						}
+					}
+				});
+			}
+
+			if (this.info[3]) {
+				const labels = this.info[3].map(item => item.label.replace(/_/g, ' '));
+				const data = this.info[3].map(item => item.number);
+
+				const ctx = document.getElementById('InfluencerFollowersChart').getContext('2d');
+				new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: labels,
+						datasets: [{
+							data: data,
+							backgroundColor: data.map(() => 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',0.5)')
+						}]
+					},
+					options: {
+						responsive: true,
+						scales: {
+							x: {
+								beginAtZero: true,
+								grid: {
+									display: false
+								}
+							},
+							y: {
+								beginAtZero: true
+							}
+						},
+						plugins: {
+							legend: {
+								display: false
+							},
+							tooltip: {
+								mode: 'index'
+							}
+						}
+					}
+				});
+			}
+
+		}
 	},
 };
 </script>
+
 <style scoped>
 /* Nav and Side Bar */
 .header-bar {

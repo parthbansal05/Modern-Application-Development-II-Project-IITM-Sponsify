@@ -14,8 +14,8 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">Person</h3>
-			<h6 class="sidebar-subheading">Post</h6>
+			<h3 class="sidebar-heading">{{ username }}</h3>
+			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
@@ -49,6 +49,7 @@
 					</u>
 				</h4>
 				<h6>
+					User Name: {{ username }}<br />
 					Email: {{ admin_email }}<br />
 					Phone Number: {{ admin_phno }}<br />
 				</h6>
@@ -66,10 +67,13 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ campaigns[2][index] }}</h3>
 								<div style="display: flex">
-									<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View </a>
+									<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View
+									</a>
 									&nbsp;
-									<a v-if="campaigns[9][index] !== 'YES'" href="#" class="btn btn-danger" @click="flag_campaign(campaigns[0][index])"> Flag </a>
-									<a v-if="campaigns[9][index] !== 'NO'" href="#" class="btn btn-danger" @click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
+									<a v-if="campaigns[9][index] !== 'YES'" href="#" class="btn btn-danger"
+										@click="flag_campaign(campaigns[0][index])"> Flag </a>
+									<a v-if="campaigns[9][index] !== 'NO'" href="#" class="btn btn-danger"
+										@click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -193,7 +197,9 @@ export default {
 			sponsors: '',
 			camp_dict: '',
 			admin_email: '',
-			admin_phno: ''
+			admin_phno: '',
+			username: '',
+			user_type: ''
 		};
 	},
 	async created() {
@@ -208,6 +214,11 @@ export default {
 			this.camp_dict = response.data.camp_dict;
 			this.admin_email = response.data.admin_email;
 			this.admin_phno = response.data.admin_phno;
+			const user_response = await axios.get('http://localhost:5000/get_username', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			this.username = user_response.data.username;
+			this.user_type = user_response.data.user_type;
 		} catch (err) {
 			console.log(err);
 		}
@@ -244,7 +255,7 @@ export default {
 			});
 			window.location.reload();
 		},
-		async delete_user(uid){
+		async delete_user(uid) {
 			await axios.get('http://localhost:5000/delete_user/' + uid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});

@@ -14,23 +14,32 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">Person</h3>
-			<h6 class="sidebar-subheading">Post</h6>
+			<h3 class="sidebar-heading">{{ username }}</h3>
+			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="$router.push('/SponsorDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="$router.push('/SponsorUpdateDashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
-				<button @click="$router.push('/CreateCampaign')" class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
-				<button @click="$router.push('/SponsorSearchInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
-				<button @click="$router.push('/SponsorInbox')" class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
+				<button @click="$router.push('/SponsorDash')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/SponsorUpdateDashboard')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
+				<button @click="$router.push('/CreateCampaign')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
+				<button @click="$router.push('/SponsorSearchInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
+				<button @click="$router.push('/SponsorInbox')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="$router.push('/login')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
@@ -38,7 +47,7 @@
 		</div>
 
 		<div class="main-container" id="main">
-			
+
 			<div v-if="error" class="error-message">
 				{{ error }}
 				<button @click="closeError" class="err-close-btn">
@@ -85,6 +94,8 @@ export default {
 			goal: '',
 			error: '',
 			msg: '',
+			username: '',
+			user_type: '',
 			id: this.$route.params.id
 		};
 	},
@@ -104,6 +115,11 @@ export default {
 		} catch (err) {
 			console.log(err);
 		}
+		const user_response = await axios.get('http://localhost:5000/get_username', {
+			headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+		});
+		this.username = user_response.data.username;
+		this.user_type = user_response.data.user_type;
 	},
 	methods: {
 		async UpdateCampaign() {
@@ -128,7 +144,7 @@ export default {
 				}, {
 					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
 				});
-				
+
 				this.password = "";
 				this.confirmPassword = "";
 
@@ -146,7 +162,7 @@ export default {
 				this.error = 'Invalid username or password';
 			}
 		},
-		
+
 		closeError() {
 			this.error = null
 		},
@@ -406,7 +422,7 @@ export default {
 	border-radius: 4px;
 }
 
-.update-form button {	
+.update-form button {
 	padding: 0.5rem;
 	font-size: 1rem;
 	color: white;
