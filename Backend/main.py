@@ -401,8 +401,8 @@ def server(app, socketio):
             data = request.json
             title = data.get('campTitle')
             description = data.get('campDesc')
-            sdate = data.get('startDate')
-            edate = data.get('endDate')
+            sdate = time.mktime(time.strptime(str(data.get('startDate')), "%Y-%m-%d"))
+            edate = time.mktime(time.strptime(str(data.get('endDate')), "%Y-%m-%d"))
             budget = data.get('budget')
             visibility = data.get('visibility')
             goal = data.get('goal')
@@ -429,8 +429,8 @@ def server(app, socketio):
             data = request.json
             title = data.get('campTitle')
             description = data.get('campDesc')
-            sdate = data.get('startDate')
-            edate = data.get('endDate')
+            sdate = time.mktime(time.strptime(str(data.get('startDate')), "%Y-%m-%d"))
+            edate = time.mktime(time.strptime(str(data.get('endDate')), "%Y-%m-%d"))
             budget = data.get('budget')
             visibility = data.get('visibility')
             goal = data.get('goal')
