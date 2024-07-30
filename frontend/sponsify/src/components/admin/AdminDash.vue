@@ -55,6 +55,30 @@
 				</h6>
 			</div>
 
+			<div class="m-2 card" v-if = "sponsor_approval_pending.length">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">Pending Sponsor Requests</span>
+				</div>
+
+				<div class="card-body">
+					<div class="admin-container">
+						<div v-for="(data, index) in sponsor_approval_pending" :key="index" class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								<h3>{{ data[1] }}</h3>
+								<div style="display: flex">
+									<a href="#" class="btn btn-danger" @click="Approve_Sponsor(data[0])">Approve</a>
+								</div>
+							</div>
+							<div class="card-body">
+								<p>Email ID: {{ data[2] }}</p>
+								<p>Phone Number: {{ data[3] }}</p>
+								<p>Industry: {{ data[8] }}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<!-- 1 -->
 			<div class="m-2 card">
 				<div class="card-header">
@@ -198,6 +222,7 @@ export default {
 			camp_dict: '',
 			admin_email: '',
 			admin_phno: '',
+			sponsor_approval_pending: '',
 			username: '',
 			user_type: ''
 		};
@@ -214,6 +239,7 @@ export default {
 			this.camp_dict = response.data.camp_dict;
 			this.admin_email = response.data.admin_email;
 			this.admin_phno = response.data.admin_phno;
+			this.sponsor_approval_pending = response.data.sponsor_approval_pending;
 			const user_response = await axios.get('http://localhost:5000/get_username', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
@@ -257,6 +283,12 @@ export default {
 		},
 		async delete_user(uid) {
 			await axios.get('http://localhost:5000/delete_user/' + uid, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
+		},
+		async Approve_Sponsor(sid) {
+			await axios.get('http://localhost:5000/admin/approve_sponsor/' + sid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
 			window.location.reload();

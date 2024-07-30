@@ -99,7 +99,11 @@ def sponsor_required(f):
         else:  
             user_type = "None"
         if user_type == "S":
-            return f(*args, **kwargs)
+            if User.query.filter_by(id=current_user_id).first().sponsor_approval == "True":
+                return f(*args, **kwargs)
+            else:
+                flash("Sponsor Approval Pending", "warning")
+                return redirect(url_for('sponsor_dashboard'))
         elif user_type == "None":
             flash("login to access this page", "info")
             return redirect(url_for('login')+"?next="+url_for(func_name, **kwargs))

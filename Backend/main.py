@@ -69,6 +69,8 @@ def server(app, socketio):
                 if user.user_type == "A":
                     redirect_url = "/AdminDash"
                 elif user.user_type == "S":
+                    if user.sponsor_approval == "False":
+                        return jsonify({"error": "Sponsor account not approved yet"}), 200
                     redirect_url = "/SponsorDash"
                 elif user.user_type == "I":
                     redirect_url = "/InfluencerDash"
@@ -226,21 +228,7 @@ def server(app, socketio):
             print(exc)
             return jsonify({"error": str(exc)}), 500
 
-    # # content page
-    # @app.route("/", methods=["GET"], strict_slashes=False)
-    # def index():       
-    #     if not current_user.is_authenticated:
-    #         return redirect(url_for('login'))    
-    #     if current_user.user_type == "A":
-    #         redirect_url = url_for('admin_dashboard')
-    #     elif current_user.user_type == 'S':
-    #         redirect_url = url_for('sponsor_dashboard')
-    #     elif current_user.user_type == "I":
-    #         redirect_url = url_for('influencer_dashboard')
-    #     elif current_user.user_type == "U":
-    #         redirect_url = url_for('user_dashboard')
-    #     return redirect(redirect_url)
-    
+    # content page
     # admin pages
     @app.route("/admin/dashboard", methods=["GET"], strict_slashes=False)
     @e.admin_required
@@ -249,9 +237,11 @@ def server(app, socketio):
         campaigns = DB_Manager().QueryRecentCampaigns()
         
         influencer = ([[inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget] for inf in User.query.filter(User.user_type == "I").all()])
-        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])
+        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S", User.sponsor_approval == "True").all()])
         users = ([[usr.id, usr.username, usr.email, usr.ph_no, usr.user_type, usr.category, usr.niche, usr.followers, usr.industry, usr.budget] for usr in User.query.filter(User.user_type == "U").all()])
         
+        sponsor_approval_pending = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S", User.sponsor_approval == "False").all()])
+        print(sponsor_approval_pending, sponsors)
         camps = DB_Manager().QueryCampaignTitleID()
         camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))} if camps not in [None, []] else {}
 
@@ -259,6 +249,7 @@ def server(app, socketio):
                         users=users,
                         influencer=influencer,
                         sponsors=sponsors,
+                        sponsor_approval_pending=sponsor_approval_pending,
                         camp_dict=camp_dict,
                         admin_email=str(User.query.filter_by(id=userID).first().email),
                         admin_phno=str(User.query.filter_by(id=userID).first().ph_no),
@@ -304,7 +295,7 @@ def server(app, socketio):
     def admin_view_campaign(cid):
         cid = int(cid)
         campaign = DB_Manager().QueryCampaignByCID(cid)
-        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])        
+        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S", User.sponsor_approval == "True").all()])
         return jsonify(campaign=campaign,
                        sponsors=sponsors)
     
@@ -312,7 +303,7 @@ def server(app, socketio):
     @e.admin_required
     def admin_view_all_campaigns():
         campaigns=DB_Manager().QueryAllCampaigns()
-        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])        
+        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S", User.sponsor_approval == "True").all()])        
         return jsonify(campaigns=campaigns,
                           sponsors=sponsors)
     
@@ -323,7 +314,7 @@ def server(app, socketio):
         if DB_Manager().flagCampaign(cid):
             return jsonify({"msg": "Campaign flagged"}), 200
         else:
-            return jsonify({"error": "Failed to flag campaign"}), 500
+            return jsonify({"error": "Failed to flag campaign"}), 200
     
     @app.route("/admin/unflag_campaign/<cid>", methods=["GET"], strict_slashes=False)
     @e.admin_required
@@ -332,7 +323,17 @@ def server(app, socketio):
         if DB_Manager().unflagCampaign(cid):
             return jsonify({"msg": "Campaign unflagged"}), 200
         else:
-            return jsonify({"error": "Failed to unflag campaign"}), 500
+            return jsonify({"error": "Failed to unflag campaign"}), 200
+        
+    @app.route("/admin/approve_sponsor/<sid>", methods=["GET"], strict_slashes=False)
+    @e.admin_required
+    def admin_approve_sponsor(sid):
+        sid = int(sid)
+        if User.query.filter_by(id=sid).first().user_type != "S":
+            return jsonify({"error": "Invalid sponsor id"}), 200
+        User.query.filter_by(id=sid).first().sponsor_approval = "True"
+        db.session.commit()
+        return jsonify({"msg": "Sponsor approved"}), 200
 
     # # sponsor pages
     @app.route("/sponsor/dashboard", methods=["GET"], strict_slashes=False)
@@ -616,7 +617,7 @@ def server(app, socketio):
         inbox = DB_Manager().QueryInfluencerInBoxChatOverView(userID)
         camps = DB_Manager().QueryCampaignTitleID()
         camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))} if camps not in [None, []] else {}
-        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S").all()])
+        sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S", User.sponsor_approval == "True").all()])
         return jsonify(inbox=inbox,
                           camp_dict=camp_dict,
                           sponsors=sponsors)
@@ -625,6 +626,8 @@ def server(app, socketio):
     @e.influencer_required
     def influencer_inbox_chat(sid):
         userID = get_jwt_id()
+        if User.query.filter_by(id=sid).first().sponsor_approval == "False":
+            return jsonify({"error": "Sponsor account not approved yet"}), 200
         DB_Manager().updateAdRequestSeenINFL(userID, sid)
         if request.method == "POST":
             data = request.json
