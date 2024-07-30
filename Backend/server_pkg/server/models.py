@@ -19,5 +19,7 @@ class User(db.Model):
     industry = db.Column(db.String(100), nullable=False, unique=False)
     budget = db.Column(db.Integer, nullable=False, unique=False)
 
+    sponsor_approval = db.Column(db.String(10), nullable=False, unique=False, default="False")
+
     def __repr__(self):
         return '<User %r>' % self.username
