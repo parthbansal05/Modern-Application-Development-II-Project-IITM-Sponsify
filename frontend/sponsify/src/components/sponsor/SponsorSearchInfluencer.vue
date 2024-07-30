@@ -38,33 +38,52 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<div v-if="campaigns.length">
-				<label for="campaign-select">Select Campaign:</label>
-				<select id="campaign-select" v-model="selectedCampaign">
-					<option v-for="(campaign, index) in campaigns[0]" :key="index" :value="campaigns[0][index]">
-						{{ campaigns[1][index] }}
-					</option>
-				</select>
-			</div>
-			<div>
-				<label for="niche-select">Filter by Niche:</label>
-				<select id="niche-select" v-model="selectedNiche">
-					<option value="">All</option>
-					<option v-for="niche in unique_niches" :key="niche" :value="niche">{{ niche }}</option>
-				</select>
 
-				<label for="category-select">Filter by Category:</label>
-				<select id="category-select" v-model="selectedCategory">
-					<option value="">All</option>
-					<option v-for="category in unique_categories" :key="category" :value="category">{{ category }}
-					</option>
-				</select>
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">Filter</span>
+				</div>
+				<div class="card-body filter-form">
+					<div v-if="campaigns.length" class="single_filter">
+						<div>
+							<label for="campaign-select">Select Campaign : &nbsp; </label>
+							<select id="campaign-select" v-model="selectedCampaign">
+								<option v-for="(campaign, index) in campaigns[0]" :key="index" :value="campaigns[0][index]">
+									{{ campaigns[1][index] }}
+								</option>
+							</select>
+						</div>
+					</div>
 
-				<label for="sort-select">Sort by Followers:</label>
-				<select id="sort-select" v-model="sortOrder">
-					<option value="asc">Ascending</option>
-					<option value="desc">Descending</option>
-				</select>
+					<div class="three_filters">
+						<div>
+							<label for="niche-select">Niche : &nbsp; </label>
+							<select id="niche-select" v-model="selectedNiche">
+								<option value="">All</option>
+								<option v-for="niche in unique_niches" :key="niche" :value="niche">
+									{{ niche }}</option>
+							</select>
+						</div>
+
+						<div>
+							<label for="category-select">Category : &nbsp; </label>
+							<select id="category-select" v-model="selectedCategory">
+								<option value="">All</option>
+								<option v-for="category in unique_categories" :key="category" :value="category">
+									{{ category }}
+								</option>
+							</select>
+						</div>					
+							
+						<div>
+							<label for="sort-select">Sort by Followers: &nbsp; </label>
+							<select id="sort-select" v-model="sortOrder">
+								<option value="asc">Ascending</option>
+								<option value="desc">Descending</option>
+							</select>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="m-2 card">
@@ -82,16 +101,11 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<p>Influencer ID: {{ influencer[0] }}</p>
-								<p>Influencer Username: {{ influencer[1] }}</p>
-								<p>Influencer Email: {{ influencer[2] }}</p>
-								<p>Influencer phone number: {{ influencer[3] }}</p>
-								<p>Influencer User type: {{ influencer[4] }}</p>
-								<p>Influencer Category: {{ influencer[5] }}</p>
-								<p>Influencer Niche: {{ influencer[6] }}</p>
-								<p>Influencer Followers: {{ influencer[7] }}</p>
-								<p>Influencer Industry: {{ influencer[8] }}</p>
-								<p>Influencer Budget: {{ influencer[9] }}</p>
+								<p>Email ID: {{ influencer[2] }}</p>
+								<p>Phone Number: {{ influencer[3] }}</p>
+								<p>Category: {{ influencer[5] }}</p>
+								<p>Niche: {{ influencer[6] }}</p>
+								<p>Followers: {{ influencer[7] }}</p>
 							</div>
 						</div>
 					</div>
@@ -344,4 +358,33 @@ export default {
 	transition: margin-left 0.5s;
 	padding: 16px;
 }
+
+.filter-form select {
+	width: 300px;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	background-color: #FFFFFF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.text-align{
+	padding: 0.5rem;
+}
+
+.single_filter{
+	display: flex;
+	justify-content: center;
+	margin-right: 130px;
+}
+
+.three_filters{
+	display: flex;
+	justify-content: space-between;
+	margin-left: 50px;
+	margin-right: 50px;
+	width: 100%-400px;
+}
+
 </style>
