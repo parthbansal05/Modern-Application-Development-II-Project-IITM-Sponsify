@@ -370,10 +370,6 @@ export default {
 	border-radius: 4px;
 }
 
-.text-align{
-	padding: 0.5rem;
-}
-
 .single_filter{
 	display: flex;
 	justify-content: center;

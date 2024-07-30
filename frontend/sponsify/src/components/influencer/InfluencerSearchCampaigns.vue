@@ -37,18 +37,30 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<div>
-				<label for="startTime-select">Start time:</label>
-				<select id="startTime-select" v-model="selectedTime">
-					<option value="">All</option>
-					<option v-for="time in unique_Time" :key="time" :value="time">{{ formatTimestamp(time) }}</option>
-				</select>
 
-				<label for="budget-select">Budget:</label>
-				<select id="budget-select" v-model="selectedCategory">
-					<option value="">All</option>
-					<option v-for="budget in unique_budget" :key="budget" :value="budget">{{ budget }}</option>
-				</select>
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						Filter</span>
+				</div>
+				<div class="card-body filter-form">
+					<div class="two-filters">
+						<div>
+							<label for="startTime-select"> Start Date and Time : &nbsp; </label>
+							<select id="startTime-select" v-model="selectedTime">
+								<option value="">All</option>
+								<option v-for="time in unique_Time" :key="time" :value="time">{{ formatTimestamp(time) }}</option>
+							</select>						
+						</div>						
+						<div>
+							<label for="budget-select"> Budget : &nbsp; </label>
+							<select id="budget-select" v-model="selectedCategory">
+								<option value="">All</option>
+								<option v-for="budget in unique_budget" :key="budget" :value="budget">{{ budget }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="m-2 card">
@@ -185,6 +197,7 @@ export default {
 	}
 };
 </script>
+
 <style scoped>
 .campaign-container {
 	display: grid;
@@ -335,4 +348,23 @@ export default {
 	transition: margin-left 0.5s;
 	padding: 16px;
 }
+
+.filter-form select {
+	width: 300px;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	background-color: #FFFFFF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.two-filters{
+	display: flex;
+	justify-content: space-between;
+	margin-left: 200px;
+	margin-right: 200px;
+	width: 100%-400px;
+}
+
 </style>
