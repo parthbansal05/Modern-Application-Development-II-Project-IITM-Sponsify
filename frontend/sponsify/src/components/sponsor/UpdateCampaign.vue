@@ -106,12 +106,12 @@ export default {
 			});
 			this.campTitle = response.data.campTitle;
 			this.campDesc = response.data.campDesc;
-			this.startDate = response.data.startDate;
-			this.endDate = response.data.endDate;
 			this.budget = response.data.budget;
 			this.visibility = response.data.visibility;
 			this.goal = response.data.goal;
-			console.log(response.data);
+
+			this.startDate = new Date(new Date(response.data.startDate * 1000).getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+			this.endDate = new Date(new Date(response.data.endDate * 1000).getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
 		} catch (err) {
 			console.log(err);
 		}
