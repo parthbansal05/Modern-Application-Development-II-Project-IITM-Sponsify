@@ -56,14 +56,6 @@
 					</div>
 
 					<div class="three_filters">
-						<div>
-							<label for="niche-select">Niche : &nbsp; </label>
-							<select id="niche-select" v-model="selectedNiche">
-								<option value="">All</option>
-								<option v-for="niche in unique_niches" :key="niche" :value="niche">
-									{{ niche }}</option>
-							</select>
-						</div>
 
 						<div>
 							<label for="category-select">Category : &nbsp; </label>
@@ -75,6 +67,15 @@
 							</select>
 						</div>					
 							
+						<div>
+							<label for="niche-select">Niche : &nbsp; </label>
+							<select id="niche-select" v-model="selectedNiche">
+								<option value="">All</option>
+								<option v-for="niche in unique_niches" :key="niche" :value="niche">
+									{{ niche }}</option>
+							</select>
+						</div>
+
 						<div>
 							<label for="sort-select">Sort by Followers: &nbsp; </label>
 							<select id="sort-select" v-model="sortOrder">
