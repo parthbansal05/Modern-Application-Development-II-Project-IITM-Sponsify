@@ -53,7 +53,7 @@
 				</button>
 			</div>
 
-			<form @submit.prevent="createCampaign">
+			<form @submit.prevent="createCampaign" class="update-form">
 				<input type="text" v-model="campTitle" placeholder="Campaign Title" required>
 				<input type="text" v-model="campDesc" placeholder="Campaign Description" required>
 				<input type="date" v-model="startDate" placeholder="Start Date" required>

@@ -14,21 +14,28 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{username}}</h3>
+			<h3 class="sidebar-heading">{{ username }}</h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="$router.push('/AdminDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="$router.push('/AdminViewAllCampaigns')" class="sidebar-button btn btn-secondary btn-block mb-2">View All Campaigns</button>
-				<button @click="$router.push('/AdminInsights')" class="sidebar-button btn btn-secondary btn-block mb-2">View Insights</button>
+				<button @click="$router.push('/AdminDash')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/AdminViewAllCampaigns')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">View All Campaigns</button>
+				<button @click="$router.push('/AdminInsights')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">View Insights</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="$router.push('/login')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
@@ -36,8 +43,36 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h4>{{ campaign }}</h4>
-			<h4>{{ sponsors }}</h4>
+
+			<div>
+				<div class="card">
+				<div class="card-header d-flex justify-content-between align-items-center">
+					<h3>{{ campaign[2][0] }}</h3>
+					<div style="display: flex">
+						
+						&nbsp;
+						<a v-if="campaign[9][0] !== 'YES'" href="#" class="btn btn-danger"
+							@click="flag_campaign(campaign[0][0])"> Flag </a>
+						<a v-if="campaign[9][0] !== 'NO'" href="#" class="btn btn-danger"
+							@click="unflag_campaign(campaign[0][0])"> Un Flag </a>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>Sponsor Name: {{ sponsors.filter(sponsor => sponsor[0] === campaign[1][0])[0][1] }}
+					</p>
+					<p>Description: {{ campaign[3][0] }}</p>
+					<p>Start Time: {{ formatTimestamp(campaign[4][0]) }}</p>
+					<p>End Time: {{ formatTimestamp(campaign[5][0]) }}</p>
+					<p>Budget: {{ campaign[6][0] }}</p>
+					<p>Visibility: {{ campaign[7][0] }}</p>
+					<p>Goal: {{ campaign[8][0] }}</p>
+					<p>Flagged: {{ campaign[9][0] }}</p>
+
+				</div>
+			</div>
+
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -86,6 +121,22 @@ export default {
 				sidebar.style.width = "250px";
 				main.style.marginLeft = "250px";
 			}
+		},
+		formatTimestamp(timestamp) {
+			const date = new Date(timestamp * 1000);
+			return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+		},
+		async flag_campaign(cid) {
+			await axios.get('http://localhost:5000/admin/flag_campaign/' + cid, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
+		},
+		async unflag_campaign(cid) {
+			await axios.get('http://localhost:5000/admin/unflag_campaign/' + cid, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
 		},
 	},
 };
@@ -220,9 +271,11 @@ export default {
 	}
 }
 
+
 .main-content {
 	margin-top: 50px;
 	transition: margin-left 0.5s;
 	padding: 16px;
 }
+
 </style>
