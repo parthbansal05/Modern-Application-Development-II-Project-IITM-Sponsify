@@ -37,8 +37,23 @@
 
 		</div>
 
-		<div class="main-content" id="main">
-			<form @submit.prevent="login">
+		<div class="main-container" id="main">
+			
+			<div v-if="error" class="error-message">
+				{{ error }}
+				<button @click="closeError" class="err-close-btn">
+					&nbsp; &times; &nbsp;
+				</button>
+			</div>
+
+			<div v-if="msg" class="success-message">
+				{{ msg }}
+				<button @click="closeMsg" class="msg-close-btn">
+					&nbsp; &times; &nbsp;
+				</button>
+			</div>
+
+			<form @submit.prevent="createCampaign">
 				<input type="text" v-model="campTitle" placeholder="Campaign Title" required>
 				<input type="text" v-model="campDesc" placeholder="Campaign Description" required>
 				<input type="date" v-model="startDate" placeholder="Start Date" required>
@@ -49,9 +64,8 @@
 					<option value="private">Private</option>
 				</select>
 				<input type="text" v-model="goal" placeholder="Goal" required>
-				<button type="submit">Login</button>
+				<button type="submit">Create</button>
 			</form>
-			<div v-if="error">{{ error }}</div>
 		</div>
 	</div>
 </template>
@@ -69,12 +83,15 @@ export default {
 			budget: '',
 			visibility: 'public',
 			goal: '',
-			error: ''
+			error: '',
+			msg: ''
 		};
 	},
 	methods: {
-		async login() {
+		async createCampaign() {
 			try {
+				this.error = '';
+				this.msg = '';
 				const response = await axios.post('http://localhost:5000/sponsor/create_campaign', {
 					campTitle: this.campTitle,
 					campDesc: this.campDesc,
@@ -87,11 +104,30 @@ export default {
 				}, {
 					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
 				});
+
+				
+				if ('error' in response.data) {
+					this.error = response.data.error;
+					return;
+				}
+				if ('msg' in response.data) {
+					this.msg = response.data.msg;
+					return;
+				}
+
 				console.log(response.data);
 			} catch (err) {
 				this.error = 'Invalid username or password';
 			}
 		},
+		closeError() {
+			this.error = null
+		},
+
+		closeMsg() {
+			this.msg = null
+		},
+
 		// Nav and Side Bar
 		logout() {
 			this.$router.push("/logout")
@@ -240,9 +276,128 @@ export default {
 	}
 }
 
-.main-content {
-	margin-top: 50px;
+.main-container {
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	width: 100%;
+	height: 100vh;
+	padding-top: 30px;
 	transition: margin-left 0.5s;
-	padding: 16px;
+	align-items: center;
+	justify-content: center;
+	background-image: url('@/assets/background.jpeg');
+	background-size: cover;
+	background-position: center;
+}
+
+.error-message {
+	display: flex;
+	width: 50rem;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.2rem;
+	background: rgba(255, 107, 107, 0.8);
+	color: rgb(188, 0, 0);
+	padding: 1rem;
+	border-radius: 8px;
+	margin-bottom: 8px;
+}
+
+.err-close-btn {
+	position: relative;
+	top: 0px;
+	right: 0px;
+	background: none;
+	border: none;
+	border-radius: 2px;
+	font-size: 2rem;
+	cursor: pointer;
+	color: rgb(188, 0, 0);
+	padding: 0rem;
+}
+
+.err-close-btn:hover {
+	color: darkred;
+}
+
+.success-message {
+	display: flex;
+	width: 50rem;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.2rem;
+	background: rgba(144, 238, 144, 0.8);
+	/* light green */
+	color: green;
+	padding: 1rem;
+	border-radius: 8px;
+	margin-bottom: 8px;
+}
+
+.msg-close-btn {
+	position: relative;
+	top: 0px;
+	right: 0px;
+	background: none;
+	border: none;
+	border-radius: 2px;
+	font-size: 2rem;
+	cursor: pointer;
+	color: green;
+	padding: 0rem;
+}
+
+.msg-close-btn:hover {
+	color: darkgreen;
+}
+
+.update-form {
+	display: flex;
+	width: 50rem;
+	flex-direction: column;
+	background: white;
+	padding: 1.5rem;
+	padding-right: 25rem;
+	border-radius: 8px;
+
+
+	position: relative;
+	z-index: 2;
+
+	background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 60%), url('@/assets/leafy_bg.jpeg');
+	background-size: cover;
+}
+
+.update-form input {
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	background-color: #FFFFFF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.update-form button {	
+	padding: 0.5rem;
+	font-size: 1rem;
+	color: white;
+	background-color: #38566E;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.update-form select {
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	background-color: #FFFFFF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.update-form button:hover {
+	background-color: #B97A57;
 }
 </style>
