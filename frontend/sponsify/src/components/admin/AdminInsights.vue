@@ -36,11 +36,70 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<canvas id="FlaggedCampaignChart"></canvas>
-			<canvas id="PublicCampaignChart"></canvas>
-			<canvas id="UserDistribututionCampaignChart"></canvas>
-			<canvas id="StatusCampaignChart"></canvas>
-			<canvas id="InfluencerFollowersChart"></canvas>
+			
+			
+			
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						<h6>Data Insights</h6></span>
+				</div>
+
+				<div class="card-body">
+					<div class="admin-container">
+						<div class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								Flagged Campaign Distribution
+							</div>
+
+							<div class="card-body">
+								<canvas id="FlaggedCampaignChart"></canvas>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								Campaign Visibility Distribution
+							</div>
+
+							<div class="card-body">
+								<canvas id="PublicCampaignChart"></canvas>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								User Status Distribution
+							</div>
+
+							<div class="card-body">								
+								<canvas id="UserDistribututionCampaignChart"></canvas>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								Campaign Approval Distribution
+							</div>
+
+							<div class="card-body">								
+								<canvas id="StatusCampaignChart"></canvas>
+							</div>
+						</div>
+					</div>	
+					
+					<div class="card custom-width">
+						<div class="card-header d-flex justify-content-between align-items-center">
+							Top Influencers
+						</div>
+						<div class="card-body">
+							<canvas id="InfluencerFollowersChart"></canvas>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -385,4 +444,22 @@ export default {
 	transition: margin-left 0.5s;
 	padding: 16px;
 }
+
+.admin-container {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	/* 3 columns of equal width */
+	grid-template-rows: auto;
+	gap: 16px;
+	width: 100%;
+	padding: 16px;
+	border-radius: 8px;
+}
+
+.custom-width{
+	margin-left: 15px;
+	margin-right: 15px;
+	width: 100% - 30px;
+}
+
 </style>
