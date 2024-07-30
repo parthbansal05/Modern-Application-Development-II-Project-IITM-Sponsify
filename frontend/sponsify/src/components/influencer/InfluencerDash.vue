@@ -37,8 +37,17 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<div class="m-2 card p-4">
-				<h1>Current User: {{ info }}</h1>
+			<div class="m-2 card">
+				<div class="card-header">
+					Username: {{ info[1] }}
+				</div>
+				<div class="card-body">
+					<p>Email ID: {{ info[2] }}</p>
+					<p>Phone Number: {{ info[3] }}</p>
+					<p>Category: {{ info[5] }}</p>
+					<p>Niche: {{ info[6] }}</p>
+					<p>Followers: {{ info[7] }}</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -220,8 +229,15 @@ export default {
 }
 
 .main-content {
-	margin-top: 50px;
+	position: fixed;
+	height: 100vh;
+	width: 100%;
+	margin-top: 60px;
 	transition: margin-left 0.5s;
 	padding: 16px;
+	background-image: url('@/assets/background.jpeg');
+	background-size: cover;
+	background-position: center;
+	
 }
 </style>
