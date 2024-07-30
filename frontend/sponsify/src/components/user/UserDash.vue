@@ -36,13 +36,54 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<div class="m-2 card p-4">
-				<h6>
-					User Info:<br>
-					Current User: {{ info }}<br>
-					Followers: {{ followers }}<br>
-					Influencers: {{ influencers }}<br>
-				</h6>
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						<h3>{{ info[1] }}</h3>
+					</span>
+				</div>
+				<div class="card-body">
+					Name : {{ info[1] }}
+					<br>Email Id : {{ info[2] }}
+					<br>Phone Number : {{ info[3] }}
+					<br>Following : {{ followers[1].length }}
+					<br>Followers: {{ followers }}
+					<br>Influencers: {{ influencers }}
+					<br>{{influencers.filter(influencer => followers[1].includes(influencer[0]))}} 
+					
+					
+				</div>
+
+
+				<div class="m-2 card">
+					<div class="card-header">
+						<span class="d-inline-block text-truncate" style="max-width: 1000px">
+							Influencers Following</span>
+					</div>
+					<div class="card-body">
+						<div v-if="influencers.length" class="admin-container">
+							<div v-for="(data, index) in followers[1]" :key="index" class="card">
+								<div class="card-header d-flex justify-content-between align-items-center">
+									<h3>{{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][1] }}</h3>
+									<div style="display: flex">
+										<a href="#" class="btn btn-danger" @click="unfollow(influencers.filter(influencer => followers[1].includes(influencer[0]))[index][0])">
+											Unfollow </a>
+									</div>
+								</div>
+								<div class="card-body">
+									<p>Email ID: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][2] }}</p>
+									<p>Phone Number: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][3] }}</p>
+									<p>Category: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][5] }}</p>
+									<p>Niche: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][6] }}</p>
+									<p>Followers: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][7] }}</p>
+								</div>
+							</div>
+						</div>
+						<div v-else>
+							<p>No Influencers Following.</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -93,6 +134,12 @@ export default {
 				sidebar.style.width = "250px";
 				main.style.marginLeft = "250px";
 			}
+		},
+		async unfollow(iid) {
+			await axios.get('http://localhost:5000/user/unfollow/' + iid, {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
 		},
 	},
 
@@ -233,4 +280,16 @@ export default {
 	transition: margin-left 0.5s;
 	padding: 16px;
 }
+
+.admin-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	/* 3 columns of equal width */
+	grid-template-rows: auto;
+	gap: 16px;
+	width: 100%;
+	padding: 16px;
+	border-radius: 8px;
+}
+
 </style>

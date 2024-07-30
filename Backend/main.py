@@ -727,6 +727,7 @@ def server(app, socketio):
     @e.user_required
     def user_unfollow(iid):
         userID = get_jwt_id()
+        print(iid, userID)
         if DB_Manager().RemoveFollower(userID, iid):
             User.query.filter_by(id=iid).first().followers -= 1
             db.session.commit()

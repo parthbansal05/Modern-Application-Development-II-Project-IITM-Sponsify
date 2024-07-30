@@ -154,15 +154,6 @@ export default {
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
-	background-color: #FFFFFF;
-	background-image: url('@/assets/background.jpeg');
-	/* Replace with your image path */
-	background-size: cover;
-	/* Adjust this to cover, contain, or other values based on your need */
-	background-position: center;
-	/* Adjust the position as needed */
-	background-repeat: no-repeat;
-	/* Ensure the image doesn't repeat */
 }
 
 .register-form {

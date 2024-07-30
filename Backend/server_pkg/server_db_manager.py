@@ -409,7 +409,8 @@ class DB_Manager:
                 "DELETE from FOLLOWERS where UID={0} and FID={1}".format(UID, FID))
             self.Commit()
             return True
-        except:
+        except Exception as exc:
+            print(exc)
             self.conn.rollback()
             return False
 
