@@ -40,6 +40,53 @@
 			<h1>Current User: {{ inbox }}</h1>
 			<h1>Current User: {{ camp_dict }}</h1>
 			<h1>Current User: {{ sponsors }}</h1>
+
+			
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						Inbox
+					</span>
+				</div>
+
+				<div class="card-body">
+					<div v-if="inbox[0].length">
+						<div v-for="(aid, index) in inbox[0]" :key="index" class="m-2 card ">
+							
+							<div class="card-header d-flex justify-content-between">
+								<div class="d-flex align-items-center justify-content-center">	
+									<h5>
+										{{ sponsors.filter(sponsor => sponsor[0] === inbox[2][index])[0][1] }}
+									</h5>
+								</div>
+
+								<a href="#" class="btn btn-primary" @click="delete_chat(inbox[2][index])">
+									Delete
+								</a>
+							</div>
+
+							<a :href="`/InfluencerInboxChat/${inbox[2][index]}`" style="color: black; text-decoration: none;">
+								<div class="card-body">
+									<h4>{{ inbox[7][index] }}</h4> 
+									Budget : {{ inbox[8][index] }}
+									<br>
+									<div v-if="inbox[9][index].length">
+									Terms : {{ inbox[9][index] }}
+									</div>
+									<div v-if="inbox[11][index] == 'False'" class="dot"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+						
+					<div v-else>
+						<p>No campaigns available.</p>
+					</div>
+
+				</div>
+
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -227,5 +274,16 @@ export default {
 	margin-top: 50px;
 	transition: margin-left 0.5s;
 	padding: 16px;
+}
+
+.dot{
+	position: absolute;
+	height: 15px;
+	width: 15px;
+	background-color: green;
+	border-radius: 50%;
+	/* display: inline-block; */
+	right: 25px;
+	bottom: 20px;
 }
 </style>

@@ -47,9 +47,52 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h4>{{ inbox }}</h4>
-			<h4>{{ camp_dict }}</h4>
-			<h4>{{ influencer }}</h4>
+
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						Inbox
+					</span>
+				</div>
+
+				<div class="card-body">
+					<div v-if="inbox[0].length">
+						<div v-for="(aid, index) in inbox[0]" :key="index" class="m-2 card ">
+							
+							<div class="card-header d-flex justify-content-between">
+								<div class="d-flex align-items-center justify-content-center">	
+									<h5>
+										{{ influencer.filter(infl => infl[0] === inbox[3][index])[0][1] }}
+									</h5>
+								</div>
+
+								<a href="#" class="btn btn-primary" @click="delete_chat(inbox[3][index])">
+									Delete
+								</a>
+							</div>
+
+							<a :href="`/SponsorInboxChat/${inbox[3][index]}`" style="color: black; text-decoration: none;">
+								<div class="card-body">
+									<h4>{{ inbox[7][index] }}</h4> 
+									Budget : {{ inbox[8][index] }}
+									<br>
+									<div v-if="inbox[9][index].length">
+									Terms : {{ inbox[9][index] }}
+									</div>
+									<div v-if="inbox[10][index] == 'False'" class="dot"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+						
+					<div v-else>
+						<p>No campaigns available.</p>
+					</div>
+
+				</div>
+
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -100,6 +143,21 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
+
+	// 	async delete_chat(IID) {
+	// 		await axios
+	// 			.get("http://localhost:5000/sponsor/delete_campaign/" + campaignID, {
+	// 				headers: {
+	// 					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+	// 				},
+	// 			})
+	// 			.then((response) => {
+	// 				console.log(response);
+	// 				window.location.reload();
+	// 			})
+	// 			.catch((error) => {
+	// 				console.log(error);
+	// 			});
 	},
 
 };
@@ -238,5 +296,16 @@ export default {
 	margin-top: 50px;
 	transition: margin-left 0.5s;
 	padding: 16px;
+}
+
+.dot{
+	position: absolute;
+	height: 15px;
+	width: 15px;
+	background-color: green;
+	border-radius: 50%;
+	/* display: inline-block; */
+	right: 25px;
+	bottom: 20px;
 }
 </style>
