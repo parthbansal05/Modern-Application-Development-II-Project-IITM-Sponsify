@@ -89,6 +89,18 @@ class DB_Manager:
             self.conn.rollback()
             return [[""]]
         
+    def QueryModelName(self, ID):
+        try:
+            query = """SELECT Username
+                    FROM MODEL
+                    where ID = {0};""".format(ID)
+            result = self.SqlQuarryExec(query)
+            return [list(column) for column in zip(*result)]
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
+            return [[""]]
+        
     def QueryModelSponsorIDs(self):
         # returns the ids of all the sponsors
         try:
@@ -180,6 +192,18 @@ class DB_Manager:
             print(e)
             self.conn.rollback()
 
+    def QueryAdRequestByAID(self, AID):
+        try:
+            query = """SELECT AID, CID, SID, IID, REQUEST_FROM, STATUS, TIMESTAMP, MSG, Budget_nig, TERMS_nig, SEEN_SOPN, SEEN_INFL
+                        FROM AD_REQUEST
+                        WHERE AID ={0}
+                        """.format(AID)
+            result = self.SqlQuarryExec(query)
+            return [list(column) for column in zip(*result)]
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
+
     def QuerySponsorInBoxChatOverView(self, SID):
         try:
             query = """SELECT AID, CID, SID, IID, REQUEST_FROM, STATUS, TIMESTAMP, MSG, Budget_nig, TERMS_nig, SEEN_SOPN, SEEN_INFL
@@ -216,6 +240,17 @@ class DB_Manager:
             print(e)
             self.conn.rollback()
 
+    def QueryLastAdStatus(self, CID):
+        try:
+            query = """SELECT MAX(AID)
+                        FROM AD_REQUEST
+                        WHERE CID = '{0}'
+                        GROUP BY IID;""".format(CID)
+            result = self.SqlQuarryExec(query)
+            return [list(column) for column in zip(*result)]
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
 
     def QuerySponsorInBoxChat(self, SID, IID):
         try:

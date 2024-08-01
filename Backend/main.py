@@ -648,6 +648,7 @@ def server(app, socketio):
             except Exception as exc:
                 print(exc)
                 return jsonify({"error": "Failed to send message"}), 500
+            return "ok"
         if request.method == "GET":
             inbox = DB_Manager().QueryInfluencerInBoxChat(userID, int(sid))
             camps = DB_Manager().QueryCampaignTitleID()

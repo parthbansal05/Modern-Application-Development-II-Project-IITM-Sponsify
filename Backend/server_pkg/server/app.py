@@ -48,14 +48,14 @@ def create_app():
             beat_schedule={
                 'daily-task': {
                     'task': 'server_pkg.server.tasks.daily_task',
-                    # 'schedule': crontab(hour=18, minute=0),
-                    'schedule': crontab(minute="*"),
+                    'schedule': crontab(hour=18, minute=0),
+                    # 'schedule': crontab(minute="*"),
                     'args': (),
                 },
                 'monthly-task': {
                     'task': 'server_pkg.server.tasks.monthly_task',
-                    # 'schedule': crontab(day_of_month=1, hour=0, minute=0),
-                    'schedule': crontab(minute="*/2"),
+                    'schedule': crontab(day_of_month=1, hour=0, minute=0),
+                    # 'schedule': crontab(minute="*/2"),
                     'args': (),
                 },
             },
