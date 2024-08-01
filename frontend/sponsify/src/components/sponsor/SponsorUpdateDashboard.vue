@@ -326,9 +326,6 @@ export default {
 	transition: margin-left 0.5s;
 	align-items: center;
 	justify-content: center;
-	background-image: url('@/assets/background.jpeg');
-	background-size: cover;
-	background-position: center;
 }
 
 .error-message {

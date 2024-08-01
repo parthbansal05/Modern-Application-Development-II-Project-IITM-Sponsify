@@ -235,9 +235,5 @@ export default {
 	margin-top: 60px;
 	transition: margin-left 0.5s;
 	padding: 16px;
-	background-image: url('@/assets/background.jpeg');
-	background-size: cover;
-	background-position: center;
-	
 }
 </style>

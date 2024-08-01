@@ -146,9 +146,9 @@ export default {
 		}
 	},
 	methods: {
-		follow(influencer_id) {
+		async follow(influencer_id) {
 			try {
-				axios.get('http://localhost:5000/user/follow/' + influencer_id, {
+				await axios.get('http://localhost:5000/user/follow/' + influencer_id, {
 					headers: {
 						Authorization: `Bearer ${sessionStorage.getItem("token")}`,
 					},
@@ -156,7 +156,7 @@ export default {
 			} catch (err) {
 				console.error(err);
 			}
-			console.log(influencer_id);
+			window.location.reload();
 		},
 		// Nav and Side Bar
 		logout() {
