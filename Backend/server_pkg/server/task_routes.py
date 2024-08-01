@@ -19,12 +19,7 @@ def result(id: str):
     }
 
 
-@bp.post("/add")
-def add():
-    a = request.form.get("a", type=int)
-    b = request.form.get("b", type=int)
-    a=5
-    b=7
-    print(a, b)
-    result = tasks.add.delay(a, b)
+@bp.post("/sponsor_export")
+def sponsor_export():
+    result = tasks.sponsor_export.delay()
     return {"result_id": result.id}

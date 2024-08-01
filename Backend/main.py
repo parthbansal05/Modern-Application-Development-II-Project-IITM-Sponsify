@@ -115,6 +115,7 @@ def server(app, socketio):
                 
                 db.session.add(newuser)
                 db.session.commit()
+                DB_Manager().AddModel(newuser.id, username, email, ph_no, user_type)
                 return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
@@ -151,6 +152,7 @@ def server(app, socketio):
                 
                 db.session.add(newuser)
                 db.session.commit()
+                DB_Manager().AddModel(newuser.id, username, email, ph_no, user_type)
                 return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
@@ -185,6 +187,7 @@ def server(app, socketio):
                     budget=0)
                 db.session.add(newuser)
                 db.session.commit()
+                DB_Manager().AddModel(newuser.id, username, email, ph_no, user_type)
                 return jsonify({"msg": "Account Successfully created"}), 200
             except IntegrityError as exc:
                 db.session.rollback()
@@ -223,6 +226,7 @@ def server(app, socketio):
                     pass
             User.query.filter_by(id=uid).delete()
             db.session.commit()
+            DB_Manager().DeleteModel(uid)
             return jsonify({"status": "Deleted"}), 200
         except Exception as exc:
             print(exc)

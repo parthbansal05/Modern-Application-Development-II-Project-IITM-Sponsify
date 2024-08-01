@@ -38,12 +38,80 @@ class DB_Manager:
                         SEEN_INFL       TEXT        NOT NULL);''')
         print("AD_REQUEST Record table created successfully")
 
+        self.conn.execute('''CREATE TABLE MODEL
+                        (ID         INTEGER     PRIMARY KEY,
+                        Username    TEXT        NOT NULL,
+                        Email       TEXT        NOT NULL,
+                        Ph_no       TEXT        NOT NULL,
+                        User_type   TEXT        NOT NULL);''')
+        print("MODEL Record table created successfully")
+
         self.conn.execute('''CREATE TABLE FOLLOWERS
                         (UID            INTEGER     NOT NULL,
                          FID             INTEGER     NOT NULL,
                          CONSTRAINT uid_fid_unique UNIQUE (UID, FID)
                         );''')
         print("FOLLOWERS Record table created successfully")
+
+
+    def AddModel(self, ID, Username, Email, Ph_no, User_type):
+        try:
+            c = self.conn.cursor()
+            c.execute("""INSERT INTO MODEL (ID, Username, Email, Ph_no, User_type) VALUES 
+                    ({0}, \"{1}\", \"{2}\", \"{3}\", \"{4}\")""".format(ID, Username, Email, Ph_no, User_type))
+            self.Commit()
+            return True, c.lastrowid
+        except Exception as e:
+            self.conn.rollback()
+            return False, 0
+        
+    def QueryModelAll(self, ID):
+        try:
+            query = """SELECT ID, Username, Email, Ph_no, User_type
+                    FROM MODEL
+                    where ID = {0};""".format(ID)
+            result = self.SqlQuarryExec(query)
+            return [list(column) for column in zip(*result)]
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
+            return []
+    
+    def QueryModelEmail(self, ID):
+        try:
+            query = """SELECT Email
+                    FROM MODEL
+                    where ID = {0};""".format(ID)
+            result = self.SqlQuarryExec(query)
+            return [list(column) for column in zip(*result)]
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
+            return [[""]]
+        
+    def QueryModelSponsorIDs(self):
+        # returns the ids of all the sponsors
+        try:
+            query = """SELECT ID
+                    FROM MODEL
+                    where User_type = 'S';"""
+            result = self.SqlQuarryExec(query)
+            return [list(column) for column in zip(*result)]
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
+            return []
+
+        
+    def DeleteModel(self, ID):
+        try:
+            self.conn.execute(
+                "DELETE from MODEL where ID={0}".format(ID))
+            self.Commit()
+            return True
+        except:
+            self.conn.rollback()
+            return False
 
     # Quarry
     def QueryAllCampaigns(self):

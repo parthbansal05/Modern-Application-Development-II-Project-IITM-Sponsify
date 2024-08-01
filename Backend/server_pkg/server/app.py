@@ -12,6 +12,10 @@ from celery import Celery, Task
 from celery.schedules import crontab
 from . import task_routes
 
+from flask_mail import Mail, Message
+
+from .. import global_vars as gv
+
 db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
@@ -43,13 +47,15 @@ def create_app():
             task_ignore_result=True,
             beat_schedule={
                 'daily-task': {
-                    'task': 'src.task_app.tasks.daily_task',
-                    'schedule': crontab(hour=18, minute=0),
+                    'task': 'server_pkg.server.tasks.daily_task',
+                    # 'schedule': crontab(hour=18, minute=0),
+                    'schedule': crontab(minute="*"),
                     'args': (),
                 },
                 'monthly-task': {
-                    'task': 'src.task_app.tasks.monthly_task',
-                    'schedule': crontab(day_of_month=1, hour=0, minute=0),  # Runs at the start of every month
+                    'task': 'server_pkg.server.tasks.monthly_task',
+                    # 'schedule': crontab(day_of_month=1, hour=0, minute=0),
+                    'schedule': crontab(minute="*/2"),
                     'args': (),
                 },
             },
@@ -66,6 +72,17 @@ def create_app():
     SQLALCHEMY_TRACK_MODIFICATIONS=True,
     static_folder='static',
     )
+
+    app.config['MAIL_SERVER']='smtp.gmail.com'
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USERNAME'] = ''
+    app.config['MAIL_PASSWORD'] = ''
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+
+    mail = Mail(app) 
+    gv.mail = mail
+
 
     db.init_app(app)
     migrate.init_app(app, db)
