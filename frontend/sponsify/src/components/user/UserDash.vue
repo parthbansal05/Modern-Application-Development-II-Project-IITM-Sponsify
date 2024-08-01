@@ -46,14 +46,8 @@
 					Name : {{ info[1] }}
 					<br>Email Id : {{ info[2] }}
 					<br>Phone Number : {{ info[3] }}
-					<br>Following : {{ followers[1].length }}
-					<br>Followers: {{ followers }}
-					<br>Influencers: {{ influencers }}
-					<br>{{influencers.filter(influencer => followers[1].includes(influencer[0]))}} 
-					
-					
+					<br>Following : {{ followers[1].length }}					
 				</div>
-
 
 				<div class="m-2 card">
 					<div class="card-header">

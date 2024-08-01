@@ -50,6 +50,33 @@
 			<h4>{{ inbox }}</h4>
 			<h4>{{ camp_dict }}</h4>
 			<h4>{{ influencer }}</h4>
+
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						Inbox
+					</span>
+				</div>
+
+				<div class="card-body">
+					<div v-if="inbox[0].length">
+						<div v-for="(aid, index) in inbox[0]" :key="index" class="m-2 card">
+							<div class="card-header">
+								<h6>
+									{{ influencer.filter(infl => infl[0] === inbox[3][index])[0][1] }}
+								</h6>
+							</div>
+						</div>
+					</div>
+						
+					<div v-else>
+						<p>No campaigns available.</p>
+					</div>
+
+				</div>
+
+			</div>
+
 		</div>
 	</div>
 </template>
