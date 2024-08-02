@@ -12,7 +12,7 @@ from flask_bcrypt import check_password_hash
 from sqlalchemy.exc import IntegrityError
 
 import server_pkg.essentials as e
-from server_pkg.server.app import bcrypt, create_app, db
+from server_pkg.server.app import bcrypt, create_app, db, cache
 from server_pkg.server.forms import login_form, register_form_inf, register_form_spo, create_campaign_form, register_form_usr
 from server_pkg.server.models import User
 from server_pkg.server_db_manager import DB_Manager
@@ -236,6 +236,7 @@ def server(app, socketio):
     # admin pages
     @app.route("/admin/dashboard", methods=["GET"], strict_slashes=False)
     @e.admin_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"admin_dashboard_{get_jwt_id()}")
     def admin_dashboard():
         userID = get_jwt_id()
         campaigns = DB_Manager().QueryRecentCampaigns()
@@ -261,6 +262,7 @@ def server(app, socketio):
 
     @app.route("/admin/insights", methods=["GET"], strict_slashes=False)
     @e.admin_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"admin_insights_{get_jwt_id()}")
     def admin_insights():
         flagged_stats =DB_Manager().QueryFlaggedCampaignsStats()
         visibility_stats =DB_Manager().QueryCampaignsVisibilityStats()
@@ -296,6 +298,7 @@ def server(app, socketio):
 
     @app.route("/admin/view_campaign/<cid>", methods=["GET"], strict_slashes=False)
     @e.admin_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"admin_view_campaign_{get_jwt_id()}")
     def admin_view_campaign(cid):
         cid = int(cid)
         campaign = DB_Manager().QueryCampaignByCID(cid)
@@ -305,6 +308,7 @@ def server(app, socketio):
     
     @app.route("/admin/view_all_campaigns", methods=["GET"], strict_slashes=False)
     @e.admin_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"admin_view_all_campaigns_{get_jwt_id()}")
     def admin_view_all_campaigns():
         campaigns=DB_Manager().QueryAllCampaigns()
         sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S", User.sponsor_approval == "True").all()])        
@@ -342,6 +346,7 @@ def server(app, socketio):
     # # sponsor pages
     @app.route("/sponsor/dashboard", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"sponsor_dashboard_{get_jwt_id()}")
     def sponsor_dashboard():
         userID = get_jwt_id()
         campaigns = DB_Manager().QueryCampaignBySID(userID)
@@ -394,6 +399,7 @@ def server(app, socketio):
 
     @app.route("/sponsor/view_campaigns/<cid>", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"sponsor_view_campaigns_{get_jwt_id()}")
     def sponsor_view_campaigns(cid):
         cid = int(cid)
         campaign = DB_Manager().QueryCampaignByCID(cid)
@@ -471,6 +477,7 @@ def server(app, socketio):
 
     @app.route("/sponsor/inbox", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"sponsor_inbox_{get_jwt_id()}")
     def sponsor_inbox():
         userID = get_jwt_id()
         inbox = DB_Manager().QuerySponsorInBoxChatOverView(userID)
@@ -483,6 +490,7 @@ def server(app, socketio):
     
     @app.route("/sponsor/inbox/<iid>", methods=["GET", "POST"], strict_slashes=False)
     @e.sponsor_required
+    @cache.cached(timeout=5, key_prefix=lambda: f"sponsor_inbox_chat_{get_jwt_id()}")
     def sponsor_inbox_chat(iid):
         userID = get_jwt_id()
         DB_Manager().updateAdRequestSeenSOPN(iid, userID)
@@ -523,6 +531,7 @@ def server(app, socketio):
     
     @app.route("/sponsor/search_influencer", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
+    @cache.cached(timeout=5, key_prefix=lambda: f"sponsor_search_influencer_{get_jwt_id()}")
     def sponsor_search_influencer():
         userID = get_jwt_id()
         influencers = ([[inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget] for inf in User.query.filter_by(user_type="I").all()])
@@ -546,6 +555,7 @@ def server(app, socketio):
     
     @app.route("/influencer/dashboard", methods=["GET"], strict_slashes=False)
     @e.influencer_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"influencer_dashboard_{get_jwt_id()}")
     def influencer_dashboard():
         userID = get_jwt_id()
         inf = User.query.filter_by(id=userID).first()
@@ -554,6 +564,7 @@ def server(app, socketio):
 
     @app.route("/influencer/dashboard/<iid>", methods=["GET"], strict_slashes=False)
     @jwt_required()
+    @cache.cached(timeout=10, key_prefix=lambda: f"influencer_dashboard_iid_{get_jwt_id()}")
     def influencer_dashboard_iid(iid):
         inf = User.query.filter_by(id=iid).first()
         if inf.user_type != "I":
@@ -595,6 +606,7 @@ def server(app, socketio):
 
     @app.route("/influencer/search_campaigns", methods=["GET"], strict_slashes=False)
     @e.influencer_required
+    @cache.cached(timeout=5, key_prefix=lambda: f"influencer_search_campaigns_{get_jwt_id()}")
     def influencer_search_campaigns():
         campaigns = DB_Manager().QueryPublicCampaign()
         print(campaigns)
@@ -616,6 +628,7 @@ def server(app, socketio):
     
     @app.route("/influencer/inbox", methods=["GET"], strict_slashes=False)
     @e.influencer_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"influencer_inbox_{get_jwt_id()}")
     def influencer_inbox():
         userID = get_jwt_id()
         inbox = DB_Manager().QueryInfluencerInBoxChatOverView(userID)
@@ -628,6 +641,7 @@ def server(app, socketio):
     
     @app.route("/influencer/inbox/<sid>", methods=["GET", "POST"], strict_slashes=False)
     @e.influencer_required
+    @cache.cached(timeout=5, key_prefix=lambda: f"influencer_inbox_chat_{get_jwt_id()}")
     def influencer_inbox_chat(sid):
         userID = get_jwt_id()
         if User.query.filter_by(id=sid).first().sponsor_approval == "False":
@@ -670,6 +684,7 @@ def server(app, socketio):
     
     @app.route("/user/dashboard", methods=["GET"], strict_slashes=False)
     @e.user_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"user_dashboard_{get_jwt_id()}")
     def user_dashboard():
         userID = get_jwt_id()
         usr = User.query.filter_by(id=userID).first()
@@ -707,6 +722,7 @@ def server(app, socketio):
     
     @app.route("/user/search_influencer", methods=["GET"], strict_slashes=False)
     @e.user_required
+    @cache.cached(timeout=10, key_prefix=lambda: f"user_search_influencer_{get_jwt_id()}")
     def user_search_influencer():
         userID = get_jwt_id()
         print(DB_Manager().QueryFollowers(userID))
@@ -752,6 +768,7 @@ def server(app, socketio):
             return jsonify({"error": "Failed to delete chat"}), 500
         
     @app.route("/get_username", methods=["GET"], strict_slashes=False)
+    @cache.cached(timeout=10, key_prefix=lambda: f"get_username_{get_jwt_id()}")
     def get_username():
         userID = get_jwt_id()
         utype_mapper = {'S': 'Sponsor', 'I': 'Influencer', 'A': 'Admin', 'U': 'User'}
