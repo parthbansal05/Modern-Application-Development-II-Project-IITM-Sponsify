@@ -298,7 +298,6 @@ def server(app, socketio):
 
     @app.route("/admin/view_campaign/<cid>", methods=["GET"], strict_slashes=False)
     @e.admin_required
-    @cache.cached(timeout=10, key_prefix=lambda: f"admin_view_campaign_{get_jwt_id()}")
     def admin_view_campaign(cid):
         cid = int(cid)
         campaign = DB_Manager().QueryCampaignByCID(cid)
@@ -399,7 +398,6 @@ def server(app, socketio):
 
     @app.route("/sponsor/view_campaigns/<cid>", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
-    @cache.cached(timeout=10, key_prefix=lambda: f"sponsor_view_campaigns_{get_jwt_id()}")
     def sponsor_view_campaigns(cid):
         cid = int(cid)
         campaign = DB_Manager().QueryCampaignByCID(cid)
@@ -490,7 +488,6 @@ def server(app, socketio):
     
     @app.route("/sponsor/inbox/<iid>", methods=["GET", "POST"], strict_slashes=False)
     @e.sponsor_required
-    @cache.cached(timeout=5, key_prefix=lambda: f"sponsor_inbox_chat_{get_jwt_id()}")
     def sponsor_inbox_chat(iid):
         userID = get_jwt_id()
         DB_Manager().updateAdRequestSeenSOPN(iid, userID)
@@ -564,7 +561,6 @@ def server(app, socketio):
 
     @app.route("/influencer/dashboard/<iid>", methods=["GET"], strict_slashes=False)
     @jwt_required()
-    @cache.cached(timeout=10, key_prefix=lambda: f"influencer_dashboard_iid_{get_jwt_id()}")
     def influencer_dashboard_iid(iid):
         inf = User.query.filter_by(id=iid).first()
         if inf.user_type != "I":
@@ -641,7 +637,6 @@ def server(app, socketio):
     
     @app.route("/influencer/inbox/<sid>", methods=["GET", "POST"], strict_slashes=False)
     @e.influencer_required
-    @cache.cached(timeout=5, key_prefix=lambda: f"influencer_inbox_chat_{get_jwt_id()}")
     def influencer_inbox_chat(sid):
         userID = get_jwt_id()
         if User.query.filter_by(id=sid).first().sponsor_approval == "False":
