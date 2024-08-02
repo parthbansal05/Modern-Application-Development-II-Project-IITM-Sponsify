@@ -19,7 +19,7 @@ def result(id: str):
     }
 
 
-@bp.post("/sponsor_export")
-def sponsor_export():
-    result = tasks.sponsor_export.delay()
+@bp.get("/sponsor_export/<id>")
+def sponsor_export(id: int):
+    result = tasks.sponsor_export.delay(id)
     return {"result_id": result.id}
