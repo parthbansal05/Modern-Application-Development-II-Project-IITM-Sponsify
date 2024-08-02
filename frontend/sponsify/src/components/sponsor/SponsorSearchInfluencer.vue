@@ -97,7 +97,7 @@
 							<div class="card-header">
 								<h3>{{ influencer[1] }}</h3>
 								<div style="display: flex; justify-content: space-between">
-									<a href="#" class="btn btn-primary" @click="send_request(influencer[0])">Send
+									<a  class="btn btn-primary" @click="send_request(influencer[0])">Send
 										Request</a>
 								</div>
 							</div>

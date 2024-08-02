@@ -66,7 +66,7 @@
 									</h5>
 								</div>
 
-								<a href="#" class="btn btn-primary" @click="delete_chat(inbox[3][index])">
+								<a  class="btn btn-primary" @click="delete_chat(inbox[3][index], userID)">
 									Delete
 								</a>
 							</div>
@@ -107,7 +107,8 @@ export default {
 			camp_dict: '',
 			influencer: '',
 			username: '',
-			user_type: ''
+			user_type: '',
+			userID: '',
 		};
 	},
 	async created() {
@@ -118,6 +119,7 @@ export default {
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.influencer = response.data.influencer;
+			this.userID = response.data.userID;
 		} catch (err) {
 			console.log(err);
 		}
@@ -143,21 +145,13 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
-
-	// 	async delete_chat(IID) {
-	// 		await axios
-	// 			.get("http://localhost:5000/sponsor/delete_campaign/" + campaignID, {
-	// 				headers: {
-	// 					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-	// 				},
-	// 			})
-	// 			.then((response) => {
-	// 				console.log(response);
-	// 				window.location.reload();
-	// 			})
-	// 			.catch((error) => {
-	// 				console.log(error);
-	// 			});
+		async delete_chat(iid, sid) {
+			console.log('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True');
+			await axios.get('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
+		},
 	},
 
 };

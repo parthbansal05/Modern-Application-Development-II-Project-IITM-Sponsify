@@ -60,7 +60,7 @@
 								<div class="card-header d-flex justify-content-between align-items-center">
 									<h3>{{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][1] }}</h3>
 									<div style="display: flex">
-										<a href="#" class="btn btn-danger" @click="unfollow(influencers.filter(influencer => followers[1].includes(influencer[0]))[index][0])">
+										<a  class="btn btn-danger" @click="unfollow(influencers.filter(influencer => followers[1].includes(influencer[0]))[index][0])">
 											Unfollow </a>
 									</div>
 								</div>

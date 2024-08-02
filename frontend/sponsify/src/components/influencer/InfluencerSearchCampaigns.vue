@@ -73,7 +73,7 @@
 							<div class="card-header">
 								<h3>{{ campaign.title }}</h3>
 								<div style="display: flex; justify-content: space-between">
-									<a href="#" class="btn btn-primary"
+									<a  class="btn btn-primary"
 										@click="send_request(campaign.cid, campaign.sid, campaign.budget)">Send
 										Request</a>
 								</div>

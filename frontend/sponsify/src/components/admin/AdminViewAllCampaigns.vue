@@ -43,8 +43,8 @@
 						<div style="display: flex">
 							<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View </a>
 							&nbsp;
-							<a v-if="campaigns[9][index] !== 'YES'" href="#" class="btn btn-danger" @click="flag_campaign(campaigns[0][index])"> Flag </a>
-							<a v-if="campaigns[9][index] !== 'NO'" href="#" class="btn btn-danger" @click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
+							<a v-if="campaigns[9][index] !== 'YES'"  class="btn btn-danger" @click="flag_campaign(campaigns[0][index])"> Flag </a>
+							<a v-if="campaigns[9][index] !== 'NO'"  class="btn btn-danger" @click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
 						</div>
 					</div>
 					<div class="card-body">

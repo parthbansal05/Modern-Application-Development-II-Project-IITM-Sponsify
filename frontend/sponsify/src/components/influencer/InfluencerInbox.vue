@@ -60,7 +60,7 @@
 									</h5>
 								</div>
 
-								<a href="#" class="btn btn-primary" @click="delete_chat(inbox[2][index])">
+								<a  class="btn btn-primary" @click="delete_chat(userID, inbox[2][index])">
 									Delete
 								</a>
 							</div>
@@ -100,8 +100,9 @@ export default {
 			inbox: [],
 			camp_dict: {},
 			sponsors: [],
+			userID: '',
 			username: '',
-			user_type: ''
+			user_type: '',
 		};
 	},
 	async created() {
@@ -112,6 +113,7 @@ export default {
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.sponsors = response.data.sponsors;
+			this.userID = response.data.userID;
 			const user_response = await axios.get('http://localhost:5000/get_username', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
@@ -136,6 +138,13 @@ export default {
 				sidebar.style.width = "250px";
 				main.style.marginLeft = "250px";
 			}
+		},
+		async delete_chat(iid, sid) {
+			console.log('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True');
+			await axios.get('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
 		},
 	},
 };

@@ -51,9 +51,9 @@
 					<div style="display: flex">
 						
 						&nbsp;
-						<a v-if="campaign[9][0] !== 'YES'" href="#" class="btn btn-danger"
+						<a v-if="campaign[9][0] !== 'YES'"  class="btn btn-danger"
 							@click="flag_campaign(campaign[0][0])"> Flag </a>
-						<a v-if="campaign[9][0] !== 'NO'" href="#" class="btn btn-danger"
+						<a v-if="campaign[9][0] !== 'NO'"  class="btn btn-danger"
 							@click="unflag_campaign(campaign[0][0])"> Un Flag </a>
 					</div>
 				</div>

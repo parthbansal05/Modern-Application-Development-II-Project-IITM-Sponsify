@@ -61,7 +61,8 @@ def server(app, socketio):
             next_url = data.get('next')
 
             user = User.query.filter_by(email=email).first()
-
+            if user is None:
+                return jsonify({"error": "User does not exist"}), 200
             if check_password_hash(user.pwd, pwd):
                 redirect_url = ""
                 print(user.user_type)
@@ -471,7 +472,6 @@ def server(app, socketio):
             return jsonify({"msg": "Campaign deleted"}), 200
         else:
             return jsonify({"error": "Failed to delete campaign"}), 500
-        return redirect(url_for('sponsor_dashboard'))
 
     @app.route("/sponsor/inbox", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
@@ -484,7 +484,8 @@ def server(app, socketio):
         influencer = ([[inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget] for inf in User.query.filter(User.user_type == "I").all()])
         return jsonify(inbox=inbox,
                           camp_dict=camp_dict,
-                          influencer=influencer)
+                          influencer=influencer,
+                          userID = userID)
     
     @app.route("/sponsor/inbox/<iid>", methods=["GET", "POST"], strict_slashes=False)
     @e.sponsor_required
@@ -504,6 +505,7 @@ def server(app, socketio):
                 if modified_budget == "": modified_budget = DB_Manager().QuerySponsorInBoxChatLastBudget(int(iid), userID, campaign)[0][0]
                 if modified_terms == "": modified_terms = DB_Manager().QuerySponsorInBoxChatLastTerm(int(iid), userID, campaign)[0][0]
                 DB_Manager().AddAdRequest(campaign, userID, iid, "SOPN", "PENDING", msg, modified_budget, modified_terms, "True", "False")
+                return "ok", 200
             except Exception as exc:
                 print(exc)
                 return jsonify({"error": "Failed to send message"}), 500
@@ -633,7 +635,8 @@ def server(app, socketio):
         sponsors = ([[spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget] for spo in User.query.filter(User.user_type == "S", User.sponsor_approval == "True").all()])
         return jsonify(inbox=inbox,
                           camp_dict=camp_dict,
-                          sponsors=sponsors)
+                          sponsors=sponsors,
+                          userID = userID)
     
     @app.route("/influencer/inbox/<sid>", methods=["GET", "POST"], strict_slashes=False)
     @e.influencer_required
@@ -654,10 +657,10 @@ def server(app, socketio):
                 if modified_budget == "": modified_budget = DB_Manager().QueryInfluencerInBoxChatLastBudget(userID, int(sid), campaign)[0][0]
                 if modified_terms == "": modified_terms = DB_Manager().QueryInfluencerInBoxChatLastTerm(userID, int(sid), campaign)[0][0]
                 DB_Manager().AddAdRequest(campaign, sid, userID, "INFL", "PENDING", msg, modified_budget, modified_terms, "False", "True")
+                return "ok", 200
             except Exception as exc:
                 print(exc)
                 return jsonify({"error": "Failed to send message"}), 500
-            return "ok"
         if request.method == "GET":
             inbox = DB_Manager().QueryInfluencerInBoxChat(userID, int(sid))
             camps = DB_Manager().QueryCampaignTitleID()
@@ -752,15 +755,15 @@ def server(app, socketio):
             db.session.commit()
             return jsonify({"msg": "Unfollowed"}), 200
         else:
-            return jsonify({"error": "Failed to unfollow"}), 500
+            return jsonify({"error": "Failed to unfollow"}), 200
 
     @app.route("/delete_chat/<iid>/<sid>/<red>", methods=["GET"], strict_slashes=False)
-    @jwt_required
+    @jwt_required()
     def delete_chat(iid, sid, red):
         if DB_Manager().RemoveChat(iid, sid):
             return jsonify({"msg": "Chat deleted"}), 200
         else:
-            return jsonify({"error": "Failed to delete chat"}), 500
+            return jsonify({"error": "Failed to delete chat"}), 200
         
     @app.route("/get_username", methods=["GET"], strict_slashes=False)
     @cache.cached(timeout=10, key_prefix=lambda: f"get_username_{get_jwt_id()}")

@@ -66,7 +66,7 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="Approve_Sponsor(data[0])">Approve</a>
+									<a class="btn btn-danger" @click="Approve_Sponsor(data[0])">Approve</a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -94,9 +94,9 @@
 									<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View
 									</a>
 									&nbsp;
-									<a v-if="campaigns[9][index] !== 'YES'" href="#" class="btn btn-danger"
+									<a v-if="campaigns[9][index] !== 'YES'" class="btn btn-danger"
 										@click="flag_campaign(campaigns[0][index])"> Flag </a>
-									<a v-if="campaigns[9][index] !== 'NO'" href="#" class="btn btn-danger"
+									<a v-if="campaigns[9][index] !== 'NO'" class="btn btn-danger"
 										@click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
 								</div>
 							</div>
@@ -132,7 +132,7 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
+									<a class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -162,7 +162,7 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
+									<a class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -191,7 +191,7 @@
 							<div class="card-header d-flex justify-content-between align-items-center">
 								<h3>{{ data[1] }}</h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
+									<a class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
 							<div class="card-body">

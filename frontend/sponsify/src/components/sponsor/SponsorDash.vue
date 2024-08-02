@@ -68,7 +68,7 @@
 				<div class="card-header">
 					<span class="d-inline-block text-truncate" style="max-width: 1000px">Recent Campaigns</span>
 					<div style="text-align: right; padding-right: 10px;">
-						<a href="#" class="btn btn-primary" @click="GenReport(info[0])">Download Campaign Report</a>
+						<a  class="btn btn-primary" @click="GenReport(info[0])">Download Campaign Report</a>
 					</div>
 				</div>
 				<div class="card-body">
@@ -79,13 +79,13 @@
 								<div style="display: flex; justify-content: space-between">
 									<a :href="`/SponsorViewCampaign/${campaigns[0][index]}`"
 										class="btn btn-primary">View</a>
-									<a v-if="campaigns[7][index] === 'Public'" href="#" class="btn btn-warning"
+									<a v-if="campaigns[7][index] === 'Public'"  class="btn btn-warning"
 										@click="setVisibility(campaigns[0][index], 'Private')">Make Private</a>
-									<a v-if="campaigns[7][index] === 'Private'" href="#" class="btn btn-success"
+									<a v-if="campaigns[7][index] === 'Private'"  class="btn btn-success"
 										@click="setVisibility(campaigns[0][index], 'Public')">Make Public</a>
 									<a :href="`/UpdateCampaign/${campaigns[0][index]}`"
 										class="btn btn-primary">Update</a>
-									<a href="#" class="btn btn-primary"
+									<a  class="btn btn-primary"
 										@click="delete_campaign(campaigns[0][index])">Delete</a>
 								</div>
 							</div>
