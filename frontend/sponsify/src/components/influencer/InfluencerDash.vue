@@ -39,7 +39,7 @@
 		<div class="main-content" id="main">
 			<div class="m-2 card">
 				<div class="card-header">
-					Username: {{ info[1] }}
+					<h5 class=" text-truncate" style="max-width: 1000px"> {{ info[1] }}</h5>
 				</div>
 				<div class="card-body">
 					<p>Email ID: {{ info[2] }}</p>

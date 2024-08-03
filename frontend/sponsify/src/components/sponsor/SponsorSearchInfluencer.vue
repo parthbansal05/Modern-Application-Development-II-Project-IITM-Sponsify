@@ -95,7 +95,7 @@
 					<div v-if="influencers.length" class="influencer-container">
 						<div v-for="(influencer, index) in filteredInfluencers" :key="index" class="card">
 							<div class="card-header">
-								<h3>{{ influencer[1] }}</h3>
+								<h3 class=" text-truncate" style="max-width: 1000px">{{ influencer[1] }}</h3>
 								<div style="display: flex; justify-content: space-between">
 									<a  class="btn btn-primary" @click="send_request(influencer[0])">Send
 										Request</a>

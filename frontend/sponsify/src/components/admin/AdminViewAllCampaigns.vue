@@ -39,7 +39,7 @@
 			<div v-if="campaigns.length" class="admin-container">
 				<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 					<div class="card-header d-flex justify-content-between align-items-center">
-						<h3>{{ campaigns[2][index] }}</h3>
+						<h3><span class="d-inline-block text-truncate" style="max-width: 250px">{{ campaigns[2][index] }}</span></h3>
 						<div style="display: flex">
 							<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View </a>
 							&nbsp;
@@ -48,13 +48,13 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<p>Sponsor Name: {{ sponsors.filter(sponsor => sponsor[0] === campaigns[1][index])[0][1]}}</p>
-						<p>Description: {{ campaigns[3][index] }}</p>
+						<p class=" text-truncate" style="max-width: 1000px">Sponsor Name: {{ sponsors.filter(sponsor => sponsor[0] === campaigns[1][index])[0][1]}}</p>
+						<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaigns[3][index] }}</p>
 						<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>
 						<p>End Time: {{ formatTimestamp(campaigns[5][index]) }}</p>
 						<p>Budget: {{ campaigns[6][index] }}</p>
 						<p>Visibility: {{ campaigns[7][index] }}</p>
-						<p>Goal: {{ campaigns[8][index] }}</p>
+						<p class=" text-truncate" style="max-width: 1000px">Goal: {{ campaigns[8][index] }}</p>
 						<p>Flagged: {{ campaigns[9][index] }}</p>
 
 					</div>

@@ -55,7 +55,7 @@
 							
 							<div class="card-header d-flex justify-content-between">
 								<div class="d-flex align-items-center justify-content-center">	
-									<h5>
+									<h5 class=" text-truncate" style="max-width: 1000px">
 										{{ sponsors.filter(sponsor => sponsor[0] === inbox[2][index])[0][1] }}
 									</h5>
 								</div>
@@ -67,11 +67,11 @@
 
 							<a :href="`/InfluencerInboxChat/${inbox[2][index]}`" style="color: black; text-decoration: none;">
 								<div class="card-body">
-									<h4>{{ inbox[7][index] }}</h4> 
+									<h4 class=" text-truncate" style="max-width: 1000px">{{ inbox[7][index] }}</h4> 
 									Budget : {{ inbox[8][index] }}
 									<br>
 									<div v-if="inbox[9][index].length">
-									Terms : {{ inbox[9][index] }}
+										<span class="d-inline-block text-truncate" style="max-width: 1000px">Terms : {{ inbox[9][index] }} </span>
 									</div>
 									<div v-if="inbox[11][index] == 'False'" class="dot"></div>
 								</div>

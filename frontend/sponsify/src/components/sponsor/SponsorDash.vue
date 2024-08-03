@@ -75,7 +75,7 @@
 					<div v-if="campaigns.length" class="campaign-container">
 						<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 							<div class="card-header">
-								<h3>{{ campaigns[2][index] }}</h3>
+								<h3 class=" text-truncate" style="max-width: 1000px">{{ campaigns[2][index] }}</h3>
 								<div style="display: flex; justify-content: space-between">
 									<a :href="`/SponsorViewCampaign/${campaigns[0][index]}`"
 										class="btn btn-primary">View</a>
@@ -92,13 +92,13 @@
 							<div class="card-body">
 								<p>Campaign ID: {{ campaigns[0][index] }}</p>
 								<p>Sponsor ID: {{ campaigns[1][index] }}</p>
-								<p>Title: {{ campaigns[2][index] }}</p>
-								<p>Description: {{ campaigns[3][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Title: {{ campaigns[2][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaigns[3][index] }}</p>
 								<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>
 								<p>End Time: {{ formatTimestamp(campaigns[5][index]) }}</p>
 								<p>Budget: {{ campaigns[6][index] }}</p>
 								<p>Visibility: {{ campaigns[7][index] }}</p>
-								<p>Goal: {{ campaigns[8][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Goal: {{ campaigns[8][index] }}</p>
 								<p>Flagged: {{ campaigns[9][index] }}</p>
 								<br />
 								<p>Campaign Progress</p>

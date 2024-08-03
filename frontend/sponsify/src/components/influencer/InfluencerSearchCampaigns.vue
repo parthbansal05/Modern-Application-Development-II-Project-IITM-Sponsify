@@ -71,7 +71,7 @@
 					<div v-if="campaigns.length" class="campaign-container">
 						<div v-for="(campaign, index) in filteredCampaigns" :key="index" class="card">
 							<div class="card-header">
-								<h3>{{ campaign.title }}</h3>
+								<h3 class=" text-truncate" style="max-width: 1000px">{{ campaign.title }}</h3>
 								<div style="display: flex; justify-content: space-between">
 									<a  class="btn btn-primary"
 										@click="send_request(campaign.cid, campaign.sid, campaign.budget)">Send
@@ -81,13 +81,13 @@
 							<div class="card-body">
 								<p>CID: {{ campaign.cid }}</p>
 								<p>SID: {{ campaign.sid }}</p>
-								<p>Name: {{ campaign.title }}</p>
-								<p>Description: {{ campaign.description }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Name: {{ campaign.title }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaign.description }}</p>
 								<p>Start Date: {{ formatTimestamp(campaign.startDate) }}</p>
 								<p>End Date: {{ formatTimestamp(campaign.endDate) }}</p>
 								<p>Budget: {{ campaign.budget }}</p>
 								<p>Visibility: {{ campaign.visibility }}</p>
-								<p>Goals: {{ campaign.goal }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Goals: {{ campaign.goal }}</p>
 								<p>Flagged: {{ campaign.flagged }}</p>
 							</div>
 						</div>

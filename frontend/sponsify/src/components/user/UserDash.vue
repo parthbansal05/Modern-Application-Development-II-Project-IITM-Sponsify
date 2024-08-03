@@ -58,7 +58,7 @@
 						<div v-if="influencers.length" class="admin-container">
 							<div v-for="(data, index) in followers[1]" :key="index" class="card">
 								<div class="card-header d-flex justify-content-between align-items-center">
-									<h3>{{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][1] }}</h3>
+									<h3 class=" text-truncate" style="max-width: 1000px">{{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][1] }}</h3>
 									<div style="display: flex">
 										<a  class="btn btn-danger" @click="unfollow(influencers.filter(influencer => followers[1].includes(influencer[0]))[index][0])">
 											Unfollow </a>
