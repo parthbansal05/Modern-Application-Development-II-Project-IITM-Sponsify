@@ -43,7 +43,6 @@
 		</div>
 
 		<div class="main-content" id="main">
-
 			<div>
 				<div class="card">
 				<div class="card-header d-flex justify-content-between align-items-center">

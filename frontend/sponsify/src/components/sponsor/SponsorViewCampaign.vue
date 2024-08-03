@@ -47,7 +47,25 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h4>{{ campaign }}</h4>
+			<div>
+				<div class="card">
+				<div class="card-header d-flex justify-content-between align-items-center">
+					<h3>{{ campaign[2][0] }}</h3>
+				</div>
+				<div class="card-body">
+					<p>Description: {{ campaign[3][0] }}</p>
+					<p>Start Time: {{ formatTimestamp(campaign[4][0]) }}</p>
+					<p>End Time: {{ formatTimestamp(campaign[5][0]) }}</p>
+					<p>Budget: {{ campaign[6][0] }}</p>
+					<p>Visibility: {{ campaign[7][0] }}</p>
+					<p>Goal: {{ campaign[8][0] }}</p>
+					<p>Flagged: {{ campaign[9][0] }}</p>
+
+				</div>
+			</div>
+
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -94,6 +112,10 @@ export default {
 				sidebar.style.width = "250px";
 				main.style.marginLeft = "250px";
 			}
+		},
+		formatTimestamp(timestamp) {
+			const date = new Date(timestamp * 1000);
+			return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 		},
 	},
 };
