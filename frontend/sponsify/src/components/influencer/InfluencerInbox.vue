@@ -14,7 +14,7 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{username}}</h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
@@ -55,23 +55,23 @@
 							
 							<div class="card-header d-flex justify-content-between">
 								<div class="d-flex align-items-center justify-content-center">	
-									<h5>
+									<h5 class=" text-truncate" style="max-width: 1000px">
 										{{ sponsors.filter(sponsor => sponsor[0] === inbox[2][index])[0][1] }}
 									</h5>
 								</div>
 
-								<a href="#" class="btn btn-primary" @click="delete_chat(inbox[2][index])">
+								<a  class="btn btn-primary" @click="delete_chat(userID, inbox[2][index])">
 									Delete
 								</a>
 							</div>
 
 							<a :href="`/InfluencerInboxChat/${inbox[2][index]}`" style="color: black; text-decoration: none;">
 								<div class="card-body">
-									<h4>{{ inbox[7][index] }}</h4> 
+									<h4 class=" text-truncate" style="max-width: 1000px">{{ inbox[7][index] }}</h4> 
 									Budget : {{ inbox[8][index] }}
 									<br>
 									<div v-if="inbox[9][index].length">
-									Terms : {{ inbox[9][index] }}
+										<span class="d-inline-block text-truncate" style="max-width: 1000px">Terms : {{ inbox[9][index] }} </span>
 									</div>
 									<div v-if="inbox[11][index] == 'False'" class="dot"></div>
 								</div>
@@ -100,8 +100,9 @@ export default {
 			inbox: [],
 			camp_dict: {},
 			sponsors: [],
+			userID: '',
 			username: '',
-			user_type: ''
+			user_type: '',
 		};
 	},
 	async created() {
@@ -112,6 +113,7 @@ export default {
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.sponsors = response.data.sponsors;
+			this.userID = response.data.userID;
 			const user_response = await axios.get('http://localhost:5000/get_username', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
@@ -136,6 +138,13 @@ export default {
 				sidebar.style.width = "250px";
 				main.style.marginLeft = "250px";
 			}
+		},
+		async delete_chat(iid, sid) {
+			console.log('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True');
+			await axios.get('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
 		},
 	},
 };

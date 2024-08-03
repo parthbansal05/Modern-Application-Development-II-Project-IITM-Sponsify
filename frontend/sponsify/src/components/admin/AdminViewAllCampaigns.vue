@@ -14,7 +14,7 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{username}}</h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
@@ -39,22 +39,22 @@
 			<div v-if="campaigns.length" class="admin-container">
 				<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 					<div class="card-header d-flex justify-content-between align-items-center">
-						<h3>{{ campaigns[2][index] }}</h3>
+						<h3><span class="d-inline-block text-truncate" style="max-width: 250px">{{ campaigns[2][index] }}</span></h3>
 						<div style="display: flex">
 							<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View </a>
 							&nbsp;
-							<a v-if="campaigns[9][index] !== 'YES'" href="#" class="btn btn-danger" @click="flag_campaign(campaigns[0][index])"> Flag </a>
-							<a v-if="campaigns[9][index] !== 'NO'" href="#" class="btn btn-danger" @click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
+							<a v-if="campaigns[9][index] !== 'YES'"  class="btn btn-danger" @click="flag_campaign(campaigns[0][index])"> Flag </a>
+							<a v-if="campaigns[9][index] !== 'NO'"  class="btn btn-danger" @click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
 						</div>
 					</div>
 					<div class="card-body">
-						<p>Sponsor Name: {{ sponsors.filter(sponsor => sponsor[0] === campaigns[1][index])[0][1]}}</p>
-						<p>Description: {{ campaigns[3][index] }}</p>
+						<p class=" text-truncate" style="max-width: 1000px">Sponsor Name: {{ sponsors.filter(sponsor => sponsor[0] === campaigns[1][index])[0][1]}}</p>
+						<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaigns[3][index] }}</p>
 						<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>
 						<p>End Time: {{ formatTimestamp(campaigns[5][index]) }}</p>
 						<p>Budget: {{ campaigns[6][index] }}</p>
 						<p>Visibility: {{ campaigns[7][index] }}</p>
-						<p>Goal: {{ campaigns[8][index] }}</p>
+						<p class=" text-truncate" style="max-width: 1000px">Goal: {{ campaigns[8][index] }}</p>
 						<p>Flagged: {{ campaigns[9][index] }}</p>
 
 					</div>

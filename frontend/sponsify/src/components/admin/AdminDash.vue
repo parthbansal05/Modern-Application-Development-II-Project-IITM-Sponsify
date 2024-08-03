@@ -14,7 +14,7 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{ username }}</h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
@@ -64,9 +64,9 @@
 					<div class="admin-container">
 						<div v-for="(data, index) in sponsor_approval_pending" :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
-								<h3>{{ data[1] }}</h3>
+								<h3><span class="d-inline-block text-truncate" style="max-width: 300px">{{ data[1] }}</span></h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="Approve_Sponsor(data[0])">Approve</a>
+									<a class="btn btn-danger" @click="Approve_Sponsor(data[0])">Approve</a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -89,27 +89,27 @@
 					<div v-if="campaigns.length" class="admin-container">
 						<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
-								<h3>{{ campaigns[2][index] }}</h3>
+								<h3><span class="d-inline-block text-truncate" style="max-width: 250px">{{ campaigns[2][index] }}</span></h3>
 								<div style="display: flex">
 									<a :href="`/AdminViewCampaign/${campaigns[0][index]}`" class="btn btn-primary"> View
 									</a>
 									&nbsp;
-									<a v-if="campaigns[9][index] !== 'YES'" href="#" class="btn btn-danger"
+									<a v-if="campaigns[9][index] !== 'YES'" class="btn btn-danger"
 										@click="flag_campaign(campaigns[0][index])"> Flag </a>
-									<a v-if="campaigns[9][index] !== 'NO'" href="#" class="btn btn-danger"
+									<a v-if="campaigns[9][index] !== 'NO'" class="btn btn-danger"
 										@click="unflag_campaign(campaigns[0][index])"> Un Flag </a>
 								</div>
 							</div>
 							<div class="card-body">
 								<p>Campaign ID: {{ campaigns[0][index] }}</p>
 								<p>Sponsor ID: {{ campaigns[1][index] }}</p>
-								<p>Title: {{ campaigns[2][index] }}</p>
-								<p>Description: {{ campaigns[3][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Title: {{ campaigns[2][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaigns[3][index] }}</p>
 								<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>
 								<p>End Time: {{ formatTimestamp(campaigns[5][index]) }}</p>
 								<p>Budget: {{ campaigns[6][index] }}</p>
 								<p>Visibility: {{ campaigns[7][index] }}</p>
-								<p>Goal: {{ campaigns[8][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Goal: {{ campaigns[8][index] }}</p>
 								<p>Flagged: {{ campaigns[9][index] }}</p>
 
 							</div>
@@ -130,9 +130,9 @@
 					<div v-if="influencer.length" class="admin-container">
 						<div v-for="(data, index) in influencer" :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
-								<h3>{{ data[1] }}</h3>
+								<h3><span class="d-inline-block text-truncate" style="max-width: 300px">{{ data[1] }}</span></h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
+									<a class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -160,9 +160,9 @@
 					<div v-if="sponsors.length" class="admin-container">
 						<div v-for="(data, index) in sponsors " :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
-								<h3>{{ data[1] }}</h3>
+								<h3><span class="d-inline-block text-truncate" style="max-width: 300px">{{ data[1] }}</span></h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
+									<a class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -189,9 +189,9 @@
 					<div v-if="users.length" class="admin-container">
 						<div v-for="(data, index) in users " :key="index" class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
-								<h3>{{ data[1] }}</h3>
+								<h3><span class="d-inline-block text-truncate" style="max-width: 300px">{{ data[1] }}</span></h3>
 								<div style="display: flex">
-									<a href="#" class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
+									<a class="btn btn-danger" @click="delete_user(data[0])">Delete </a>
 								</div>
 							</div>
 							<div class="card-body">

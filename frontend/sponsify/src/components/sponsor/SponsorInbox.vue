@@ -14,7 +14,7 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{ username }}</h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
@@ -61,23 +61,23 @@
 							
 							<div class="card-header d-flex justify-content-between">
 								<div class="d-flex align-items-center justify-content-center">	
-									<h5>
+									<h5 class=" text-truncate" style="max-width: 1000px">
 										{{ influencer.filter(infl => infl[0] === inbox[3][index])[0][1] }}
 									</h5>
 								</div>
 
-								<a href="#" class="btn btn-primary" @click="delete_chat(inbox[3][index])">
+								<a  class="btn btn-primary" @click="delete_chat(inbox[3][index], userID)">
 									Delete
 								</a>
 							</div>
 
 							<a :href="`/SponsorInboxChat/${inbox[3][index]}`" style="color: black; text-decoration: none;">
 								<div class="card-body">
-									<h4>{{ inbox[7][index] }}</h4> 
+									<h4 class=" text-truncate" style="max-width: 1000px">{{ inbox[7][index] }}</h4> 
 									Budget : {{ inbox[8][index] }}
 									<br>
 									<div v-if="inbox[9][index].length">
-									Terms : {{ inbox[9][index] }}
+										<span class="d-inline-block text-truncate" style="max-width: 1000px">Terms : {{ inbox[9][index] }} </span>
 									</div>
 									<div v-if="inbox[10][index] == 'False'" class="dot"></div>
 								</div>
@@ -107,7 +107,8 @@ export default {
 			camp_dict: '',
 			influencer: '',
 			username: '',
-			user_type: ''
+			user_type: '',
+			userID: '',
 		};
 	},
 	async created() {
@@ -118,6 +119,7 @@ export default {
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.influencer = response.data.influencer;
+			this.userID = response.data.userID;
 		} catch (err) {
 			console.log(err);
 		}
@@ -143,21 +145,13 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
-
-	// 	async delete_chat(IID) {
-	// 		await axios
-	// 			.get("http://localhost:5000/sponsor/delete_campaign/" + campaignID, {
-	// 				headers: {
-	// 					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-	// 				},
-	// 			})
-	// 			.then((response) => {
-	// 				console.log(response);
-	// 				window.location.reload();
-	// 			})
-	// 			.catch((error) => {
-	// 				console.log(error);
-	// 			});
+		async delete_chat(iid, sid) {
+			console.log('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True');
+			await axios.get('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			window.location.reload();
+		},
 	},
 
 };

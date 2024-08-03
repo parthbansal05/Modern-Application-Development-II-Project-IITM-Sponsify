@@ -14,7 +14,7 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{ username }}</h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
@@ -65,14 +65,14 @@
 					<div v-if="influencers.length" class="influencer-container">
 						<div v-for="(influencer, index) in filteredInfluencers" :key="index" class="card">
 							<div class="card-header">
-								<h3>{{ influencer[1] }}</h3>
+								<h3 class=" text-truncate" style="max-width: 1000px">{{ influencer[1] }}</h3>
 								<div style="display: flex; justify-content: space-between">
-									<a href="#" class="btn btn-primary" @click="follow(influencer[0])">Follow</a>
+									<a  class="btn btn-primary" @click="follow(influencer[0])">Follow</a>
 								</div>
 							</div>
 							<div class="card-body">
 								<p>Influencer ID: {{ influencer[0] }}</p>
-								<p>Influencer Username: {{ influencer[1] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Influencer Username: {{ influencer[1] }}</p>
 								<p>Influencer Email: {{ influencer[2] }}</p>
 								<p>Influencer phone number: {{ influencer[3] }}</p>
 								<p>Influencer User type: {{ influencer[4] }}</p>

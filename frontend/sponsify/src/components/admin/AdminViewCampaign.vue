@@ -14,7 +14,7 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{ username }}</h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
@@ -43,7 +43,6 @@
 		</div>
 
 		<div class="main-content" id="main">
-
 			<div>
 				<div class="card">
 				<div class="card-header d-flex justify-content-between align-items-center">
@@ -51,9 +50,9 @@
 					<div style="display: flex">
 						
 						&nbsp;
-						<a v-if="campaign[9][0] !== 'YES'" href="#" class="btn btn-danger"
+						<a v-if="campaign[9][0] !== 'YES'"  class="btn btn-danger"
 							@click="flag_campaign(campaign[0][0])"> Flag </a>
-						<a v-if="campaign[9][0] !== 'NO'" href="#" class="btn btn-danger"
+						<a v-if="campaign[9][0] !== 'NO'"  class="btn btn-danger"
 							@click="unflag_campaign(campaign[0][0])"> Un Flag </a>
 					</div>
 				</div>

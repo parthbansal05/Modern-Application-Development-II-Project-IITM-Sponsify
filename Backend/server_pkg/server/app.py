@@ -11,10 +11,10 @@ from flask_cors import CORS
 from celery import Celery, Task
 from celery.schedules import crontab
 from . import task_routes
-
 from flask_mail import Mail, Message
-
 from .. import global_vars as gv
+from flask_caching import Cache
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -23,6 +23,7 @@ socketio = SocketIO()
 dropzone = Dropzone()
 cors = CORS()
 jwt = JWTManager()
+cache = Cache()
 
 
 def celery_init_app(app: Flask) -> Celery:
@@ -83,6 +84,13 @@ def create_app():
     mail = Mail(app) 
     gv.mail = mail
 
+    app.config['CACHE_TYPE'] = 'RedisCache'
+    app.config['CACHE_REDIS_HOST'] = 'localhost'  # Redis host
+    app.config['CACHE_REDIS_PORT'] = 6379  # Redis port
+    app.config['CACHE_REDIS_DB'] = 0  # Redis database
+    app.config['CACHE_REDIS_URL'] = 'redis://localhost:6379/0'  # Redis URL
+    app.config['CACHE_DEFAULT_TIMEOUT'] = 300  # Cache timeout in seconds (5 minutes)
+
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -91,5 +99,6 @@ def create_app():
     dropzone.init_app(app)
     cors.init_app(app)
     jwt.init_app(app)
+    cache.init_app(app)
     
     return app, socketio, dropzone

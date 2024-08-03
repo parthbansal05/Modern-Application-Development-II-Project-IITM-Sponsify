@@ -14,23 +14,32 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading">{{ username }}</h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="$router.push('/SponsorDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="$router.push('/SponsorUpdateDashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
-				<button @click="$router.push('/CreateCampaign')" class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
-				<button @click="$router.push('/SponsorSearchInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
-				<button @click="$router.push('/SponsorInbox')" class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
+				<button @click="$router.push('/SponsorDash')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/SponsorUpdateDashboard')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
+				<button @click="$router.push('/CreateCampaign')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
+				<button @click="$router.push('/SponsorSearchInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
+				<button @click="$router.push('/SponsorInbox')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="$router.push('/login')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
@@ -58,35 +67,38 @@
 			<div class="m-2 card">
 				<div class="card-header">
 					<span class="d-inline-block text-truncate" style="max-width: 1000px">Recent Campaigns</span>
+					<div style="text-align: right; padding-right: 10px;">
+						<a  class="btn btn-primary" @click="GenReport(info[0])">Download Campaign Report</a>
+					</div>
 				</div>
 				<div class="card-body">
 					<div v-if="campaigns.length" class="campaign-container">
 						<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 							<div class="card-header">
-								<h3>{{ campaigns[2][index] }}</h3>
+								<h3 class=" text-truncate" style="max-width: 1000px">{{ campaigns[2][index] }}</h3>
 								<div style="display: flex; justify-content: space-between">
 									<a :href="`/SponsorViewCampaign/${campaigns[0][index]}`"
 										class="btn btn-primary">View</a>
-									<a v-if="campaigns[7][index] === 'Public'" href="#" class="btn btn-warning"
+									<a v-if="campaigns[7][index] === 'Public'"  class="btn btn-warning"
 										@click="setVisibility(campaigns[0][index], 'Private')">Make Private</a>
-									<a v-if="campaigns[7][index] === 'Private'" href="#" class="btn btn-success"
+									<a v-if="campaigns[7][index] === 'Private'"  class="btn btn-success"
 										@click="setVisibility(campaigns[0][index], 'Public')">Make Public</a>
 									<a :href="`/UpdateCampaign/${campaigns[0][index]}`"
 										class="btn btn-primary">Update</a>
-									<a href="#" class="btn btn-primary"
+									<a  class="btn btn-primary"
 										@click="delete_campaign(campaigns[0][index])">Delete</a>
 								</div>
 							</div>
 							<div class="card-body">
 								<p>Campaign ID: {{ campaigns[0][index] }}</p>
 								<p>Sponsor ID: {{ campaigns[1][index] }}</p>
-								<p>Title: {{ campaigns[2][index] }}</p>
-								<p>Description: {{ campaigns[3][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Title: {{ campaigns[2][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaigns[3][index] }}</p>
 								<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>
 								<p>End Time: {{ formatTimestamp(campaigns[5][index]) }}</p>
 								<p>Budget: {{ campaigns[6][index] }}</p>
 								<p>Visibility: {{ campaigns[7][index] }}</p>
-								<p>Goal: {{ campaigns[8][index] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Goal: {{ campaigns[8][index] }}</p>
 								<p>Flagged: {{ campaigns[9][index] }}</p>
 								<br />
 								<p>Campaign Progress</p>
@@ -139,7 +151,7 @@ export default {
 			this.campaigns = response.data.campaigns;
 			this.info = response.data.info;
 			await new Promise((resolve) => setTimeout(resolve, 1000));
-			if (this.campaigns.length !== 0) {				
+			if (this.campaigns.length !== 0) {
 				for (let i = 0; i < this.campaigns[0].length; i++) {
 					const startTime = this.campaigns[4][i] * 1000;
 					const endTime = this.campaigns[5][i] * 1000;
@@ -194,6 +206,12 @@ export default {
 					console.log(error);
 				});
 		},
+		async GenReport(UserID) {
+			sessionStorage.removeItem('ReportID');
+			const response = await axios.get("http://localhost:5000/tasks/sponsor_export/" + UserID, { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}`, }, });
+			sessionStorage.setItem('ReportID', response.data.result_id);
+
+		},
 		async delete_campaign(campaignID) {
 			await axios
 				.get("http://localhost:5000/sponsor/delete_campaign/" + campaignID, {
@@ -209,7 +227,27 @@ export default {
 					console.log(error);
 				});
 		},
+		async fetch_CSV() {
+			var ReportID = sessionStorage.getItem('ReportID');
+			if (ReportID === null) {
+				return;
+			}
+			const response = await axios.get("http://localhost:5000/tasks/result/" + ReportID, { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}`, }, });
 
+			if (response.data.ready === true && response.data.successful === true){
+				sessionStorage.removeItem('ReportID');
+				const blob = new Blob([response.data.value], { type: 'text/csv' });
+				const url = window.URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = 'report.csv';
+				a.click();
+				window.URL.revokeObjectURL(url);
+			}
+			else {
+				console.log("CSV Not Ready");
+			}
+		},
 		// Nav and Side Bar
 		toggle() {
 			const sidebar = document.getElementById("mySidebar");
@@ -222,6 +260,10 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
+	},
+	mounted() {
+		// Start the interval to run the function periodically
+		setInterval(this.fetch_CSV, 2000); // Run every 5 seconds
 	},
 };
 </script>
