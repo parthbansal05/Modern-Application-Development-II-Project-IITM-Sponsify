@@ -120,18 +120,31 @@ export default {
 		// this.username = user_response.data.username;
 		this.user_type = user_response.data.user_type;
 	},
+
 	methods: {
 		async updateSponsorDashboard() {
+			this.error = '';
+			this.msg = '';
+
+			if (this.username.length <= 3) {
+				this.error = 'Username must be more than 3 characters long';
+				return;
+			}
+			if (this.password !== this.confirmPassword) {
+				this.error = 'Passwords do not match';
+				this.password = "";
+				this.confirmPassword = "";
+				return;
+			}
+			const phnoPattern = /^[6-9]\d{9}$/;
+			if (!phnoPattern.test(this.phno)) {
+				this.error = 'Invalid Phone Number \nPhone Number must be 10 digits long';
+				return;
+			}
+			
 			try {
 				// check if the password and confirm password match
-				this.error = '';
-				this.msg = '';
-				if (this.password !== this.confirmPassword) {
-					this.error = 'Passwords do not match';
-					this.password = "";
-					this.confirmPassword = "";
-					return;
-				}
+				
 				const response = await axios.post('http://localhost:5000/sponsor/update_dashboard', {
 					pwd: this.password,
 					username: this.username,
@@ -331,6 +344,7 @@ export default {
 .error-message {
 	display: flex;
 	width: 50rem;
+	white-space: pre-line;
 	align-items: center;
 	justify-content: space-between;
 	font-size: 1.2rem;

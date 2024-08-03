@@ -123,9 +123,31 @@ export default {
 	},
 	methods: {
 		async UpdateCampaign() {
+			this.error = '';
+			this.msg = '';
+
+			if (this.campTitle.length <= 3) {
+				this.error = 'Title must be more than 3 characters long';
+				return;
+			}
+			if (this.campDesc.length <= 10) {
+				this.error = 'Description must be more than 10 characters long';
+				return;
+			}
+			if (new Date(this.startDate) >= new Date(this.endDate)) {
+				this.error = 'Start Date must be before End Date';
+				return;
+			}
+			if (this.budget <= 0) {
+				this.error = 'Campaign Budget must be a positive Integer Value';
+				return;
+			}
+			if (this.goal.length <= 3) {
+				this.error = 'Goal must be more than 3 characters long';
+				return;
+			}
+			
 			try {
-				this.error = '';
-				this.msg = '';
 				if (this.password !== this.confirmPassword) {
 					this.error = 'Passwords do not match';
 					this.password = "";

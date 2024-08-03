@@ -55,13 +55,123 @@
 				<input v-model="msg" :placeholder="msg" type="text" />
 				<input v-model="modified_budget" :placeholder="modified_budget" type="number" />
 				<input v-model="modified_terms" :placeholder="modified_terms" type="text" />
-				<select v-model="campain_id" :placeholder="campain_id" type="text" required>
-					<option value="Food & Beverage">Food & Beverage</option>
+				<select v-model="campain_id" placeholder="Campaign" type="text" required>
+					<option v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
+						:key="index" :value="cid">
+						{{ camp_dict[cid] }}
+					</option>
 				</select>
 				<button type="submit">Login</button>
 			</form>
 			<div v-if="error">{{ error }}</div>
+
+			<div class="col-lg-8 col-md-8 m-auto card" style="padding-bottom: 50px; width: 80%;">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						<h6> {{ influencer[1] }} </h6>
+					</span>
+				</div>
+
+				<div v-for="(aid, index) in inbox[0]" :key="index" class="card-body">
+					<div v-if="inbox[4][index] == 'INFL'" class="col-lg-10 col-md-6 ms-0 me-auto card p-3"
+						style="background-color: #C4A484;">
+						<h5> {{ inbox[7][index] }} </h5>
+						<span>Budget Negotiation: {{ inbox[8][index] }}</span>
+						<div v-if="inbox[9][index] != ''">
+							Terms Negotiation : {{ inbox[9][index] }}
+						</div>
+						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+
+						<div style="float: right;">
+							<!-- Status -->
+							<div style=" position: absolute; top: 85%; right: 170px; transform: translateY(-50%);">
+								<div v-if="inbox[5][index] == 'Rejected'" class="dot_r" title="Rejected"></div>
+								<div v-if="inbox[5][index] == 'PENDING'" class="dot_y" title="Pending"></div>
+								<div v-if="inbox[5][index] == 'Approved'" class="dot_g" title="Approved"></div>
+							</div>
+
+							<!-- TimeStamp -->
+							<div style="position: absolute; top: 85%; right: 15px; transform: translateY(-50%);">
+								{{ formatTimestamp(inbox[6][index]) }}
+							</div>
+						</div>
+
+					</div>
+
+					<div v-else-if="inbox[4][index] == 'SOPN'" class="col-lg-10 col-md-6 ms-auto me-0 card p-3"
+						style="background-color: #FF5CCE;">
+
+						<h5> {{ inbox[7][index] }} </h5>
+						<span>Budget Negotiation: {{ inbox[8][index] }}</span>
+						<div v-if="inbox[9][index] != ''">
+							Terms Negotiation : {{ inbox[9][index] }}
+						</div>
+						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+
+						<div style="float: right;">
+							<!-- Status -->
+							<div style="position: absolute; top: 85%; right: 200px; transform: translateY(-50%)">
+								<div v-if="inbox[5][index] == 'Rejected'" class="dot_r" title="Rejected"></div>
+								<div v-if="inbox[5][index] == 'PENDING'" class="dot_y" title="Pending"></div>
+								<div v-if="inbox[5][index] == 'Approved'" class="dot_g" title="Approved"></div>
+							</div>
+
+							<!-- TimeStamp -->
+							<div style="position: absolute; top: 85%; right: 45px; transform: translateY(-50%)">
+								{{ formatTimestamp(inbox[6][index]) }}
+							</div>
+
+							<!-- Tick and Double Tick -->
+							<div v-if="inbox[11][index] == 'False'"
+								style="position: absolute; top: 83%; right: 15px; transform: translateY(-50%);">
+								&#10004;
+							</div>
+							<div v-if="inbox[11][index] == 'True'">
+								<div style="position: absolute; top: 83%; right: 18.6px; transform: translateY(-50%);">
+									&#10004;
+								</div>
+								<div style="position: absolute; top: 83%; right: 11.3px; transform: translateY(-50%);">
+									&#10004;
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
+
+		<div class="fixed-bottom-bar">
+			<div class="container py-3 d-flex justify-content-between align-items-center">
+				<form @submit.prevent="sendMsg" class="w-100">
+					<div class="row align-items-center">
+						<div class="col-md-4 mb-2 mb-md-0">
+							<input type="text" v-model="msg" class="form-control" placeholder="Write a message">
+						</div>
+						<div class="col-md-8 d-flex flex-column flex-md-row align-items-center gap-3">
+							<select v-model="campain_id" class="form-select mb-2 mb-md-0" placeholder="Select Campaign" required>
+								<option
+									v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
+									:key="index" :value="cid">
+									{{ camp_dict[cid] }}
+								</option>
+							</select>
+							<input type="number" v-model="modified_budget" class="form-control mb-2 mb-md-0"
+								placeholder="Modified Budget">
+							<input type="text" v-model="modified_terms" class="form-control mb-2 mb-md-0"
+								placeholder="Modified terms">
+							<div class="d-flex gap-2 mb-2 mb-md-0">
+								<button type="button" class="btn btn-success">Accept</button>
+								<button type="button" class="btn btn-danger">Reject</button>
+								<button type="submit" class="btn btn-primary">Send</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
 	</div>
 </template>
 
@@ -75,7 +185,7 @@ export default {
 			camp_dict: '',
 			influencer: '',
 			msg: '',
-			campain_id: '',
+			campain_id: "",
 			modified_budget: '',
 			modified_terms: '',
 			username: '',
@@ -104,8 +214,8 @@ export default {
 		async sendMsg() {
 			try {
 				const response = await axios.post('http://localhost:5000/sponsor/inbox/' + this.id, {
-					msg: this.msg,
-					campain_id: this.campain_id,
+					message: this.msg,
+					campaign: this.campain_id,
 					modified_budget: this.modified_budget,
 					modified_terms: this.modified_terms,
 					next: this.$route.query.next
@@ -131,6 +241,11 @@ export default {
 				sidebar.style.width = "250px";
 				main.style.marginLeft = "250px";
 			}
+		},
+
+		formatTimestamp(timestamp) {
+			const date = new Date(timestamp * 1000);
+			return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 		},
 	}
 
@@ -268,7 +383,41 @@ export default {
 
 .main-content {
 	margin-top: 50px;
+	margin-bottom: 40px;
 	transition: margin-left 0.5s;
 	padding: 16px;
+}
+
+.dot_g {
+	height: 10px;
+	width: 10px;
+	background-color: #00DD00;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.dot_y {
+	height: 10px;
+	width: 10px;
+	background-color: yellow;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.dot_r {
+	height: 10px;
+	width: 10px;
+	background-color: red;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.fixed-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f8f9fa;
+  padding: 10px;
+  z-index: 100; /* Ensure it appears above other content */
 }
 </style>
