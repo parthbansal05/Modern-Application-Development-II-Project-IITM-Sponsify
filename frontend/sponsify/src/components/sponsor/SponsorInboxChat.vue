@@ -58,17 +58,21 @@
 					</span>
 				</div>
 
-				<div v-if="showDialog" class="modal-overlay">
+				<div v-if="showDialog" class="m-2 card">
 					<div class="modal-content">
-						<h3>Campaign Details</h3>
-						<p>Campaign Name:{{ campaignName }}</p>
-						<p>Campaign Description:{{ campaignDesc }}</p>
-						<p>Campaign Start Date:{{ campaignSDate }}</p>
-						<p>Campaign End Date:{{ campaignEDate }}</p>
-						<p>Campaign Budget:{{ campaignBudget }}</p>
-						<p>Campaign Visibility:{{ campaignVisibility }}</p>
-						<p>Campaign Goals:{{ campaignGoal }}</p>
-						<button @click="closeDialog">Close</button>
+						<div class="card-header" style="display: flex; justify-content: space-between;">
+							<span class="d-inline-block text-truncate">Campaign Details</span>
+							<button @click="closeDialog" class="btn btn-danger"> Close </button>
+						</div>
+						<div class="card-body">
+						<p>Campaign Name : {{ campaignName }}</p>
+						<p>Campaign Description : {{ campaignDesc }}</p>
+						<p>Campaign Start Date : {{ campaignSDate }}</p>
+						<p>Campaign End Date : {{ campaignEDate }}</p>
+						<p>Campaign Budget : {{ campaignBudget }}</p>
+						<p>Campaign Visibility : {{ campaignVisibility }}</p>
+						<p>Campaign Goals : {{ campaignGoal }}</p>
+						</div>
 					</div>
 				</div>
 
@@ -82,7 +86,7 @@
 						</div>
 						<h6 class="d-inline-block text-truncate" style="max-width: 200px; font-weight: normal;"
 							@click="open_campaign_details(inbox[1][index])">
-							Campaign : {{ camp_dict[inbox[1][index]] }}
+							Campaign : <span class="campaign-btn-two"> {{ camp_dict[inbox[1][index]] }} </span>
 						</h6>
 
 						<div class="bottom-right">
@@ -94,7 +98,7 @@
 							</div>
 
 							<!-- TimeStamp -->
-								{{ formatTimestamp(inbox[6][index]) }}
+							{{ formatTimestamp(inbox[6][index]) }}
 						</div>
 
 					</div>
@@ -109,7 +113,7 @@
 						</div>
 						<h6 class="d-inline-block text-truncate" style="max-width: 200px; font-weight: normal;"
 							@click="open_campaign_details(inbox[1][index])">
-							Campaign : {{ camp_dict[inbox[1][index]] }}
+							Campaign : <span class="campaign-btn-one"> {{ camp_dict[inbox[1][index]] }} </span>
 						</h6>
 
 						<div class="bottom-right" style="position: absolute; right: 40px;">
@@ -480,5 +484,16 @@ export default {
 	z-index: 0;
 	transition: margin-left 0.5s;
 	/* Ensure it appears above other content */
+}
+
+.campaign-btn-one:hover {
+	text-decoration: underline;
+	color: lightblue;
+	cursor: pointer;
+}
+.campaign-btn-two:hover {
+	text-decoration: underline;
+	color: orange;
+	cursor: pointer;
 }
 </style>
