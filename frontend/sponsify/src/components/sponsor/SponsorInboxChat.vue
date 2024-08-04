@@ -14,7 +14,8 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username
+					}}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
@@ -82,18 +83,16 @@
 						</div>
 						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
 
-						<div style="float: right;">
+						<div class="bottom-right">
 							<!-- Status -->
-							<div style=" position: absolute; top: 85%; right: 170px; transform: translateY(-50%);">
+							<div>
 								<div v-if="inbox[5][index] == 'Rejected'" class="dot_r" title="Rejected"></div>
 								<div v-if="inbox[5][index] == 'PENDING'" class="dot_y" title="Pending"></div>
 								<div v-if="inbox[5][index] == 'Approved'" class="dot_g" title="Approved"></div>
 							</div>
 
 							<!-- TimeStamp -->
-							<div style="position: absolute; top: 85%; right: 15px; transform: translateY(-50%);">
-								{{ formatTimestamp(inbox[6][index]) }}
-							</div>
+							{{ formatTimestamp(inbox[6][index]) }}
 						</div>
 
 					</div>
@@ -108,70 +107,65 @@
 						</div>
 						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
 
-						<div style="float: right;">
+						<div class="bottom-right" style="position: absolute; right: 40px;">
 							<!-- Status -->
-							<div style="position: absolute; top: 85%; right: 200px; transform: translateY(-50%)">
+							<div>
 								<div v-if="inbox[5][index] == 'Rejected'" class="dot_r" title="Rejected"></div>
 								<div v-if="inbox[5][index] == 'PENDING'" class="dot_y" title="Pending"></div>
 								<div v-if="inbox[5][index] == 'Approved'" class="dot_g" title="Approved"></div>
 							</div>
 
 							<!-- TimeStamp -->
-							<div style="position: absolute; top: 85%; right: 45px; transform: translateY(-50%)">
-								{{ formatTimestamp(inbox[6][index]) }}
-							</div>
+							{{ formatTimestamp(inbox[6][index]) }}
+						</div>
 
-							<!-- Tick and Double Tick -->
-							<div v-if="inbox[11][index] == 'False'"
-								style="position: absolute; top: 83%; right: 15px; transform: translateY(-50%);">
+						<!-- Tick and Double Tick -->
+						<div v-if="inbox[11][index] == 'False'" style="position: absolute; bottom: 8px; right: 10px;">
+							&#10004;
+						</div>
+						<div v-if="inbox[11][index] == 'True'">
+							<div style="position: absolute; bottom: 8px; right: 14px;">
 								&#10004;
 							</div>
-							<div v-if="inbox[11][index] == 'True'">
-								<div style="position: absolute; top: 83%; right: 18.6px; transform: translateY(-50%);">
-									&#10004;
-								</div>
-								<div style="position: absolute; top: 83%; right: 11.3px; transform: translateY(-50%);">
-									&#10004;
-								</div>
+							<div style="position: absolute; bottom: 8px; right: 7px;">
+								&#10004;
 							</div>
-
 						</div>
 					</div>
 				</div>
 			</div>
 
-		</div>
-
-		<div class="fixed-bottom-bar">
-			<div class="container py-3 d-flex justify-content-between align-items-center">
-				<form @submit.prevent="sendMsg" class="w-100">
-					<div class="row align-items-center">
-						<div class="col-md-4 mb-2 mb-md-0">
-							<input type="text" v-model="msg" class="form-control" placeholder="Write a message">
-						</div>
-						<div class="col-md-8 d-flex flex-column flex-md-row align-items-center gap-3">
-							<select v-model="campain_id" class="form-select mb-2 mb-md-0" placeholder="Select Campaign" required>
-								<option
-									v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
-									:key="index" :value="cid">
-									{{ camp_dict[cid] }}
-								</option>
-							</select>
-							<input type="number" v-model="modified_budget" class="form-control mb-2 mb-md-0"
-								placeholder="Modified Budget">
-							<input type="text" v-model="modified_terms" class="form-control mb-2 mb-md-0"
-								placeholder="Modified terms">
-							<div class="d-flex gap-2 mb-2 mb-md-0">
-								<button type="button" class="btn btn-success">Accept</button>
-								<button type="button" class="btn btn-danger">Reject</button>
-								<button type="submit" class="btn btn-primary">Send</button>
+			<div class="fixed-bottom-bar">
+				<div class="container py-3 d-flex justify-content-between align-items-center">
+					<form @submit.prevent="sendMsg" class="w-100">
+						<div class="row align-items-center">
+							<div class="col-md-4 mb-2 mb-md-0">
+								<input type="text" v-model="msg" class="form-control" placeholder="Write a message">
+							</div>
+							<div class="col-md-8 d-flex flex-column flex-md-row align-items-center gap-3">
+								<select v-model="campain_id" class="form-select mb-2 mb-md-0"
+									placeholder="Select Campaign" required>
+									<option
+										v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
+										:key="index" :value="cid">
+										{{ camp_dict[cid] }}
+									</option>
+								</select>
+								<input type="number" v-model="modified_budget" class="form-control mb-2 mb-md-0"
+									placeholder="Modified Budget">
+								<input type="text" v-model="modified_terms" class="form-control mb-2 mb-md-0"
+									placeholder="Modified terms">
+								<div class="d-flex gap-2 mb-2 mb-md-0">
+									<button type="button" class="btn btn-success">Accept</button>
+									<button type="button" class="btn btn-danger">Reject</button>
+									<button type="submit" class="btn btn-primary">Send</button>
+								</div>
 							</div>
 						</div>
-					</div>
-				</form>
+					</form>
+				</div>			
 			</div>
 		</div>
-
 	</div>
 </template>
 
@@ -242,7 +236,6 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
-
 		formatTimestamp(timestamp) {
 			const date = new Date(timestamp * 1000);
 			return date.toLocaleDateString() + " " + date.toLocaleTimeString();
@@ -388,6 +381,17 @@ export default {
 	padding: 16px;
 }
 
+.bottom-right {
+	display: flex;
+	justify-content: right;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+	display: flex;
+	gap: 6px;
+	width: 100%;
+}
+
 .dot_g {
 	height: 10px;
 	width: 10px;
@@ -413,11 +417,14 @@ export default {
 }
 
 .fixed-bottom-bar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #f8f9fa;
-  padding: 10px;
-  z-index: 100; /* Ensure it appears above other content */
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color: #f8f9fa;
+	padding: 10px;
+	z-index: 0;
+	transition: margin-left 0.5s;
+	/* Ensure it appears above other content */
 }
 </style>

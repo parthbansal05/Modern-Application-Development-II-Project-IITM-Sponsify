@@ -73,7 +73,7 @@
 
 							<a :href="`/SponsorInboxChat/${inbox[3][index]}`" style="color: black; text-decoration: none;">
 								<div class="card-body">
-									<h4 class=" text-truncate" style="max-width: 1000px">{{ inbox[7][index] }}</h4> 
+									<h4 class=" text-truncate" style="max-width: 1000px; height: 30px">{{ inbox[7][index] }}</h4> 
 									Budget : {{ inbox[8][index] }}
 									<br>
 									<div v-if="inbox[9][index].length">
