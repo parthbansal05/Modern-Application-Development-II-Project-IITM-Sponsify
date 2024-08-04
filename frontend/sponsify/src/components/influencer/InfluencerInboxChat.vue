@@ -46,7 +46,7 @@
 		</div>
 
 		<div class="main-content" id="main">
-			
+
 			<div v-if="error">{{ error }}</div>
 
 			<div class="col-lg-8 col-md-8 m-auto card" style="padding-bottom: 50px; width: 80%;">
@@ -59,20 +59,20 @@
 				<div v-if="showDialog" class="modal-overlay">
 					<div class="modal-content">
 						<h3>Campaign Details</h3>
-							<p>Campaign Name:{{campaignName}}</p>
-							<p>Campaign Description:{{campaignDesc}}</p>
-							<p>Campaign Start Date:{{campaignSDate}}</p>
-							<p>Campaign End Date:{{campaignEDate}}</p>
-							<p>Campaign Budget:{{campaignBudget}}</p>
-							<p>Campaign Visibility:{{campaignVisibility}}</p>
-							<p>Campaign Goals:{{campaignGoal}}</p>
+						<p>Campaign Name:{{ campaignName }}</p>
+						<p>Campaign Description:{{ campaignDesc }}</p>
+						<p>Campaign Start Date:{{ campaignSDate }}</p>
+						<p>Campaign End Date:{{ campaignEDate }}</p>
+						<p>Campaign Budget:{{ campaignBudget }}</p>
+						<p>Campaign Visibility:{{ campaignVisibility }}</p>
+						<p>Campaign Goals:{{ campaignGoal }}</p>
 						<button @click="closeDialog">Close</button>
 					</div>
 				</div>
 
 				<div v-for="(aid, index) in inbox[0]" :key="index" class="card-body">
 					<div v-if="inbox[4][index] == 'SOPN'" class="col-lg-10 col-md-6 ms-0 me-auto card p-3"
-						style="background-color: #C4A484;">
+						style="background-color: #FED5B9; color: #481E64;">
 						<h5> {{ inbox[7][index] }} </h5>
 						<span>Budget Negotiation: {{ inbox[8][index] }}</span>
 						<div v-if="inbox[9][index] != ''">
@@ -80,7 +80,7 @@
 						</div>
 						<h6 class="d-inline-block text-truncate" style="max-width: 200px; font-weight: normal;"
 							@click="open_campaign_details(inbox[1][index])">
-							Campaign : {{ camp_dict[inbox[1][index]] }} 
+							Campaign : {{ camp_dict[inbox[1][index]] }}
 						</h6>
 
 						<div class="bottom-right">
@@ -91,14 +91,14 @@
 								<div v-if="inbox[5][index] == 'Approved'" class="dot_g" title="Approved"></div>
 							</div>
 
-							<!-- TimeStamp -->
-							{{ formatTimestamp(inbox[6][index]) }}
+							<!-- TimeStamp -->							
+								{{ formatTimestamp(inbox[6][index]) }}							
 						</div>
 
 					</div>
 
 					<div v-else-if="inbox[4][index] == 'INFL'" class="col-lg-10 col-md-6 ms-auto me-0 card p-3"
-						style="background-color: #FF5CCE;">
+						style="background-color: #244B5E; color: white;">
 
 						<h5> {{ inbox[7][index] }} </h5>
 						<span>Budget Negotiation: {{ inbox[8][index] }}</span>
@@ -119,19 +119,24 @@
 							</div>
 
 							<!-- TimeStamp -->
-							{{ formatTimestamp(inbox[6][index]) }}
+							<div style="color: white;">
+								{{ formatTimestamp(inbox[6][index]) }}
+							</div>
 						</div>
 
 						<!-- Tick and Double Tick -->
-						<div v-if="inbox[10][index] == 'False'" style="position: absolute; bottom: 8px; right: 10px;">
-							&#10004;
+						<div v-if="inbox[10][index] == 'False'"
+							style="position: absolute; bottom: 7px; right: 15px; color: white; font-weight: bold; transform: rotate(10deg);">
+							&#10003;
 						</div>
 						<div v-if="inbox[10][index] == 'True'">
-							<div style="position: absolute; bottom: 8px; right: 14px;">
-								&#10004;
+							<div
+								style="position: absolute; bottom: 7px; right: 18px;color: white; font-weight: bold; transform: rotate(10deg);">
+								&#10003;
 							</div>
-							<div style="position: absolute; bottom: 8px; right: 7px;">
-								&#10004;
+							<div
+								style="position: absolute; bottom: 7px; right: 12px;color: white; font-weight: bold; transform: rotate(10deg);">
+								&#10003;
 							</div>
 						</div>
 					</div>
