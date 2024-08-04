@@ -195,16 +195,35 @@ export default {
 	},
 	methods: {
 		async updateInfluencerDashboard() {
+
+			// check if the password and confirm password match
+			this.error = '';
+			this.msg = '';
+
+			if (this.username.length <= 3) {
+				this.error = 'Username must be more than 3 characters long';
+				return;
+			}
+			if (this.password.length < 8) {
+				this.error = "Password must be atleast 8 characters long";
+				this.password = "";
+				this.confirmPassword = "";
+				return;
+			}
+			if (this.password !== this.confirmPassword) {
+				this.error = 'Passwords do not match';
+				this.password = "";
+				this.confirmPassword = "";
+				return;
+			}
+			const phnoPattern = /^[6-9]\d{9}$/;
+			if (!phnoPattern.test(this.ph_no)) {
+				this.error = 'Invalid Phone Number \nPhone Number must be 10 digits long';
+				return;
+			}
+			
 			try {
-				// check if the password and confirm password match
-				this.error = '';
-				this.msg = '';
-				if (this.password !== this.confirmPassword) {
-					this.error = 'Passwords do not match';
-					this.password = "";
-					this.confirmPassword = "";
-					return;
-				}
+				
 				const response = await axios.post('http://localhost:5000/influencer/update_dashboard', {
 					pwd: this.password,
 					username: this.username,
@@ -406,6 +425,7 @@ export default {
 .error-message {
 	display: flex;
 	width: 50rem;
+	white-space: pre-line;
 	align-items: center;
 	justify-content: space-between;
 	font-size: 1.2rem;
