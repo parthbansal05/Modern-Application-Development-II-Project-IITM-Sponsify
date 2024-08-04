@@ -42,6 +42,12 @@
 		</div>
 
 		<div class="main-content" id="main">
+			<div v-if="msg" class="success-message">
+				{{ msg }}
+				<button @click="closeMsg" class="msg-close-btn">
+					&nbsp; &times; &nbsp;
+				</button>
+			</div>
 			<div class="m-2 card p-4">
 				<h4>
 					<u>
@@ -224,11 +230,13 @@ export default {
 			admin_phno: '',
 			sponsor_approval_pending: '',
 			username: '',
-			user_type: ''
+			user_type: '',
+			msg: '',
 		};
 	},
 	async created() {
 		try {
+			this.msg = "";
 			const response = await axios.get('http://localhost:5000/admin/dashboard', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
@@ -273,30 +281,64 @@ export default {
 			await axios.get('http://localhost:5000/admin/flag_campaign/' + cid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			window.location.reload();
+			this.msg = 'Campaign will be flagged shortely';
 		},
 		async unflag_campaign(cid) {
 			await axios.get('http://localhost:5000/admin/unflag_campaign/' + cid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			window.location.reload();
+			this.msg = 'Campaign will be un-flagged shortely';
 		},
 		async delete_user(uid) {
 			await axios.get('http://localhost:5000/delete_user/' + uid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			window.location.reload();
+			this.msg = 'User will be deleted shortely';
 		},
 		async Approve_Sponsor(sid) {
 			await axios.get('http://localhost:5000/admin/approve_sponsor/' + sid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			window.location.reload();
+			this.msg = 'Sponsor will be approved shortely';
+		},
+		closeMsg() {
+			this.msg = null
 		}
 	},
 };
 </script>
 <style scoped>
+
+.success-message {
+	display: flex;
+	/* width: 50rem; */
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.2rem;
+	background: rgba(144, 238, 144, 0.8);
+	/* light green */
+	color: green;
+	padding: 1rem;
+	border-radius: 8px;
+	margin-bottom: 8px;
+}
+.msg-close-btn {
+	position: relative;
+	top: 0px;
+	right: 0px;
+	background: none;
+	border: none;
+	border-radius: 2px;
+	font-size: 2rem;
+	cursor: pointer;
+	color: green;
+	padding: 0rem;
+}
+
+.msg-close-btn:hover {
+	color: darkgreen;
+}
+
 /* Nav and Side Bar */
 .header-bar {
 	display: flex;

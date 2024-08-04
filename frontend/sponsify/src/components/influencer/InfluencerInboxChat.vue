@@ -46,28 +46,28 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h4>{{ inbox }}</h4>
-			<h4>{{ camp_dict }}</h4>
-			<h4>{{ sponsor }}</h4>
-
-			<form @submit.prevent="sendMsg">
-				<input v-model="msg" :placeholder="msg" type="text" />
-				<input v-model="modified_budget" :placeholder="modified_budget" type="number" />
-				<input v-model="modified_terms" :placeholder="modified_terms" type="text" />
-				<select v-model="campain_id" placeholder="Campaign" type="text" required>
-					<option v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
-						:key="index" :value="cid">
-						{{ camp_dict[cid] }}
-					</option>
-				</select>
-				<button type="submit">Login</button>
-			</form>
+			
+			<div v-if="error">{{ error }}</div>
 
 			<div class="col-lg-8 col-md-8 m-auto card" style="padding-bottom: 50px; width: 80%;">
 				<div class="card-header">
 					<span class="d-inline-block text-truncate" style="max-width: 1000px">
 						<h6> {{ sponsor[1] }} </h6>
 					</span>
+				</div>
+
+				<div v-if="showDialog" class="modal-overlay">
+					<div class="modal-content">
+						<h3>Campaign Details</h3>
+							<p>Campaign Name:{{campaignName}}</p>
+							<p>Campaign Description:{{campaignDesc}}</p>
+							<p>Campaign Start Date:{{campaignSDate}}</p>
+							<p>Campaign End Date:{{campaignEDate}}</p>
+							<p>Campaign Budget:{{campaignBudget}}</p>
+							<p>Campaign Visibility:{{campaignVisibility}}</p>
+							<p>Campaign Goals:{{campaignGoal}}</p>
+						<button @click="closeDialog">Close</button>
+					</div>
 				</div>
 
 				<div v-for="(aid, index) in inbox[0]" :key="index" class="card-body">
@@ -78,7 +78,10 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+						<h6 class="d-inline-block text-truncate" style="max-width: 200px; font-weight: normal;"
+							@click="open_campaign_details(inbox[1][index])">
+							Campaign : {{ camp_dict[inbox[1][index]] }} 
+						</h6>
 
 						<div class="bottom-right">
 							<!-- Status -->
@@ -102,7 +105,10 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+						<h6 class="d-inline-block text-truncate" style="max-width: 200px; font-weight: normal;"
+							@click="open_campaign_details(inbox[1][index])">
+							Campaign : {{ camp_dict[inbox[1][index]] }}
+						</h6>
 
 						<div class="bottom-right" style="position: absolute; right: 40px;">
 							<!-- Status -->
@@ -153,8 +159,8 @@
 								<input type="text" v-model="modified_terms" class="form-control mb-2 mb-md-0"
 									placeholder="Modified terms">
 								<div class="d-flex gap-2 mb-2 mb-md-0">
-									<button type="button" class="btn btn-success">Accept</button>
-									<button type="button" class="btn btn-danger">Reject</button>
+									<a class="btn btn-success" @click="acceptOffer()">Accept</a>
+									<a class="btn btn-danger" @click="rejectOffer()">Reject</a>
 									<button type="submit" class="btn btn-primary">Send</button>
 								</div>
 							</div>
@@ -181,6 +187,16 @@ export default {
 			modified_terms: '',
 			username: '',
 			user_type: '',
+			campaignDetails: "",///
+			campaignName: "",
+			campaignDesc: "",
+			campaignSDate: "",
+			campaignEDate: "",
+			campaignBudget: "",
+			campaignVisibility: "",
+			campaignGoal: "",
+			showDialog: false,
+			userid: "",
 			id: this.$route.params.id
 		};
 	},
@@ -192,6 +208,8 @@ export default {
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.sponsor = response.data.sponsor;
+			this.userid = response.data.userID;
+			this.campain_id = this.inbox[1].filter((cid, index) => this.inbox[1].indexOf(cid) === index)[0]
 			const user_response = await axios.get('http://localhost:5000/get_username', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
@@ -204,19 +222,51 @@ export default {
 	methods: {
 		async sendMsg() {
 			try {
-				const response = await axios.post('http://localhost:5000/influencer/inbox/' + this.id, {
-					msg: this.msg,
-					campain_id: this.campain_id,
+				await axios.post('http://localhost:5000/influencer/inbox/' + this.id, {
+					message: this.msg,
+					campaign: this.campain_id,
 					modified_budget: this.modified_budget,
 					modified_terms: this.modified_terms,
 					next: this.$route.query.next
 				}, {
 					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
 				});
-				console.log(response.data);
+				window.location.reload();
 			} catch (err) {
 				this.error = 'Invalid username or password';
 			}
+		},
+		async open_campaign_details(campaignId) {
+			try {
+				const response = await axios.get(`http://localhost:5000/view_campaign/${campaignId}`, {
+					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+				});
+				this.campaignName = response.data.campaign[2][0];
+				this.campaignDesc = response.data.campaign[3][0];
+				this.campaignSDate = response.data.campaign[4][0];
+				this.campaignEDate = response.data.campaign[5][0];
+				this.campaignBudget = response.data.campaign[6][0];
+				this.campaignVisibility = response.data.campaign[7][0];
+				this.campaignGoal = response.data.campaign[8][0];
+				this.showDialog = true;
+			} catch (error) {
+				console.error('Error fetching campaign details:', error);
+			}
+		},
+		closeDialog() {
+			this.showDialog = false;
+		},
+		async acceptOffer() {
+			await axios.get('http://localhost:5000/influencer/accept_ad_request/' + this.userid + '/' + this.sponsor[0] + '/' + this.campain_id + '/Approved', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			});
+			window.location.reload();
+		},
+		async rejectOffer() {
+			await axios.get('http://localhost:5000/influencer/accept_ad_request/' + this.userid + '/' + this.sponsor[0] + '/' + this.campain_id + '/Rejected', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			});
+			window.location.reload();
 		},
 		// Nav and Side Bar
 		logout() {

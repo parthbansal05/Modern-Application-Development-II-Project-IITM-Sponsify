@@ -480,7 +480,7 @@ def server(app, socketio):
         userID = get_jwt_id()
         inbox = DB_Manager().QuerySponsorInBoxChatOverView(userID)
         camps = DB_Manager().QueryCampaignTitleID()
-        camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))}
+        camp_dict = {camps[0][i]: camps[1][i] for i in range(len(camps[0]))} if camps not in [None, []] else {}
         influencer = ([[inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget] for inf in User.query.filter(User.user_type == "I").all()])
         return jsonify(inbox=inbox,
                           camp_dict=camp_dict,
@@ -670,7 +670,8 @@ def server(app, socketio):
             sponsor = ([spo.id, spo.username, spo.email, spo.ph_no, spo.user_type, spo.category, spo.niche, spo.followers, spo.industry, spo.budget])
             return jsonify(inbox=inbox,
                             camp_dict=camp_dict,
-                            sponsor=sponsor)
+                            sponsor=sponsor,
+                            userID = userID)
     
     @app.route("/influencer/accept_ad_request/<iid>/<sid>/<cid>/<status>", methods=["GET"], strict_slashes=False)
     @e.influencer_required
