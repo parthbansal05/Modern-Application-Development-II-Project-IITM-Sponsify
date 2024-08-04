@@ -517,7 +517,8 @@ def server(app, socketio):
             influencer = ([inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget])
             return jsonify(inbox=inbox,
                             camp_dict=camp_dict,
-                            influencer=influencer)
+                            influencer=influencer,
+                            userID = userID)
     
     @app.route("/sponsor/accept_ad_request/<iid>/<sid>/<cid>/<status>", methods=["GET"], strict_slashes=False)
     @e.sponsor_required

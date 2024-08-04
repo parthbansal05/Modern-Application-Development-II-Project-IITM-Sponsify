@@ -38,22 +38,7 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h4>{{ inbox }}</h4>
-			<h4>{{ camp_dict }}</h4>
-			<h4>{{ influencer }}</h4>
 
-			<form @submit.prevent="sendMsg">
-				<input v-model="msg" :placeholder="msg" type="text" />
-				<input v-model="modified_budget" :placeholder="modified_budget" type="number" />
-				<input v-model="modified_terms" :placeholder="modified_terms" type="text" />
-				<select v-model="campain_id" placeholder="Campaign" type="text" required>
-					<option v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
-						:key="index" :value="cid">
-						{{ camp_dict[cid] }}
-					</option>
-				</select>
-				<button type="submit">Login</button>
-			</form>
 			<div v-if="error">{{ error }}</div>
 
 			<div class="col-lg-8 col-md-8 m-auto card" style="padding-bottom: 50px; width: 80%;">
@@ -79,7 +64,8 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+						<span class="d-inline-block text-truncate" style="max-width: 200px" @click="open_campaign_details(inbox[1][index])">
+							Campaign : {{ camp_dict[inbox[1][index]] }} </span>
 
 						<div style="float: right;">
 							<!-- Status -->
@@ -163,8 +149,8 @@
 							<input type="text" v-model="modified_terms" class="form-control mb-2 mb-md-0"
 								placeholder="Modified terms">
 							<div class="d-flex gap-2 mb-2 mb-md-0">
-								<button type="button" class="btn btn-success">Accept</button>
-								<button type="button" class="btn btn-danger">Reject</button>
+								<a  class="btn btn-success" @click="acceptOffer()">Accept</a>
+								<a  class="btn btn-danger" @click="rejectOffer()">Reject</a>
 								<button type="submit" class="btn btn-primary">Send</button>
 							</div>
 						</div>
@@ -193,6 +179,7 @@ export default {
 			user_type: '',
 			campaignDetails: "",
 			showDialog: false,
+			userid: "",
 			id: this.$route.params.id
 		};
 	},
@@ -201,9 +188,11 @@ export default {
 			const response = await axios.get('http://localhost:5000/sponsor/inbox/' + this.id, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
+			console.log(response.data);
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.influencer = response.data.influencer;
+			this.userid = response.data.userID;
 		} catch (err) {
 			console.log(err);
 		}
@@ -244,6 +233,18 @@ export default {
 		},
 		closeDialog() {
 		this.showDialog = false;
+		},
+		async acceptOffer() {
+			await axios.get('http://localhost:5000/sponsor/accept_ad_request/' + this.influencer[0] + '/' + this.userid + '/' + this.campain_id + '/Approved', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			});
+			window.location.reload();
+		},
+		async rejectOffer() {
+			await axios.get('http://localhost:5000/sponsor/accept_ad_request/' + this.influencer[0] + '/' + this.userid + '/' + this.campain_id + '/Rejected', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			});
+			window.location.reload();
 		},
 		// Nav and Side Bar
 		logout() {
