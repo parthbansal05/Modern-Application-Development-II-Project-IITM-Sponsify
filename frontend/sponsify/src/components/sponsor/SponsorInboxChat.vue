@@ -193,6 +193,7 @@ export default {
 			this.camp_dict = response.data.camp_dict;
 			this.influencer = response.data.influencer;
 			this.userid = response.data.userID;
+			this.campain_id = this.inbox[1].filter((cid, index) => this.inbox[1].indexOf(cid) === index)[0]
 		} catch (err) {
 			console.log(err);
 		}
