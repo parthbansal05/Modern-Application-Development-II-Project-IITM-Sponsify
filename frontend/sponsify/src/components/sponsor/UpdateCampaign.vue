@@ -148,12 +148,6 @@ export default {
 			}
 			
 			try {
-				if (this.password !== this.confirmPassword) {
-					this.error = 'Passwords do not match';
-					this.password = "";
-					this.confirmPassword = "";
-					return;
-				}
 				const response = await axios.post('http://localhost:5000/sponsor/update_campaign/' + this.id, {
 					campTitle: this.campTitle,
 					campDesc: this.campDesc,

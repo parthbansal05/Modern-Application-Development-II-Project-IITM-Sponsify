@@ -130,7 +130,13 @@ export default {
 				this.error = 'Username must be more than 3 characters long';
 				return;
 			}
-			if (this.password !== this.confirmPassword) {
+			if (this.password.length < 8) {
+				this.error = "Password must be atleast 8 characters long";
+				this.password = "";
+				this.confirmPassword = "";
+				return;
+			}
+			else if (this.password !== this.confirmPassword) {
 				this.error = 'Passwords do not match';
 				this.password = "";
 				this.confirmPassword = "";
