@@ -61,7 +61,13 @@
 				<div v-if="showDialog" class="modal-overlay">
 					<div class="modal-content">
 						<h3>Campaign Details</h3>
-						<p>{{ campaignDetails }}</p>
+							<p>Campaign Name:{{campaignName}}</p>
+							<p>Campaign Description:{{campaignDesc}}</p>
+							<p>Campaign Start Date:{{campaignSDate}}</p>
+							<p>Campaign End Date:{{campaignEDate}}</p>
+							<p>Campaign Budget:{{campaignBudget}}</p>
+							<p>Campaign Visibility:{{campaignVisibility}}</p>
+							<p>Campaign Goals:{{campaignGoal}}</p>
 						<button @click="closeDialog">Close</button>
 					</div>
 				</div>
@@ -74,9 +80,10 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span class="d-inline-block text-truncate" style="max-width: 200px"
+						<h6 class="d-inline-block text-truncate" style="max-width: 200px; font-weight: normal;"
 							@click="open_campaign_details(inbox[1][index])">
-							Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+							Campaign : {{ camp_dict[inbox[1][index]] }} 
+						</h6>
 
 						<div class="bottom-right">
 							<!-- Status -->
@@ -100,10 +107,10 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span class="d-inline-block text-truncate" style="max-width: 200px"
+						<h6 class="d-inline-block text-truncate" style="max-width: 200px; font-weight: normal;"
 							@click="open_campaign_details(inbox[1][index])">
 							Campaign : {{ camp_dict[inbox[1][index]] }}
-						</span>
+						</h6>
 
 						<div class="bottom-right" style="position: absolute; right: 40px;">
 							<!-- Status -->
@@ -164,7 +171,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 </template>
 
@@ -184,6 +190,13 @@ export default {
 			username: '',
 			user_type: '',
 			campaignDetails: "",
+			campaignName: "",
+			campaignDesc: "",
+			campaignSDate: "",
+			campaignEDate: "",
+			campaignBudget: "",
+			campaignVisibility: "",
+			campaignGoal: "",
 			showDialog: false,
 			userid: "",
 			id: this.$route.params.id
@@ -194,7 +207,6 @@ export default {
 			const response = await axios.get('http://localhost:5000/sponsor/inbox/' + this.id, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			console.log(response.data);
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.influencer = response.data.influencer;
@@ -231,8 +243,13 @@ export default {
 				const response = await axios.get(`http://localhost:5000/view_campaign/${campaignId}`, {
 					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 				});
-				console.log(response);
-				this.campaignDetails = response.data.campaign;
+				this.campaignName = response.data.campaign[2][0];
+				this.campaignDesc = response.data.campaign[3][0];
+				this.campaignSDate = response.data.campaign[4][0];
+				this.campaignEDate = response.data.campaign[5][0];
+				this.campaignBudget = response.data.campaign[6][0];
+				this.campaignVisibility = response.data.campaign[7][0];
+				this.campaignGoal = response.data.campaign[8][0];
 				this.showDialog = true;
 			} catch (error) {
 				console.error('Error fetching campaign details:', error);

@@ -36,6 +36,12 @@
 		</div>
 
 		<div class="main-content" id="main">
+			<div v-if="msg" class="success-message">
+				{{ msg }}
+				<button @click="closeMsg" class="msg-close-btn">
+					&nbsp; &times; &nbsp;
+				</button>
+			</div>
 			<div v-if="campaigns.length" class="admin-container">
 				<div v-for="(campaign, index) in campaigns[0]" :key="index" class="card">
 					<div class="card-header d-flex justify-content-between align-items-center">
@@ -76,11 +82,13 @@ export default {
 			campaigns: "",
 			sponsors: "",
 			username: "",
-			user_type: ""
+			user_type: "",
+			msg: "",
 		};
 	},
 	async created() {
 		try {
+			this.msg = "";
 			const response = await axios.get('http://localhost:5000/admin/view_all_campaigns', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
@@ -119,19 +127,53 @@ export default {
 			await axios.get('http://localhost:5000/admin/flag_campaign/' + cid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			window.location.reload();
+			this.msg = 'Campaign will be flagged shortely';
 		},
 		async unflag_campaign(cid) {
 			await axios.get('http://localhost:5000/admin/unflag_campaign/' + cid, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			window.location.reload();
+			this.msg = 'Campaign will be un-flagged shortely';
 		},
+		closeMsg() {
+			this.msg = null
+		}
 	},
 
 };
 </script>
 <style scoped>
+
+.success-message {
+	display: flex;
+	/* width: 50rem; */
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.2rem;
+	background: rgba(144, 238, 144, 0.8);
+	/* light green */
+	color: green;
+	padding: 1rem;
+	border-radius: 8px;
+	margin-bottom: 8px;
+}
+.msg-close-btn {
+	position: relative;
+	top: 0px;
+	right: 0px;
+	background: none;
+	border: none;
+	border-radius: 2px;
+	font-size: 2rem;
+	cursor: pointer;
+	color: green;
+	padding: 0rem;
+}
+
+.msg-close-btn:hover {
+	color: darkgreen;
+}
+
 /* Nav and Side Bar */
 .header-bar {
 	display: flex;
