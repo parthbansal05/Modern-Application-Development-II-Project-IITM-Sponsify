@@ -14,21 +14,29 @@
 		</header>
 
 		<div id="mySidebar" class="sidebar">
-			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username }}</span></h3>
+			<h3 class="sidebar-heading"><span class="d-inline-block text-truncate" style="max-width: 150px">{{ username
+					}}</span></h3>
 			<h6 class="sidebar-subheading">{{ user_type }}</h6>
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="$router.push('/UserDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="$router.push('/UserUpdateDashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
-				<button @click="$router.push('/UserSearchInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
+				<button @click="$router.push('/UserDash')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/UserUpdateDashboard')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
+				<button @click="$router.push('/UserSearchInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="$router.push('/login')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')"
+					class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
@@ -42,25 +50,38 @@
 					&nbsp; &times; &nbsp;
 				</button>
 			</div>
-			<div>
-				<label for="niche-select">Filter by Niche:</label>
-				<select id="niche-select" v-model="selectedNiche">
-					<option value="">All</option>
-					<option v-for="niche in unique_niches" :key="niche" :value="niche">{{ niche }}</option>
-				</select>
-
-				<label for="category-select">Filter by Category:</label>
-				<select id="category-select" v-model="selectedCategory">
-					<option value="">All</option>
-					<option v-for="category in unique_categories" :key="category" :value="category">{{ category }}
-					</option>
-				</select>
-
-				<label for="sort-select">Sort by Followers:</label>
-				<select id="sort-select" v-model="sortOrder">
-					<option value="asc">Ascending</option>
-					<option value="desc">Descending</option>
-				</select>
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">Filter</span>
+				</div>
+				<div class="card-body filter-form">
+					<div class="three_filters">
+						<div>
+							<label for="niche-select">Filter by Niche : &nbsp; </label>
+							<select id="niche-select" v-model="selectedNiche">
+								<option value="">All</option>
+								<option v-for="niche in unique_niches" :key="niche" :value="niche">{{ niche }}</option>
+							</select>
+						</div>
+						<div>
+							<label for="category-select">Filter by Category : &nbsp; </label>
+							<select id="category-select" v-model="selectedCategory">
+								<option value="">All</option>
+								<option v-for="category in unique_categories" :key="category" :value="category">{{
+									category
+									}}
+								</option>
+							</select>
+						</div>
+						<div>
+							<label for="sort-select">Sort by Followers : &nbsp; </label>
+							<select id="sort-select" v-model="sortOrder">
+								<option value="asc">Ascending</option>
+								<option value="desc">Descending</option>
+							</select>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="m-2 card">
@@ -73,12 +94,13 @@
 							<div class="card-header">
 								<h3 class=" text-truncate" style="max-width: 1000px">{{ influencer[1] }}</h3>
 								<div style="display: flex; justify-content: space-between">
-									<a  class="btn btn-primary" @click="follow(influencer[0])">Follow</a>
+									<a class="btn btn-primary" @click="follow(influencer[0])">Follow</a>
 								</div>
 							</div>
 							<div class="card-body">
 								<p>Influencer ID: {{ influencer[0] }}</p>
-								<p class=" text-truncate" style="max-width: 1000px">Influencer Username: {{ influencer[1] }}</p>
+								<p class=" text-truncate" style="max-width: 1000px">Influencer Username: {{
+									influencer[1] }}</p>
 								<p>Influencer Email: {{ influencer[2] }}</p>
 								<p>Influencer phone number: {{ influencer[3] }}</p>
 								<p>Influencer User type: {{ influencer[4] }}</p>
@@ -202,6 +224,7 @@ export default {
 	/* background-color: #f9f9f9; */
 	/* gap: 16px; */
 }
+
 .success-message {
 	display: flex;
 	/* width: 50rem; */
@@ -215,6 +238,7 @@ export default {
 	border-radius: 8px;
 	margin-bottom: 8px;
 }
+
 .msg-close-btn {
 	position: relative;
 	top: 0px;
@@ -227,6 +251,7 @@ export default {
 	color: green;
 	padding: 0rem;
 }
+
 .msg-close-btn:hover {
 	color: darkgreen;
 }
@@ -364,5 +389,23 @@ export default {
 	margin-top: 50px;
 	transition: margin-left 0.5s;
 	padding: 16px;
+}
+
+.filter-form select {
+	width: 300px;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	background-color: #FFFFFF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.three_filters {
+	display: flex;
+	justify-content: space-between;
+	margin-left: 50px;
+	margin-right: 50px;
+	width: 100%-400px;
 }
 </style>
