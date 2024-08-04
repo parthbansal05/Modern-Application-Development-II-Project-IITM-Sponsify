@@ -47,6 +47,12 @@
 		</div>
 
 		<div class="main-content" id="main">
+			<div v-if="msg" class="success-message">
+				{{ msg }}
+				<button @click="closeMsg" class="msg-close-btn">
+					&nbsp; &times; &nbsp;
+				</button>
+			</div>
 
 			<!-- Main Content -->
 			<div class="m-2 card p-4">
@@ -136,10 +142,12 @@ export default {
 			info: [],
 			username: "",
 			user_type: "",
+			msg: '',
 		};
 	},
 	async created() {
 		try {
+			this.msg = "";
 			const response = await axios.get(
 				"http://localhost:5000/sponsor/dashboard",
 				{
@@ -198,9 +206,8 @@ export default {
 						},
 					}
 				)
-				.then((response) => {
-					console.log(response);
-					window.location.reload();
+				.then(() => {
+					this.msg = 'Visibility will be updated shortly.';
 				})
 				.catch((error) => {
 					console.log(error);
@@ -210,6 +217,7 @@ export default {
 			sessionStorage.removeItem('ReportID');
 			const response = await axios.get("http://localhost:5000/tasks/sponsor_export/" + UserID, { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}`, }, });
 			sessionStorage.setItem('ReportID', response.data.result_id);
+			this.msg = 'Report will be generated shortly.';
 
 		},
 		async delete_campaign(campaignID) {
@@ -221,7 +229,7 @@ export default {
 				})
 				.then((response) => {
 					console.log(response);
-					window.location.reload();
+					this.msg = 'Campaign will be deleted shortly.';
 				})
 				.catch((error) => {
 					console.log(error);
@@ -248,6 +256,9 @@ export default {
 				console.log("CSV Not Ready");
 			}
 		},
+		closeMsg() {
+			this.msg = null
+		},
 		// Nav and Side Bar
 		toggle() {
 			const sidebar = document.getElementById("mySidebar");
@@ -269,6 +280,35 @@ export default {
 </script>
 
 <style scoped>
+
+.success-message {
+	display: flex;
+	/* width: 50rem; */
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.2rem;
+	background: rgba(144, 238, 144, 0.8);
+	/* light green */
+	color: green;
+	padding: 1rem;
+	border-radius: 8px;
+	margin-bottom: 8px;
+}
+.msg-close-btn {
+	position: relative;
+	top: 0px;
+	right: 0px;
+	background: none;
+	border: none;
+	border-radius: 2px;
+	font-size: 2rem;
+	cursor: pointer;
+	color: green;
+	padding: 0rem;
+}
+.msg-close-btn:hover {
+	color: darkgreen;
+}
 /* Nav and Side Bar */
 .header-bar {
 	display: flex;

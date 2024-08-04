@@ -37,6 +37,12 @@
 		</div>
 
 		<div class="main-content" id="main">
+			<div v-if="msg" class="success-message">
+				{{ msg }}
+				<button @click="closeMsg" class="msg-close-btn">
+					&nbsp; &times; &nbsp;
+				</button>
+			</div>
 			
 			<div class="m-2 card">
 				<div class="card-header">
@@ -99,10 +105,12 @@ export default {
 			userID: '',
 			username: '',
 			user_type: '',
+			msg: '',
 		};
 	},
 	async created() {
 		try {
+			this.msg = "";
 			const response = await axios.get('http://localhost:5000/influencer/inbox', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
@@ -120,6 +128,9 @@ export default {
 		}
 	},
 	methods: {
+		closeMsg() {
+			this.msg = null
+		},
 		// Nav and Side Bar
 		logout() {
 			this.$router.push("/logout")
@@ -140,12 +151,40 @@ export default {
 			await axios.get('http://localhost:5000/delete_chat/' + iid + '/' + sid + '/True', {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
-			window.location.reload();
+			this.msg = "Chat will be deleted shortly.";
 		},
 	},
 };
 </script>
 <style scoped>
+.success-message {
+	display: flex;
+	/* width: 50rem; */
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.2rem;
+	background: rgba(144, 238, 144, 0.8);
+	/* light green */
+	color: green;
+	padding: 1rem;
+	border-radius: 8px;
+	margin-bottom: 8px;
+}
+.msg-close-btn {
+	position: relative;
+	top: 0px;
+	right: 0px;
+	background: none;
+	border: none;
+	border-radius: 2px;
+	font-size: 2rem;
+	cursor: pointer;
+	color: green;
+	padding: 0rem;
+}
+.msg-close-btn:hover {
+	color: darkgreen;
+}
 /* Nav and Side Bar */
 .header-bar {
 	display: flex;
