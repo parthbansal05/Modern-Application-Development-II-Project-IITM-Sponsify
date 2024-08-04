@@ -57,8 +57,7 @@
 					</div>
 				</div>
 				<div class="card-body">
-					<p>Sponsor Name: {{ sponsors.filter(sponsor => sponsor[0] === campaign[1][0])[0][1] }}
-					</p>
+					<p>Sponsor Name: {{ sponsors.filter(sponsor => sponsor[0] === campaign[1][0])[0][1] }}</p>
 					<p>Description: {{ campaign[3][0] }}</p>
 					<p>Start Time: {{ formatTimestamp(campaign[4][0]) }}</p>
 					<p>End Time: {{ formatTimestamp(campaign[5][0]) }}</p>

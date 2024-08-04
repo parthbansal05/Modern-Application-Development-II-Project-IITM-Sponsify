@@ -19,27 +19,18 @@
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="$router.push('/SponsorDash')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="$router.push('/SponsorUpdateDashboard')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
-				<button @click="$router.push('/CreateCampaign')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
-				<button @click="$router.push('/SponsorSearchInfluencer')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
-				<button @click="$router.push('/SponsorInbox')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
+				<button @click="$router.push('/SponsorDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/SponsorUpdateDashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
+				<button @click="$router.push('/CreateCampaign')" class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
+				<button @click="$router.push('/SponsorSearchInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
+				<button @click="$router.push('/SponsorInbox')" class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="$router.push('/login')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="$router.push('/registerInfluencer')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="$router.push('/registerSponsor')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="$router.push('/registerUser')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
@@ -70,6 +61,14 @@
 					<span class="d-inline-block text-truncate" style="max-width: 1000px">
 						<h6> {{ influencer[1] }} </h6>
 					</span>
+				</div>
+
+				<div v-if="showDialog" class="modal-overlay">
+				<div class="modal-content">
+					<h3>Campaign Details</h3>
+					<p>{{ campaignDetails }}</p>
+					<button @click="closeDialog">Close</button>
+				</div>
 				</div>
 
 				<div v-for="(aid, index) in inbox[0]" :key="index" class="card-body">
@@ -106,7 +105,9 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+						<span class="d-inline-block text-truncate" style="max-width: 200px" @click="open_campaign_details(inbox[1][index])">
+							Campaign : {{ camp_dict[inbox[1][index]] }}
+						</span>
 
 						<div style="float: right;">
 							<!-- Status -->
@@ -190,6 +191,8 @@ export default {
 			modified_terms: '',
 			username: '',
 			user_type: '',
+			campaignDetails: "",
+			showDialog: false,
 			id: this.$route.params.id
 		};
 	},
@@ -213,7 +216,7 @@ export default {
 	methods: {
 		async sendMsg() {
 			try {
-				const response = await axios.post('http://localhost:5000/sponsor/inbox/' + this.id, {
+				await axios.post('http://localhost:5000/sponsor/inbox/' + this.id, {
 					message: this.msg,
 					campaign: this.campain_id,
 					modified_budget: this.modified_budget,
@@ -222,10 +225,25 @@ export default {
 				}, {
 					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
 				});
-				console.log(response.data);
+				window.location.reload();
 			} catch (err) {
 				this.error = 'Invalid username or password';
 			}
+		},
+		async open_campaign_details(campaignId) {
+		try {
+			const response = await axios.get(`http://localhost:5000/view_campaign/${campaignId}`, {
+			headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			console.log(response);
+			this.campaignDetails = response.data.campaign;
+			this.showDialog = true;
+		} catch (error) {
+			console.error('Error fetching campaign details:', error);
+		}
+		},
+		closeDialog() {
+		this.showDialog = false;
 		},
 		// Nav and Side Bar
 		logout() {
@@ -242,7 +260,6 @@ export default {
 				main.style.marginLeft = "250px";
 			}
 		},
-
 		formatTimestamp(timestamp) {
 			const date = new Date(timestamp * 1000);
 			return date.toLocaleDateString() + " " + date.toLocaleTimeString();

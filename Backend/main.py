@@ -773,6 +773,13 @@ def server(app, socketio):
         return jsonify(username=User.query.filter_by(id=userID).first().username,
                           user_type=utype_mapper[User.query.filter_by(id=userID).first().user_type]), 200
     
+    @app.route("/view_campaign/<cid>", methods=["GET"], strict_slashes=False)
+    @jwt_required()
+    def view_campaign(cid):
+        cid = int(cid)
+        campaign = DB_Manager().QueryCampaignByCID(cid)
+        return jsonify(campaign=campaign)
+    
 
 app, socketio, dropzone = create_app()
 
