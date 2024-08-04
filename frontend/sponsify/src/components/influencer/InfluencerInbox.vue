@@ -37,10 +37,6 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h1>Current User: {{ inbox }}</h1>
-			<h1>Current User: {{ camp_dict }}</h1>
-			<h1>Current User: {{ sponsors }}</h1>
-
 			
 			<div class="m-2 card">
 				<div class="card-header">

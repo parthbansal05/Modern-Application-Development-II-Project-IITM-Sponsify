@@ -143,6 +143,7 @@ export default {
 			this.campaigns = response.data.campaigns;
 			this.unique_niches = response.data.unique_niches;
 			this.unique_categories = response.data.unique_categories;
+			this.selectedCampaign = this.campaigns[0][0];
 		} catch (err) {
 			console.log(err);
 		}

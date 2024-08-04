@@ -20,27 +20,18 @@
 
 			<div class="sidebar-buttons-top">
 				<hr class="bg-white">
-				<button @click="$router.push('/SponsorDash')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
-				<button @click="$router.push('/SponsorUpdateDashboard')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
-				<button @click="$router.push('/CreateCampaign')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
-				<button @click="$router.push('/SponsorSearchInfluencer')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
-				<button @click="$router.push('/SponsorInbox')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
+				<button @click="$router.push('/SponsorDash')" class="sidebar-button btn btn-secondary btn-block mb-2">Dashboard</button>
+				<button @click="$router.push('/SponsorUpdateDashboard')" class="sidebar-button btn btn-secondary btn-block mb-2">Update Dashboard</button>
+				<button @click="$router.push('/CreateCampaign')" class="sidebar-button btn btn-secondary btn-block mb-2">Create Campaign</button>
+				<button @click="$router.push('/SponsorSearchInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Search Influencer</button>
+				<button @click="$router.push('/SponsorInbox')" class="sidebar-button btn btn-secondary btn-block mb-2">Inbox</button>
 			</div>
 
 			<div class="sidebar-buttons-bottom">
-				<button @click="$router.push('/login')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
-				<button @click="$router.push('/registerInfluencer')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
-				<button @click="$router.push('/registerSponsor')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
-				<button @click="$router.push('/registerUser')"
-					class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
+				<button @click="$router.push('/login')" class="sidebar-button btn btn-secondary btn-block mb-2">Login</button>
+				<button @click="$router.push('/registerInfluencer')" class="sidebar-button btn btn-secondary btn-block mb-2">Influencer Register</button>
+				<button @click="$router.push('/registerSponsor')" class="sidebar-button btn btn-secondary btn-block mb-2">Sponsor Register</button>
+				<button @click="$router.push('/registerUser')" class="sidebar-button btn btn-secondary btn-block mb-2">User Register</button>
 				<hr class="bg-white">
 				v 2.0.0
 			</div>
@@ -48,22 +39,7 @@
 		</div>
 
 		<div class="main-content" id="main">
-			<h4>{{ inbox }}</h4>
-			<h4>{{ camp_dict }}</h4>
-			<h4>{{ influencer }}</h4>
 
-			<form @submit.prevent="sendMsg">
-				<input v-model="msg" :placeholder="msg" type="text" />
-				<input v-model="modified_budget" :placeholder="modified_budget" type="number" />
-				<input v-model="modified_terms" :placeholder="modified_terms" type="text" />
-				<select v-model="campain_id" placeholder="Campaign" type="text" required>
-					<option v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
-						:key="index" :value="cid">
-						{{ camp_dict[cid] }}
-					</option>
-				</select>
-				<button type="submit">Login</button>
-			</form>
 			<div v-if="error">{{ error }}</div>
 
 			<div class="col-lg-8 col-md-8 m-auto card" style="padding-bottom: 50px; width: 80%;">
@@ -71,6 +47,14 @@
 					<span class="d-inline-block text-truncate" style="max-width: 1000px">
 						<h6> {{ influencer[1] }} </h6>
 					</span>
+				</div>
+
+				<div v-if="showDialog" class="modal-overlay">
+				<div class="modal-content">
+					<h3>Campaign Details</h3>
+					<p>{{ campaignDetails }}</p>
+					<button @click="closeDialog">Close</button>
+				</div>
 				</div>
 
 				<div v-for="(aid, index) in inbox[0]" :key="index" class="card-body">
@@ -81,7 +65,8 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+						<span class="d-inline-block text-truncate" style="max-width: 200px" @click="open_campaign_details(inbox[1][index])">
+							Campaign : {{ camp_dict[inbox[1][index]] }} </span>
 
 						<div class="bottom-right">
 							<!-- Status -->
@@ -105,7 +90,9 @@
 						<div v-if="inbox[9][index] != ''">
 							Terms Negotiation : {{ inbox[9][index] }}
 						</div>
-						<span> Campaign : {{ camp_dict[inbox[1][index]] }} </span>
+						<span class="d-inline-block text-truncate" style="max-width: 200px" @click="open_campaign_details(inbox[1][index])">
+							Campaign : {{ camp_dict[inbox[1][index]] }}
+						</span>
 
 						<div class="bottom-right" style="position: absolute; right: 40px;">
 							<!-- Status -->
@@ -135,37 +122,36 @@
 				</div>
 			</div>
 
-			<div class="fixed-bottom-bar">
-				<div class="container py-3 d-flex justify-content-between align-items-center">
-					<form @submit.prevent="sendMsg" class="w-100">
-						<div class="row align-items-center">
-							<div class="col-md-4 mb-2 mb-md-0">
-								<input type="text" v-model="msg" class="form-control" placeholder="Write a message">
-							</div>
-							<div class="col-md-8 d-flex flex-column flex-md-row align-items-center gap-3">
-								<select v-model="campain_id" class="form-select mb-2 mb-md-0"
-									placeholder="Select Campaign" required>
-									<option
-										v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
-										:key="index" :value="cid">
-										{{ camp_dict[cid] }}
-									</option>
-								</select>
-								<input type="number" v-model="modified_budget" class="form-control mb-2 mb-md-0"
-									placeholder="Modified Budget">
-								<input type="text" v-model="modified_terms" class="form-control mb-2 mb-md-0"
-									placeholder="Modified terms">
-								<div class="d-flex gap-2 mb-2 mb-md-0">
-									<button type="button" class="btn btn-success">Accept</button>
-									<button type="button" class="btn btn-danger">Reject</button>
-									<button type="submit" class="btn btn-primary">Send</button>
-								</div>
+		<div class="fixed-bottom-bar">
+			<div class="container py-3 d-flex justify-content-between align-items-center">
+				<form @submit.prevent="sendMsg" class="w-100">
+					<div class="row align-items-center">
+						<div class="col-md-4 mb-2 mb-md-0">
+							<input type="text" v-model="msg" class="form-control" placeholder="Write a message">
+						</div>
+						<div class="col-md-8 d-flex flex-column flex-md-row align-items-center gap-3">
+							<select v-model="campain_id" class="form-select mb-2 mb-md-0" placeholder="Select Campaign" required>
+								<option
+									v-for="(cid, index) in inbox[1].filter((cid, index) => inbox[1].indexOf(cid) === index)"
+									:key="index" :value="cid">
+									{{ camp_dict[cid] }}
+								</option>
+							</select>
+							<input type="number" v-model="modified_budget" class="form-control mb-2 mb-md-0"
+								placeholder="Modified Budget">
+							<input type="text" v-model="modified_terms" class="form-control mb-2 mb-md-0"
+								placeholder="Modified terms">
+							<div class="d-flex gap-2 mb-2 mb-md-0">
+								<a  class="btn btn-success" @click="acceptOffer()">Accept</a>
+								<a  class="btn btn-danger" @click="rejectOffer()">Reject</a>
+								<button type="submit" class="btn btn-primary">Send</button>
 							</div>
 						</div>
-					</form>
-				</div>			
+					</div>
+				</form>
 			</div>
 		</div>
+
 	</div>
 </template>
 
@@ -184,6 +170,9 @@ export default {
 			modified_terms: '',
 			username: '',
 			user_type: '',
+			campaignDetails: "",
+			showDialog: false,
+			userid: "",
 			id: this.$route.params.id
 		};
 	},
@@ -192,9 +181,12 @@ export default {
 			const response = await axios.get('http://localhost:5000/sponsor/inbox/' + this.id, {
 				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
 			});
+			console.log(response.data);
 			this.inbox = response.data.inbox;
 			this.camp_dict = response.data.camp_dict;
 			this.influencer = response.data.influencer;
+			this.userid = response.data.userID;
+			this.campain_id = this.inbox[1].filter((cid, index) => this.inbox[1].indexOf(cid) === index)[0]
 		} catch (err) {
 			console.log(err);
 		}
@@ -207,7 +199,7 @@ export default {
 	methods: {
 		async sendMsg() {
 			try {
-				const response = await axios.post('http://localhost:5000/sponsor/inbox/' + this.id, {
+				await axios.post('http://localhost:5000/sponsor/inbox/' + this.id, {
 					message: this.msg,
 					campaign: this.campain_id,
 					modified_budget: this.modified_budget,
@@ -216,10 +208,37 @@ export default {
 				}, {
 					headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
 				});
-				console.log(response.data);
+				window.location.reload();
 			} catch (err) {
 				this.error = 'Invalid username or password';
 			}
+		},
+		async open_campaign_details(campaignId) {
+		try {
+			const response = await axios.get(`http://localhost:5000/view_campaign/${campaignId}`, {
+			headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }  // Change to sessionStorage
+			});
+			console.log(response);
+			this.campaignDetails = response.data.campaign;
+			this.showDialog = true;
+		} catch (error) {
+			console.error('Error fetching campaign details:', error);
+		}
+		},
+		closeDialog() {
+		this.showDialog = false;
+		},
+		async acceptOffer() {
+			await axios.get('http://localhost:5000/sponsor/accept_ad_request/' + this.influencer[0] + '/' + this.userid + '/' + this.campain_id + '/Approved', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			});
+			window.location.reload();
+		},
+		async rejectOffer() {
+			await axios.get('http://localhost:5000/sponsor/accept_ad_request/' + this.influencer[0] + '/' + this.userid + '/' + this.campain_id + '/Rejected', {
+				headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+			});
+			window.location.reload();
 		},
 		// Nav and Side Bar
 		logout() {

@@ -517,7 +517,8 @@ def server(app, socketio):
             influencer = ([inf.id, inf.username, inf.email, inf.ph_no, inf.user_type, inf.category, inf.niche, inf.followers, inf.industry, inf.budget])
             return jsonify(inbox=inbox,
                             camp_dict=camp_dict,
-                            influencer=influencer)
+                            influencer=influencer,
+                            userID = userID)
     
     @app.route("/sponsor/accept_ad_request/<iid>/<sid>/<cid>/<status>", methods=["GET"], strict_slashes=False)
     @e.sponsor_required
@@ -772,6 +773,13 @@ def server(app, socketio):
         utype_mapper = {'S': 'Sponsor', 'I': 'Influencer', 'A': 'Admin', 'U': 'User'}
         return jsonify(username=User.query.filter_by(id=userID).first().username,
                           user_type=utype_mapper[User.query.filter_by(id=userID).first().user_type]), 200
+    
+    @app.route("/view_campaign/<cid>", methods=["GET"], strict_slashes=False)
+    @jwt_required()
+    def view_campaign(cid):
+        cid = int(cid)
+        campaign = DB_Manager().QueryCampaignByCID(cid)
+        return jsonify(campaign=campaign)
     
 
 app, socketio, dropzone = create_app()
