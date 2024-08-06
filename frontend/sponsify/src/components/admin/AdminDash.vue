@@ -107,8 +107,8 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<p>Campaign ID: {{ campaigns[0][index] }}</p>
-								<p>Sponsor ID: {{ campaigns[1][index] }}</p>
+								<!-- <p>Campaign ID: {{ campaigns[0][index] }}</p>
+								<p>Sponsor ID: {{ campaigns[1][index] }}</p> -->
 								<p class=" text-truncate" style="max-width: 1000px">Title: {{ campaigns[2][index] }}</p>
 								<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaigns[3][index] }}</p>
 								<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>

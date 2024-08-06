@@ -54,34 +54,33 @@
 					<br>Phone Number : {{ info[3] }}
 					<br>Following : {{ followers[1].length }}					
 				</div>
-
-				<div class="m-2 card">
-					<div class="card-header">
-						<span class="d-inline-block text-truncate" style="max-width: 1000px">
-							Influencers Following</span>
-					</div>
-					<div class="card-body">
-						<div v-if="influencers.length" class="admin-container">
-							<div v-for="(data, index) in followers[1]" :key="index" class="card">
-								<div class="card-header d-flex justify-content-between align-items-center">
-									<h3 class=" text-truncate" style="max-width: 1000px">{{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][1] }}</h3>
-									<div style="display: flex">
-										<a  class="btn btn-danger" @click="unfollow(influencers.filter(influencer => followers[1].includes(influencer[0]))[index][0])">
-											Unfollow </a>
-									</div>
-								</div>
-								<div class="card-body">
-									<p>Email ID: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][2] }}</p>
-									<p>Phone Number: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][3] }}</p>
-									<p>Category: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][5] }}</p>
-									<p>Niche: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][6] }}</p>
-									<p>Followers: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][7] }}</p>
+			</div>
+			<div class="m-2 card">
+				<div class="card-header">
+					<span class="d-inline-block text-truncate" style="max-width: 1000px">
+						Influencers Following</span>
+				</div>
+				<div class="card-body">
+					<div v-if="influencers.length" class="admin-container">
+						<div v-for="(data, index) in followers[1]" :key="index" class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								<h3 class=" text-truncate" style="max-width: 1000px">{{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][1] }}</h3>
+								<div style="display: flex">
+									<a  class="btn btn-danger" @click="unfollow(influencers.filter(influencer => followers[1].includes(influencer[0]))[index][0])">
+										Unfollow </a>
 								</div>
 							</div>
+							<div class="card-body">
+								<p>Email ID: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][2] }}</p>
+								<p>Phone Number: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][3] }}</p>
+								<p>Category: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][5] }}</p>
+								<p>Niche: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][6] }}</p>
+								<p>Followers: {{ influencers.filter(influencer => followers[1].includes(influencer[0]))[index][7] }}</p>
+							</div>
 						</div>
-						<div v-else>
-							<p>No Influencers Following.</p>
-						</div>
+					</div>
+					<div v-else>
+						<p>No Influencers Following.</p>
 					</div>
 				</div>
 			</div>

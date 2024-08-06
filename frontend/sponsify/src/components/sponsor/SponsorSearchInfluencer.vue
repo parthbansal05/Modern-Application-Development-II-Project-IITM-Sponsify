@@ -134,7 +134,7 @@ export default {
 			unique_categories: [],
 			selectedNiche: '',
 			selectedCategory: '',
-			sortOrder: 'asc',
+			sortOrder: 'desc',
 			selectedCampaign: '',
 			username: '',
 			user_type: '',

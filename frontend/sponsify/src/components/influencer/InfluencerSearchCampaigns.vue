@@ -85,16 +85,16 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<p>CID: {{ campaign.cid }}</p>
-								<p>SID: {{ campaign.sid }}</p>
+								<!-- <p>CID: {{ campaign.cid }}</p>
+								<p>SID: {{ campaign.sid }}</p> -->
 								<p class=" text-truncate" style="max-width: 1000px">Name: {{ campaign.title }}</p>
 								<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaign.description }}</p>
 								<p>Start Date: {{ formatTimestamp(campaign.startDate) }}</p>
 								<p>End Date: {{ formatTimestamp(campaign.endDate) }}</p>
 								<p>Budget: {{ campaign.budget }}</p>
-								<p>Visibility: {{ campaign.visibility }}</p>
+								<!-- <p>Visibility: {{ campaign.visibility }}</p> -->
 								<p class=" text-truncate" style="max-width: 1000px">Goals: {{ campaign.goal }}</p>
-								<p>Flagged: {{ campaign.flagged }}</p>
+								<!-- <p>Flagged: {{ campaign.flagged }}</p> -->
 							</div>
 						</div>
 					</div>

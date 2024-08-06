@@ -58,16 +58,16 @@
 			<div class="m-2 card p-4">
 				<h6>
 					User Info:<br />
-					ID: {{ info[0] }}<br />
+					<!-- ID: {{ info[0] }}<br /> -->
 					Name: {{ info[1] }}<br />
 					Email: {{ info[2] }}<br />
 					Phone Number: {{ info[3] }}<br />
-					User Type: {{ info[4] }}<br />
-					Category: {{ info[5] }}<br />
-					Niche: {{ info[6] }}<br />
-					Followers: {{ info[7] }}<br />
+					<!-- User Type: {{ info[4] }}<br /> -->
+					<!-- Category: {{ info[5] }}<br />
+					Niche: {{ info[6] }}<br /> -->
+					<!-- Followers: {{ info[7] }}<br /> -->
 					Industry: {{ info[8] }}<br />
-					Budget: {{ info[9] }}<br />
+					<!-- Budget: {{ info[9] }}<br /> -->
 				</h6>
 			</div>
 			<div class="m-2 card">
@@ -96,8 +96,8 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<p>Campaign ID: {{ campaigns[0][index] }}</p>
-								<p>Sponsor ID: {{ campaigns[1][index] }}</p>
+								<!-- <p>Campaign ID: {{ campaigns[0][index] }}</p>
+								<p>Sponsor ID: {{ campaigns[1][index] }}</p> -->
 								<p class=" text-truncate" style="max-width: 1000px">Title: {{ campaigns[2][index] }}</p>
 								<p class=" text-truncate" style="max-width: 1000px">Description: {{ campaigns[3][index] }}</p>
 								<p>Start Time: {{ formatTimestamp(campaigns[4][index]) }}</p>

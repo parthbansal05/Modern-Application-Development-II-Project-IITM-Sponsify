@@ -98,17 +98,17 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<p>Influencer ID: {{ influencer[0] }}</p>
+								<!-- <p>Influencer ID: {{ influencer[0] }}</p> -->
 								<p class=" text-truncate" style="max-width: 1000px">Influencer Username: {{
 									influencer[1] }}</p>
 								<p>Influencer Email: {{ influencer[2] }}</p>
 								<p>Influencer phone number: {{ influencer[3] }}</p>
-								<p>Influencer User type: {{ influencer[4] }}</p>
+								<!-- <p>Influencer User type: {{ influencer[4] }}</p> -->
 								<p>Influencer Category: {{ influencer[5] }}</p>
 								<p>Influencer Niche: {{ influencer[6] }}</p>
 								<p>Influencer Followers: {{ influencer[7] }}</p>
-								<p>Influencer Industry: {{ influencer[8] }}</p>
-								<p>Influencer Budget: {{ influencer[9] }}</p>
+								<!-- <p>Influencer Industry: {{ influencer[8] }}</p>
+								<p>Influencer Budget: {{ influencer[9] }}</p> -->
 							</div>
 						</div>
 					</div>
@@ -129,7 +129,7 @@ export default {
 			unique_categories: [],
 			selectedNiche: '',
 			selectedCategory: '',
-			sortOrder: 'asc',
+			sortOrder: 'desc',
 			selectedCampaign: '',
 			username: '',
 			user_type: '',
