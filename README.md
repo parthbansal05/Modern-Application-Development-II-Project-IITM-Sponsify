@@ -1,32 +1,31 @@
 # Modern-Application-Development-II-Project-IITM-Sponsify
 
+## Terminal 1
+sudo apt update <br>
+sudo apt install redis-server <br>
+sudo nano /etc/redis/redis.conf			(change "supervised no" to "supervised system" for ubuntu) <br>
+sudo service redis-server restart <br>
+<br>
 
-#terminal 1
-sudo apt update
-sudo apt install redis-server
-sudo nano /etc/redis/redis.conf			(change "supervised no" to "supervised system" for ubuntu)
-sudo service redis-server restart
+## Terminal 2
+. ./.venv/bin/activate <br>
+cd backend <br>
+celery -A make_celery.celery_app worker --loglevel INFO <br>
+<br>
 
+## Terminal 3
+. ./.venv/bin/activate <br>
+cd backend <br>
+celery -A make_celery.celery_app beat <br>
+<br>
 
-#terminal 2
-. ./.venv/bin/activate
-cd backend
-celery -A make_celery.celery_app worker --loglevel INFO
+## Terminal 4
+. ./.venv/bin/activate <br>
+cd backend <br>
+python main.py <br>
+<br>
 
-
-#terminal 3
-. ./.venv/bin/activate
-cd backend
-celery -A make_celery.celery_app beat
-
-
-#terminal 4
-. ./.venv/bin/activate
-cd backend
-python main.py
-
-
-#terminal 5
-cd frontend/sponsify
-npm run serve
+## Terminal 5
+cd frontend/sponsify <br>
+npm run serve <br>
 
